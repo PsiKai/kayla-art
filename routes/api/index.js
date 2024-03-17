@@ -7,6 +7,6 @@ apiRouter.get("/", (req, res) => {
   res.send("Hello API router\n")
 })
 
-apiRouter.use("/user", userRouter)
+apiRouter.use("/users", userRouter)
 
 export default apiRouter

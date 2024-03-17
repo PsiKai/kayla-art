@@ -13,10 +13,12 @@ userRouter.get("/", async (req, res) => {
 
 userRouter.post("/", async (req, res) => {
   // const user = req.body
-  const user = new User(req.body)
+  const user = new User(req.body).toObject()
   // await user.save()
   res.write("Hello User POST\n")
-  res.write(JSON.stringify(user))
+  Object.entries(user).forEach(value => {
+    res.write(JSON.stringify(value) + "\n")
+  })
   res.end("\n")
 })
 
