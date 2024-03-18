@@ -7,6 +7,7 @@ import Main from "./pages/Main.tsx"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Subcategory from "./pages/Subcategory.tsx"
 import Collection from "./pages/Collection.tsx"
+import Upload from "./pages/Upload.tsx"
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="illustration" element={<Illustration />} />
         <Route path="illustration/:subcategory" element={<Subcategory />} />
         <Route path="illustration/:subcategory/:collection" element={<Collection />} />
+        <Route path="upload" element={<Upload />} />
       </Routes>
     </BrowserRouter>
   )
