@@ -32,6 +32,7 @@ artworkRouter.get("/:category", async (req, res) => {
 
 artworkRouter.get("/:category/:subcategory", async (req, res) => {
   const { category, subcategory } = req.params
+  console.log(category, subcategory)
   try {
     const artwork = await Artwork.find({ category, subcategory })
     if (artwork.length === 0) {

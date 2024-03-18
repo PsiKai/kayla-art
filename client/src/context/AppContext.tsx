@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from "react"
 
-type TArtWork = {
+export type TArtWork = {
   id: string
   title: string | null
   category: "Photography" | "Illustration"

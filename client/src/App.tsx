@@ -16,11 +16,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="photography" element={<Photography />} />
-        <Route path="photography/:subcategory" element={<Subcategory />} />
-        <Route path="photography/:subcategory/:collection" element={<Collection />} />
         <Route path="illustration" element={<Illustration />} />
-        <Route path="illustration/:subcategory" element={<Subcategory />} />
-        <Route path="illustration/:subcategory/:collection" element={<Collection />} />
+        <Route path=":category/:subcategory" element={<Subcategory />} />
+        <Route path=":category/:subcategory/:collection" element={<Collection />} />
         <Route path="upload" element={<Upload />} />
       </Routes>
     </BrowserRouter>
