@@ -4,6 +4,11 @@ import artworkRouter from "./artwork.js"
 
 const apiRouter = Router()
 
+apiRouter.use(async (_req, _res, next) => {
+  await new Promise(resolve => setTimeout(resolve, 1000))
+  next()
+})
+
 apiRouter.get("/", (_req, res) => {
   res.send("Hello API router\n")
 })

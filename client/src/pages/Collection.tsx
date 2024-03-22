@@ -1,27 +1,13 @@
-import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import { TArtWork } from "../context/AppContext"
+import useFetchOnRender from "../hooks/useFetchOnRender"
 
 function Collection() {
   const { category, subcategory, collection } = useParams()
-  const [artCollection, setCollection] = useState<TArtWork[]>([])
-  const [pending, setPending] = useState(false)
 
-  useEffect(() => {
-    setPending(true)
-    fetch(`/api/artworks/${category}/${subcategory}`)
-      .then(data => {
-        if (!data.ok) {
-          throw new Error("Network response was not ok")
-        }
-        return data.json()
-      })
-      .then(({ artwork }) => {
-        setCollection(artwork)
-      })
-      .catch(err => console.log(err))
-      .finally(() => setPending(false))
-  }, [category, subcategory])
+  const [artCollection, pending] = useFetchOnRender<TArtWork[]>(
+    `/api/artworks/${category}/subcategories/${subcategory}/collections/${collection}`,
+  )
 
   if (/^photography|illustration$/.test(category!) === false) {
     return <div>Category not found</div>

@@ -19,44 +19,52 @@ artworkRouter.post("/", uploader, async (req, res) => {
 artworkRouter.get("/:category", async (req, res) => {
   const { category } = req.params
   try {
-    const artwork = await Artwork.find({ category })
-    if (artwork.length === 0) {
-      return res.status(404).json({ message: "No artwork found" })
-    }
-    res.json({ artwork })
+    const resources = await Artwork.find({ category })
+    res.json({ resources })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: error.message })
   }
 })
 
-artworkRouter.get("/:category/:subcategory", async (req, res) => {
+artworkRouter.get("/:category/subcategories/:subcategory", async (req, res) => {
   const { category, subcategory } = req.params
   console.log(category, subcategory)
   try {
-    const artwork = await Artwork.find({ category, subcategory })
-    if (artwork.length === 0) {
-      return res.status(404).json({ message: "No artwork found" })
-    }
-    res.json({ artwork })
+    const resources = await Artwork.find({ category, subcategory })
+    res.json({ resources })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: error.message })
   }
 })
 
-artworkRouter.get("/:category/:subcategory/:id", async (req, res) => {
-  const { id } = req.params
-  try {
-    const artwork = await Artwork.findById(id)
-    if (!artwork) {
-      return res.status(404).json({ message: "No artwork found" })
+artworkRouter.get(
+  "/:category/subcategories/:subcategory/collections/:artCollection",
+  async (req, res) => {
+    const { artCollection, category, subcategory } = req.params
+    try {
+      const resources = await Artwork.find({ category, subcategory, artCollection })
+      res.json({ resources })
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: error.message })
     }
-    res.json({ artwork })
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: error.message })
-  }
-})
+  },
+)
+
+artworkRouter.get(
+  "/:category/subcategories/:subcategory/collections/:artCollection/works/:id",
+  async (req, res) => {
+    const { id } = req.params
+    try {
+      const resources = await Artwork.findById(id)
+      res.json({ resources })
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: error.message })
+    }
+  },
+)
 
 export default artworkRouter

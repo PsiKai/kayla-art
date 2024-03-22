@@ -1,7 +1,7 @@
 import React, { createContext, useReducer } from "react"
 
 export type TArtWork = {
-  id: string
+  _id: string
   title: string | null
   category: "Photography" | "Illustration"
   thumbnail: string

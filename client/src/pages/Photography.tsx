@@ -1,26 +1,9 @@
 import { Link } from "react-router-dom"
 import { TArtWork } from "../context/AppContext"
-import { useEffect, useState } from "react"
+import useFetchOnRender from "../hooks/useFetchOnRender"
 
 function Photography() {
-  const [pending, setPending] = useState(false)
-  const [artworks, setArtworks] = useState<TArtWork[]>([])
-
-  useEffect(() => {
-    setPending(true)
-    fetch("/api/artworks/photography")
-      .then(data => {
-        if (!data.ok) {
-          throw new Error("Network response was not ok")
-        }
-        return data.json()
-      })
-      .then(({ artwork }) => {
-        setArtworks(artwork)
-      })
-      .catch(err => console.log(err))
-      .finally(() => setPending(false))
-  }, [])
+  const [artworks, pending] = useFetchOnRender<TArtWork[]>("/api/artworks/photography")
 
   return (
     <>
