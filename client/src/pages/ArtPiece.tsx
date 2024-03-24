@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom"
 import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
+import { titleCase } from "../utils/stringUtils"
 
 export default function ArtPiece() {
-  const { artwork } = useParams()
+  const { artCollection, artwork } = useParams()
   const [artPiece, pending] = useFetchOnRender<TArtWork>(`/api/artworks/${artwork}`)
 
   return (
@@ -13,7 +14,7 @@ export default function ArtPiece() {
         <div>Loading...</div>
       ) : (
         <>
-          <img src={artPiece?.thumbnail} alt="An artwork" />
+          <img src={artPiece?.thumbnail} alt={`An artwork from the ${titleCase(artCollection)}`} />
         </>
       )}
     </>

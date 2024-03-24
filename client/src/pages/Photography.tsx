@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
+import { titleCase } from "../utils/stringUtils"
 
 function Photography() {
   const [artworks, pending] = useFetchOnRender<TArtWork[]>("/api/artworks?category=photography")
@@ -14,7 +15,7 @@ function Photography() {
         <>
           {artworks.map(art => (
             <Link key={art._id} to={art.subCategory}>
-              {art.subCategory}
+              {titleCase(art.subCategory)}
             </Link>
           ))}
           <Link to="landscape">Landscape</Link>

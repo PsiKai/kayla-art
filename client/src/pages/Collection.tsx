@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom"
 import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
+import { titleCase } from "../utils/stringUtils"
 
 function Collection() {
   const { category, subCategory, artCollection } = useParams()
@@ -15,16 +16,19 @@ function Collection() {
 
   return (
     <>
-      <h1>Category: {category}</h1>
-      <h2>Subcategory: {subCategory}</h2>
-      <h3>Collection: {artCollection}</h3>
+      <h1>Category: {titleCase(category)}</h1>
+      <h2>Subcategory: {titleCase(subCategory)}</h2>
+      <h3>Collection: {titleCase(artCollection)}</h3>
       {pending ? (
         <div>Loading...</div>
       ) : (
         <>
           {collection.map(art => (
             <Link to={art._id}>
-              <img src={art.thumbnail} alt={`An artwork from the ${collection} collection`} />
+              <img
+                src={art.thumbnail}
+                alt={`An artwork from the ${titleCase(artCollection)} collection`}
+              />
             </Link>
           ))}
           <Link to="sample-artwork">

@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom"
 import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
+import { titleCase } from "../utils/stringUtils"
 
 function Subcategory() {
   const { category, subCategory } = useParams()
@@ -15,15 +16,15 @@ function Subcategory() {
 
   return (
     <>
-      <h1>Category: {category}</h1>
-      <h2>Subcategory: {subCategory}</h2>
+      <h1>Category: {titleCase(category)}</h1>
+      <h2>Subcategory: {titleCase(subCategory)}</h2>
       {pending ? (
         <div>Loading...</div>
       ) : (
         <>
           {subcategories.map(subcategory => (
             <Link key={subcategory._id} to={subcategory.artCollection}>
-              {subcategory.artCollection}
+              {titleCase(subcategory.artCollection)}
             </Link>
           ))}
           <Link to="sample-collection">Sample Collection</Link>
