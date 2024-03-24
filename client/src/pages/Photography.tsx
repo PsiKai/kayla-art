@@ -3,7 +3,7 @@ import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 
 function Photography() {
-  const [artworks, pending] = useFetchOnRender<TArtWork[]>("/api/artworks/photography")
+  const [artworks, pending] = useFetchOnRender<TArtWork[]>("/api/artworks?category=photography")
 
   return (
     <>

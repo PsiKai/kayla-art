@@ -7,19 +7,22 @@ function DeleteArt() {
   const deleteArt = async (_id: string) => {
     console.log("Deleting artwork")
     console.log(_id)
-    // const response = await fetch("/api/artworks", {
-    //   method: "DELETE",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({}),
-    // })
-    //
-    // if (response.ok) {
-    //   console.log("Artwork deleted")
-    // } else {
-    //   console.error("Failed to delete artwork")
-    // }
+    try {
+      const response = await fetch(`/api/artworks/${_id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      if (response.ok) {
+        console.log("Artwork deleted")
+      } else {
+        console.error("Failed to delete artwork")
+      }
+    } catch (error) {
+      console.error("Failed to delete artwork")
+      console.error(error)
+    }
   }
 
   return (

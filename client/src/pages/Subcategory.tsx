@@ -6,7 +6,7 @@ function Subcategory() {
   const { category, subCategory } = useParams()
 
   const [subcategories, pending] = useFetchOnRender<TArtWork[]>(
-    `/api/artworks/${category}/subcategories/${subCategory}`,
+    `/api/artworks?category=${category}&subCategory=${subCategory}`,
   )
 
   if (/^photography|illustration$/.test(category!) === false) {

@@ -3,10 +3,8 @@ import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 
 export default function ArtPiece() {
-  const { category, subCategory, collection, artwork } = useParams()
-  const [artPiece, pending] = useFetchOnRender<TArtWork>(
-    `/api/artworks/${category}/subcategories/${subCategory}/collections/${collection}/artworks/${artwork}`,
-  )
+  const { artwork } = useParams()
+  const [artPiece, pending] = useFetchOnRender<TArtWork>(`/api/artworks/${artwork}`)
 
   return (
     <>
