@@ -6,7 +6,7 @@ function Collection() {
   const { category, subCategory, collection } = useParams()
 
   const [artCollection, pending] = useFetchOnRender<TArtWork[]>(
-    `/api/artworks?category=${category}&subCategory=${subCategory}&collection=${collection}`,
+    `/api/artworks?category=${category}&subCategory=${subCategory}&artCollection=${collection}`,
   )
 
   if (/^photography|illustration$/.test(category!) === false) {

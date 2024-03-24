@@ -1,6 +1,6 @@
 import { Router } from "express"
 import userRouter from "./user.js"
-import artworkRouter from "./artwork.js"
+import artworkRouter from "./artwork/index.js"
 
 const apiRouter = Router()
 

@@ -11,7 +11,7 @@ const ArtworkSchema = new Schema({
     required: true,
     index: true,
   },
-  collection: {
+  artCollection: {
     type: String,
     required: true,
     index: true,
