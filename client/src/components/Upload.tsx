@@ -4,7 +4,7 @@ import React, { useState /*, useContext*/ } from "react"
 type TUploadForm = {
   category?: string
   subCategory?: string
-  collection?: string
+  artCollection?: string
 }
 
 function Upload() {
@@ -131,21 +131,21 @@ function Upload() {
         </div>
         <div>
           <legend>
-            <label htmlFor="collection">
+            <label htmlFor="artCollection">
               <p>
                 <strong>Collection</strong>
               </p>
             </label>
           </legend>
           <input
-            id="collection"
+            id="artCollection"
             type="text"
-            name="collection"
+            name="artCollection"
             placeholder="Collection"
             required
             autoComplete="off"
             spellCheck="false"
-            value={form.collection || ""}
+            value={form.artCollection || ""}
             onChange={updateForm}
           />
         </div>

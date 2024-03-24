@@ -3,7 +3,7 @@ import React, { createContext, useReducer } from "react"
 export type TArtWork = {
   _id: string
   category: "Photography" | "Illustration"
-  collection: string
+  artCollection: string
   subCategory: string
   thumbnail: string
   extension?: string

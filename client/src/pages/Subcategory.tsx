@@ -22,8 +22,8 @@ function Subcategory() {
       ) : (
         <>
           {subcategories.map(subcategory => (
-            <Link key={subcategory._id} to={subcategory.collection}>
-              {subcategory.collection}
+            <Link key={subcategory._id} to={subcategory.artCollection}>
+              {subcategory.artCollection}
             </Link>
           ))}
           <Link to="sample-collection">Sample Collection</Link>

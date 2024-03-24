@@ -20,8 +20,8 @@ function App() {
           <Route path="photography" element={<Photography />} />
           <Route path="illustration" element={<Illustration />} />
           <Route path=":category/:subCategory" element={<Subcategory />} />
-          <Route path=":category/:subCategory/:collection" element={<Collection />} />
-          <Route path=":category/:subCategory/:collection/:artwork" element={<ArtPiece />} />
+          <Route path=":category/:subCategory/:artCollection" element={<Collection />} />
+          <Route path=":category/:subCategory/:artCollection/:artwork" element={<ArtPiece />} />
           <Route path="admin" element={<Admin />} />
         </Routes>
       </main>
