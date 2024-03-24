@@ -32,7 +32,7 @@ function DeleteArt() {
         <div>Loading...</div>
       ) : (
         <div className="admin-art">
-          {artwork.map(art => (
+          {artwork?.map(art => (
             <div>
               <img className="admin-art-thumbnail" src={art.thumbnail} alt="An artwork" />
               <button onClick={() => deleteArt(art._id)}>Delete</button>

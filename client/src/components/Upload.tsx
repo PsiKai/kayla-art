@@ -7,6 +7,8 @@ type TUploadForm = {
   artCollection?: string
 }
 
+const invalidCharsRegex = /[!"#$%&'()*+,/:;<=>?@[\\\]^`{|}~]/g
+
 function Upload() {
   // const { dispatch } = useContext(AppContext)
   const [image, setImage] = useState<File | null>()
@@ -25,10 +27,11 @@ function Upload() {
   }
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const value = e.target.value.replace(invalidCharsRegex, "")
     setForm(prev => {
       return {
         ...prev,
-        [e.target.name]: e.target.value,
+        [e.target.name]: value,
       }
     })
   }
