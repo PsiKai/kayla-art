@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom"
 import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import { titleCase } from "../utils/stringUtils"
+import withValidPath from "../components/hoc/withValidPath"
 
 function Collection() {
   const { category, subCategory, artCollection } = useParams()
@@ -9,10 +10,6 @@ function Collection() {
   const [collection, pending] = useFetchOnRender<TArtWork[]>(
     `/api/artworks?category=${category}&subCategory=${subCategory}&artCollection=${artCollection}`,
   )
-
-  if (/^photography|illustration$/.test(category!) === false) {
-    return <div>Category not found</div>
-  }
 
   return (
     <>
@@ -43,4 +40,6 @@ function Collection() {
   )
 }
 
-export default Collection
+const ValidPathCollection = withValidPath(Collection)
+
+export default ValidPathCollection

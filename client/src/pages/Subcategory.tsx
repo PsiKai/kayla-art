@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom"
 import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import { titleCase } from "../utils/stringUtils"
+import withValidPath from "../components/hoc/withValidPath"
 
 function Subcategory() {
   const { category, subCategory } = useParams()
@@ -9,10 +10,6 @@ function Subcategory() {
   const [subcategories, pending] = useFetchOnRender<TArtWork[]>(
     `/api/artworks?category=${category}&subCategory=${subCategory}`,
   )
-
-  if (/^photography|illustration$/.test(category!) === false) {
-    return <h1>Category not found</h1>
-  }
 
   return (
     <>
@@ -35,4 +32,6 @@ function Subcategory() {
   )
 }
 
-export default Subcategory
+const ValidPathSubcategory = withValidPath(Subcategory)
+
+export default ValidPathSubcategory
