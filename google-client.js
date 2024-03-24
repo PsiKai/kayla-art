@@ -65,20 +65,20 @@ class GoogleClient extends Storage {
   }
 
   buildPaths(art) {
-    let { category, subCategory, title, extension } = art
+    let { category, subCategory, collection, uid, extension } = art
     subCategory = slugify(subCategory)
-    title = slugify(title)
-    const path = `${category}/${subCategory}/${title}`
+    collection = slugify(collection)
+    const path = `${category}/${subCategory}/${collection}/${uid}`
 
     return [`${path}.${extension}`, `${path}.webp`]
   }
 
   buildThumbnailUrl(art) {
-    let { category, subCategory, title } = art
+    let { category, subCategory, collection, uid } = art
     subCategory = slugify(subCategory)
-    title = slugify(title)
+    collection = slugify(collection)
 
-    return `${this.baseStorageUrl}/${this.thumbBucketName}/${category}/${subCategory}/${title}.webp`
+    return `${this.baseStorageUrl}/${this.thumbBucketName}/${category}/${subCategory}/${collection}/${uid}.webp`
   }
 }
 

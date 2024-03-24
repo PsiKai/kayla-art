@@ -13,7 +13,9 @@ function Illustration() {
       ) : (
         <>
           {artworks.map(art => (
-            <Link to={art.subcategory}>{art.subcategory}</Link>
+            <Link key={art._id} to={art.subCategory}>
+              {art.subCategory}
+            </Link>
           ))}
           <Link to="digital">Digital</Link>
           <Link to="traditional">Traditional</Link>

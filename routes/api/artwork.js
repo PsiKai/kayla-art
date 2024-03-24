@@ -1,18 +1,21 @@
 import { Router, json } from "express"
 import Artwork from "../../db/models/artwork.js"
 import { uploader } from "../../middleware/uploader.js"
+import { storageClient } from "../../google-client.js"
 
 const artworkRouter = Router()
 artworkRouter.use(json())
 
 artworkRouter.get("/", async (_req, res) => {
-  const artwork = await Artwork.find({})
-  res.json({ artwork })
+  const resources = await Artwork.find({})
+  res.json({ resources })
 })
 
 artworkRouter.post("/", uploader, async (req, res) => {
   console.log(req.body)
-  const newArt = new Artwork(req.body).toObject()
+  const thumbnail = storageClient.buildThumbnailUrl(req.body)
+  const newArt = new Artwork({ ...req.body, thumbnail })
+  await newArt.save()
   res.json({ newArt })
 })
 
@@ -27,11 +30,11 @@ artworkRouter.get("/:category", async (req, res) => {
   }
 })
 
-artworkRouter.get("/:category/subcategories/:subcategory", async (req, res) => {
-  const { category, subcategory } = req.params
-  console.log(category, subcategory)
+artworkRouter.get("/:category/subcategories/:subCategory", async (req, res) => {
+  const { category, subCategory } = req.params
+  console.log(category, subCategory)
   try {
-    const resources = await Artwork.find({ category, subcategory })
+    const resources = await Artwork.find({ category, subCategory })
     res.json({ resources })
   } catch (error) {
     console.error(error)
@@ -40,11 +43,11 @@ artworkRouter.get("/:category/subcategories/:subcategory", async (req, res) => {
 })
 
 artworkRouter.get(
-  "/:category/subcategories/:subcategory/collections/:artCollection",
+  "/:category/subcategories/:subCategory/collections/:artCollection",
   async (req, res) => {
-    const { artCollection, category, subcategory } = req.params
+    const { artCollection, category, subCategory } = req.params
     try {
-      const resources = await Artwork.find({ category, subcategory, artCollection })
+      const resources = await Artwork.find({ category, subCategory, artCollection })
       res.json({ resources })
     } catch (error) {
       console.error(error)
@@ -54,7 +57,7 @@ artworkRouter.get(
 )
 
 artworkRouter.get(
-  "/:category/subcategories/:subcategory/collections/:artCollection/works/:id",
+  "/:category/subcategories/:subCategory/collections/:artCollection/artworks/:id",
   async (req, res) => {
     const { id } = req.params
     try {

@@ -3,10 +3,10 @@ import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 
 function Collection() {
-  const { category, subcategory, collection } = useParams()
+  const { category, subCategory, collection } = useParams()
 
   const [artCollection, pending] = useFetchOnRender<TArtWork[]>(
-    `/api/artworks/${category}/subcategories/${subcategory}/collections/${collection}`,
+    `/api/artworks/${category}/subcategories/${subCategory}/collections/${collection}`,
   )
 
   if (/^photography|illustration$/.test(category!) === false) {
@@ -16,7 +16,7 @@ function Collection() {
   return (
     <>
       <h1>Category: {category}</h1>
-      <h2>Subcategory: {subcategory}</h2>
+      <h2>Subcategory: {subCategory}</h2>
       <h3>Collection: {collection}</h3>
       {pending ? (
         <div>Loading...</div>

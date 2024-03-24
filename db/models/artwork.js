@@ -6,7 +6,7 @@ const ArtworkSchema = new Schema({
     required: true,
     index: true,
   },
-  subcategory: {
+  subCategory: {
     type: String,
     required: true,
     index: true,
@@ -15,6 +15,10 @@ const ArtworkSchema = new Schema({
     type: String,
     required: true,
     index: true,
+  },
+  uid: {
+    type: String,
+    required: true,
   },
   createdAt: {
     type: Date,

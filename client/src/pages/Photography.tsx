@@ -13,7 +13,9 @@ function Photography() {
       ) : (
         <>
           {artworks.map(art => (
-            <Link to={art.subcategory}>{art.subcategory}</Link>
+            <Link key={art._id} to={art.subCategory}>
+              {art.subCategory}
+            </Link>
           ))}
           <Link to="landscape">Landscape</Link>
           <Link to="portraits">Portraits</Link>

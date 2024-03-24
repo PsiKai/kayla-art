@@ -1,0 +1,9 @@
+.admin-art {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-art-thumbnail {
+  height: 100px;
+}

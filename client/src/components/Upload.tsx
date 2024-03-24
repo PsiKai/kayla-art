@@ -3,7 +3,7 @@ import React, { useState /*, useContext*/ } from "react"
 
 type TUploadForm = {
   category?: string
-  subcategory?: string
+  subCategory?: string
   collection?: string
 }
 
@@ -24,7 +24,7 @@ function Upload() {
     }
   }
 
-  const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const updateForm = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm(prev => {
       return {
         ...prev,
@@ -62,7 +62,7 @@ function Upload() {
 
   return (
     <div className="form-data">
-      <h1>Upload Artwork</h1>
+      <h2>Upload Artwork</h2>
       {image && typeof image !== "string" && (
         <img
           className="preview"
@@ -97,35 +97,35 @@ function Upload() {
               </p>
             </label>
           </legend>
-          <input
+          <select
             id="category"
-            type="text"
             name="category"
-            placeholder="Category"
             required
-            autoComplete="off"
-            spellCheck="false"
             value={form.category || ""}
             onChange={updateForm}
-          />
+          >
+            <option value="">Select a category</option>
+            <option value="photography">Photography</option>
+            <option value="illustration">Illustration</option>
+          </select>
         </div>
         <div>
           <legend>
-            <label htmlFor="subcategory">
+            <label htmlFor="subCategory">
               <p>
                 <strong>Subcategory</strong>
               </p>
             </label>
           </legend>
           <input
-            id="subcategory"
+            id="subCategory"
             type="text"
-            name="subcategory"
+            name="subCategory"
             placeholder="Subcategory"
             required
             autoComplete="off"
             spellCheck="false"
-            value={form.subcategory || ""}
+            value={form.subCategory || ""}
             onChange={updateForm}
           />
         </div>
