@@ -10,13 +10,13 @@ function Subcategory() {
   )
 
   if (/^photography|illustration$/.test(category!) === false) {
-    return <div>Category not found</div>
+    return <h1>Category not found</h1>
   }
 
   return (
     <>
-      <div>Category: {category}</div>
-      <div>Subcategory: {subcategory}</div>
+      <h1>Category: {category}</h1>
+      <h2>Subcategory: {subcategory}</h2>
       {pending ? (
         <div>Loading...</div>
       ) : (

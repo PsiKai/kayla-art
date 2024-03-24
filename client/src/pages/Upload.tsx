@@ -62,32 +62,33 @@ function Upload() {
 
   return (
     <div className="form-data">
-      <div>
-        <legend>
-          <label htmlFor="image">
-            <p>
-              <strong>Image</strong>
-            </p>
-          </label>
-        </legend>
-        <input
-          type="file"
-          id="image"
-          name="image"
-          accept="image/*"
-          required
-          onChange={updateImage}
+      <h1>Upload Artwork</h1>
+      {image && typeof image !== "string" && (
+        <img
+          className="preview"
+          src={URL.createObjectURL(image)}
+          alt="Preview of your uploaded image"
+          style={{ width: "200px" }}
         />
-        {image && typeof image !== "string" && (
-          <img
-            className="preview"
-            src={URL.createObjectURL(image)}
-            alt="Preview of your uploaded image"
-            style={{ width: "200px" }}
-          />
-        )}
-      </div>
+      )}
       <form className="form" onSubmit={uploadNewArt}>
+        <div>
+          <legend>
+            <label htmlFor="image">
+              <p>
+                <strong>Image</strong>
+              </p>
+            </label>
+          </legend>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            required
+            onChange={updateImage}
+          />
+        </div>
         <div>
           <legend>
             <label htmlFor="category">

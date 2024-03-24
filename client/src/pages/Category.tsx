@@ -4,7 +4,7 @@ function Category() {
   const { category } = useParams()
   return (
     <>
-      <div>Category: {category}</div>
+      <h1>Category: {category}</h1>
     </>
   )
 }

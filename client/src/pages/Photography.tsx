@@ -7,7 +7,7 @@ function Photography() {
 
   return (
     <>
-      <div>Photography Page</div>
+      <h1>Photography Page</h1>
       {pending ? (
         <div>Loading...</div>
       ) : (

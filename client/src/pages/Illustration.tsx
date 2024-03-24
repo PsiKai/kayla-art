@@ -7,7 +7,7 @@ function Illustration() {
 
   return (
     <>
-      <div>Illustration Page</div>
+      <h1>Illustration Page</h1>
       {pending ? (
         <div>Loading...</div>
       ) : (

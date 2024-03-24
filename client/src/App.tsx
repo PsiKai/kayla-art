@@ -14,15 +14,17 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="photography" element={<Photography />} />
-        <Route path="illustration" element={<Illustration />} />
-        <Route path=":category/:subcategory" element={<Subcategory />} />
-        <Route path=":category/:subcategory/:collection" element={<Collection />} />
-        <Route path=":category/:subcategory/:collection/:artwork" element={<ArtPiece />} />
-        <Route path="upload" element={<Upload />} />
-      </Routes>
+      <main>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="photography" element={<Photography />} />
+          <Route path="illustration" element={<Illustration />} />
+          <Route path=":category/:subcategory" element={<Subcategory />} />
+          <Route path=":category/:subcategory/:collection" element={<Collection />} />
+          <Route path=":category/:subcategory/:collection/:artwork" element={<ArtPiece />} />
+          <Route path="upload" element={<Upload />} />
+        </Routes>
+      </main>
     </BrowserRouter>
   )
 }

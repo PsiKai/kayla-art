@@ -15,9 +15,9 @@ function Collection() {
 
   return (
     <>
-      <div>Category: {category}</div>
-      <div>Subcategory: {subcategory}</div>
-      <div>Collection: {collection}</div>
+      <h1>Category: {category}</h1>
+      <h2>Subcategory: {subcategory}</h2>
+      <h3>Collection: {collection}</h3>
       {pending ? (
         <div>Loading...</div>
       ) : (
