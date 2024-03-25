@@ -1,6 +1,7 @@
 .admin-art {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem;
 }
 
@@ -22,12 +23,19 @@ input:checked + label.artwork-label {
 .action-buttons {
   display: flex;
   gap: 0.5rem;
-  position: absolute;
-  bottom: 100%;
+  /* position: absolute; */
+  /* bottom: 100%; */
 }
 
 .collection-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
   position: relative;
+  max-width: 600px;
 }
 
 .preview-container {

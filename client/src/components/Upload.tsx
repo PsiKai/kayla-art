@@ -1,6 +1,10 @@
-import React, { useEffect, useRef, useState } from "react"
-import { titleCase } from "../utils/stringUtils"
+import React, { Dispatch, useEffect, useRef, useState } from "react"
 import AdminArtCollection from "./AdminArtCollection"
+import CategoriesSelection from "./form/CategoriesSelection"
+import GenericSelection from "./form/GenericSelection"
+import FileInput from "./form/FileInput"
+import { slugify } from "../utils/stringUtils"
+import useDebounce from "../hooks/useDebounce"
 
 type TUploadForm = {
   category?: string
@@ -18,23 +22,49 @@ function Upload() {
   const [collections, setCollections] = useState<string[]>([])
 
   const uploadForm = useRef<HTMLFormElement>(null)
+  const fileInput = useRef<HTMLInputElement>(null)
+
+  const debounce = useDebounce(500)
 
   useEffect(() => {
-    if (!form.category) return
-    fetch(`/api/artworks/categories/${form.category}/subcategories`)
-      .then(res => res.json())
-      .then(({ resources }) => setSubCategories(resources))
-      .catch(err => console.log(err))
-  }, [form.category])
+    if (image.size === 0) {
+      fileInput.current!.value = ""
+    }
 
-  useEffect(() => {
-    if (!form.category || !form.subCategory) return
+    const dt = new DataTransfer()
+    Array.from(image.values()).forEach(file => dt.items.add(file))
+    fileInput.current!.files = dt.files
+  }, [image])
 
-    fetch(`/api/artworks/categories/${form.category}/subcategories/${form.subCategory}/collections`)
+  const updateFormSelections = async (
+    updatedForm: TUploadForm,
+    updatedField: keyof TUploadForm,
+  ) => {
+    if (!updatedForm.category) return
+    if (!updatedForm[updatedField]) return
+
+    type mapType<T> = {
+      [key in keyof TUploadForm]: T
+    }
+    const urlMap: mapType<string> = {
+      category: `/api/artworks/categories/${updatedForm.category}/subcategories`,
+      subCategory: `/api/artworks/categories/${updatedForm.category}/subcategories/${updatedForm.subCategory}/collections`,
+    }
+    const stateSetterMap: mapType<Dispatch<React.SetStateAction<string[]>>> = {
+      category: setSubCategories,
+      subCategory: setCollections,
+    }
+
+    const url = urlMap[updatedField]
+    const stateSetter = stateSetterMap[updatedField]
+    if (!url || !stateSetter) return
+
+    stateSetter([])
+    fetch(url)
       .then(res => res.json())
-      .then(({ resources }) => setCollections(resources))
+      .then(({ resources }) => stateSetter(resources))
       .catch(err => console.log(err))
-  }, [form.category, form.subCategory])
+  }
 
   const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
@@ -46,13 +76,17 @@ function Upload() {
   }
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const value = e.target.value.replace(invalidCharsRegex, "")
+    let value = e.target.value.replace(invalidCharsRegex, "")
+    value = slugify(value)
     console.log(value)
     setForm(prev => {
-      return {
+      const updatedForm = {
         ...prev,
         [e.target.name]: value,
       }
+
+      debounce(() => updateFormSelections(updatedForm, e.target.name as keyof TUploadForm))
+      return updatedForm
     })
   }
 
@@ -83,10 +117,11 @@ function Upload() {
         await uploadNewArt(img)
         image.delete(img.name)
       }
-      setImage(new Map(image))
     } catch (error) {
       console.error("Failed to upload artwork")
       console.error(error)
+    } finally {
+      setImage(new Map(image))
     }
   }
 
@@ -100,133 +135,32 @@ function Upload() {
       <div className="form-data">
         <h2>Upload Artwork</h2>
         <form ref={uploadForm} className="form">
-          <div>
-            <legend>
-              <label htmlFor="category">
-                <p>
-                  <strong>Category</strong>
-                </p>
-              </label>
-            </legend>
-            <select
-              id="category"
-              name="category"
-              required
-              value={form.category || ""}
-              onChange={updateForm}
-            >
-              <option value="">Select a category</option>
-              <option value="photography">Photography</option>
-              <option value="illustration">Illustration</option>
-            </select>
-          </div>
-          <div>
-            <legend>
-              <label htmlFor="subCategory">
-                <p>
-                  <strong>Subcategory</strong>
-                </p>
-              </label>
-            </legend>
-            <select
-              name="subCategory"
-              id="subCategory"
-              value={form.subCategory || ""}
-              onChange={updateForm}
-            >
-              <option value="">Select a subcategory</option>
-              {subCategories.map(subCategory => (
-                <option key={subCategory} value={subCategory}>
-                  {titleCase(subCategory)}
-                </option>
-              ))}
-            </select>
-
-            <input
-              id="subCategory"
-              type="text"
-              name="subCategory"
-              placeholder="Subcategory"
-              required
-              autoComplete="off"
-              spellCheck="false"
-              value={titleCase(form.subCategory) || ""}
-              onChange={updateForm}
-            />
-          </div>
-          <div>
-            <legend>
-              <label htmlFor="artCollection">
-                <p>
-                  <strong>Collection</strong>
-                </p>
-              </label>
-            </legend>
-            <select
-              name="artCollection"
-              id="artCollection"
-              value={form.artCollection || ""}
-              onChange={updateForm}
-            >
-              <option value="">Select a collection</option>
-              {collections.map(collection => (
-                <option key={collection} value={collection}>
-                  {titleCase(collection)}
-                </option>
-              ))}
-            </select>
-            <input
-              id="artCollection"
-              type="text"
-              name="artCollection"
-              placeholder="Collection"
-              required
-              autoComplete="off"
-              spellCheck="false"
-              value={titleCase(form.artCollection) || ""}
-              onChange={updateForm}
-            />
-          </div>
+          <CategoriesSelection category={form.category || ""} updateForm={updateForm} />
+          <GenericSelection
+            allValues={subCategories}
+            valueType="subCategory"
+            selectedValue={form.subCategory || ""}
+            updateForm={updateForm}
+          />
+          <GenericSelection
+            allValues={collections}
+            valueType="artCollection"
+            selectedValue={form.artCollection || ""}
+            updateForm={updateForm}
+          />
         </form>
+        <FileInput
+          ref={fileInput}
+          image={image}
+          updateImage={updateImage}
+          uploading={uploading}
+          removeStagedUpload={removeStagedUpload}
+        />
         {form.category && form.subCategory && form.artCollection && image.size ? (
           <button onClick={beginBulkUpload} disabled={uploading !== null}>
             {uploading !== null ? "Uploading..." : "Upload"}
           </button>
         ) : null}
-        <div>
-          <legend>
-            <label htmlFor="image">
-              <p>
-                <strong>Image</strong>
-              </p>
-            </label>
-          </legend>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
-            required
-            onChange={updateImage}
-            multiple
-          />
-        </div>
-        <div className="preview-container">
-          {Array.from(image.values()).map((img, i) => {
-            return (
-              <div className="thumbnail-preview" key={i}>
-                <img
-                  className={`preview ${uploading === img ? "uploading" : ""}`}
-                  src={URL.createObjectURL(img)}
-                  alt="Preview of your uploaded image"
-                />
-                <button disabled={uploading === img} onClick={() => removeStagedUpload(img)}>
-                  X
-                </button>
-              </div>
-            )
-          })}
-        </div>
       </div>
       {form.category && form.subCategory && form.artCollection ? (
         <AdminArtCollection
