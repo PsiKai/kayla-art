@@ -18,7 +18,7 @@ function GenericSelection({
       <legend>
         <label htmlFor={valueType}>
           <p>
-            <strong>Subcategory</strong>
+            <strong>{titleCase(valueType)}</strong>
           </p>
         </label>
       </legend>

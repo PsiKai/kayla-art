@@ -1,30 +1,15 @@
-import React, { Dispatch, useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import AdminArtCollection from "./AdminArtCollection"
-import CategoriesSelection from "./form/CategoriesSelection"
-import GenericSelection from "./form/GenericSelection"
 import FileInput from "./form/FileInput"
-import { slugify } from "../utils/stringUtils"
-import useDebounce from "../hooks/useDebounce"
-
-type TUploadForm = {
-  category?: string
-  subCategory?: string
-  artCollection?: string
-}
-
-const invalidCharsRegex = /[!"#$%&'()*+,/:;<=>?@[\\\]^`{|}~]/g
+import ArtworkForm, { TArtworkForm } from "./form/ArtworkForm"
 
 function Upload() {
   const [image, setImage] = useState<Map<string, File>>(new Map())
-  const [form, setForm] = useState<TUploadForm>({})
+  const [form, setForm] = useState<TArtworkForm>({})
   const [uploading, setUploading] = useState<File | null>(null)
-  const [subCategories, setSubCategories] = useState<string[]>([])
-  const [collections, setCollections] = useState<string[]>([])
 
   const uploadForm = useRef<HTMLFormElement>(null)
   const fileInput = useRef<HTMLInputElement>(null)
-
-  const debounce = useDebounce(500)
 
   useEffect(() => {
     if (image.size === 0) {
@@ -36,36 +21,6 @@ function Upload() {
     fileInput.current!.files = dt.files
   }, [image])
 
-  const updateFormSelections = async (
-    updatedForm: TUploadForm,
-    updatedField: keyof TUploadForm,
-  ) => {
-    if (!updatedForm.category) return
-    if (!updatedForm[updatedField]) return
-
-    type mapType<T> = {
-      [key in keyof TUploadForm]: T
-    }
-    const urlMap: mapType<string> = {
-      category: `/api/artworks/categories/${updatedForm.category}/subcategories`,
-      subCategory: `/api/artworks/categories/${updatedForm.category}/subcategories/${updatedForm.subCategory}/collections`,
-    }
-    const stateSetterMap: mapType<Dispatch<React.SetStateAction<string[]>>> = {
-      category: setSubCategories,
-      subCategory: setCollections,
-    }
-
-    const url = urlMap[updatedField]
-    const stateSetter = stateSetterMap[updatedField]
-    if (!url || !stateSetter) return
-
-    stateSetter([])
-    fetch(url)
-      .then(res => res.json())
-      .then(({ resources }) => stateSetter(resources))
-      .catch(err => console.log(err))
-  }
-
   const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
 
@@ -73,21 +28,6 @@ function Upload() {
       image.set(file.name, file)
     }
     setImage(new Map(image))
-  }
-
-  const updateForm = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    let value = e.target.value.replace(invalidCharsRegex, "")
-    value = slugify(value)
-    console.log(value)
-    setForm(prev => {
-      const updatedForm = {
-        ...prev,
-        [e.target.name]: value,
-      }
-
-      debounce(() => updateFormSelections(updatedForm, e.target.name as keyof TUploadForm))
-      return updatedForm
-    })
   }
 
   const uploadNewArt = async (img: File) => {
@@ -133,22 +73,8 @@ function Upload() {
   return (
     <>
       <div className="form-data">
-        <h2>Upload Artwork</h2>
-        <form ref={uploadForm} className="form">
-          <CategoriesSelection category={form.category || ""} updateForm={updateForm} />
-          <GenericSelection
-            allValues={subCategories}
-            valueType="subCategory"
-            selectedValue={form.subCategory || ""}
-            updateForm={updateForm}
-          />
-          <GenericSelection
-            allValues={collections}
-            valueType="artCollection"
-            selectedValue={form.artCollection || ""}
-            updateForm={updateForm}
-          />
-        </form>
+        <h2>Explore Artwork</h2>
+        <ArtworkForm ref={uploadForm} form={form} setForm={setForm} />
         <FileInput
           ref={fileInput}
           image={image}

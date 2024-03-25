@@ -40,7 +40,7 @@ const FileInput = forwardRef<HTMLInputElement, TFileInputProps>((props, ref) => 
                 alt="Preview of your uploaded image"
               />
               <button disabled={uploading === img} onClick={() => removeStagedUpload(img)}>
-                X
+                ✕
               </button>
             </div>
           )
