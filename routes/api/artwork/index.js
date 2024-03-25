@@ -9,7 +9,8 @@ const artworkRouter = Router()
 artworkRouter.use(json())
 
 artworkRouter.get("/", async (req, res) => {
-  const resources = await Artwork.find(req.query)
+  const { limit = 5, offset = 0, ...query } = req.query
+  const resources = await Artwork.find(query).skip(+offset).limit(+limit)
   res.json({ resources })
 })
 

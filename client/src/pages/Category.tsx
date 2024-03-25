@@ -1,7 +1,9 @@
+import React from "react"
 import { Link, useParams } from "react-router-dom"
 import { titleCase } from "../utils/stringUtils"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import withValidPath from "../components/hoc/withValidPath"
+import ThumbnailContainer from "../components/ThumbnailContainer"
 
 function Category() {
   const { category } = useParams()
@@ -18,9 +20,10 @@ function Category() {
       ) : (
         <>
           {subCategories.map(subCategory => (
-            <Link key={subCategory} to={`/${category}/${subCategory}`}>
-              {titleCase(subCategory)}
-            </Link>
+            <React.Fragment key={subCategory}>
+              <Link to={`/${category}/${subCategory}`}>{titleCase(subCategory)}</Link>
+              <ThumbnailContainer category={category} subCategory={subCategory} />
+            </React.Fragment>
           ))}
         </>
       )}

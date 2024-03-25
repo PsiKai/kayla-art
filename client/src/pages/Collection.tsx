@@ -3,6 +3,7 @@ import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import { titleCase } from "../utils/stringUtils"
 import withValidPath from "../components/hoc/withValidPath"
+import withBreadcrumbs from "../components/hoc/withBreadcrumb"
 
 function Collection() {
   const { category, subCategory, artCollection } = useParams()
@@ -19,22 +20,14 @@ function Collection() {
       {pending ? (
         <div>Loading...</div>
       ) : (
-        <>
-          {collection.map(art => (
-            <Link to={art._id}>
-              <img
-                src={art.thumbnail}
-                alt={`An artwork from the ${titleCase(artCollection)} collection`}
-              />
-            </Link>
-          ))}
-          <Link to="sample-artwork">
-            <img src="https://picsum.photos/200/300" alt="A sample artwork" />
+        collection.map(art => (
+          <Link to={art._id} key={art._id}>
+            <img
+              src={art.thumbnail}
+              alt={`An artwork from the ${titleCase(artCollection)} collection`}
+            />
           </Link>
-          <Link to="sample-artwork">
-            <img src="https://picsum.photos/300/300" alt="A sample artwork" />
-          </Link>
-        </>
+        ))
       )}
     </>
   )
@@ -42,4 +35,6 @@ function Collection() {
 
 const ValidPathCollection = withValidPath(Collection)
 
-export default ValidPathCollection
+const BreadcrumbedCollection = withBreadcrumbs(ValidPathCollection)
+
+export default BreadcrumbedCollection

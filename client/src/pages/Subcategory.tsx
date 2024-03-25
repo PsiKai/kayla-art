@@ -3,6 +3,9 @@ import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import { titleCase } from "../utils/stringUtils"
 import withValidPath from "../components/hoc/withValidPath"
+import withBreadcrumbs from "../components/hoc/withBreadcrumb"
+import React from "react"
+import ThumbnailContainer from "../components/ThumbnailContainer"
 
 function Subcategory() {
   const { category, subCategory } = useParams()
@@ -20,12 +23,15 @@ function Subcategory() {
       ) : (
         <>
           {subcategories.map(subcategory => (
-            <Link key={subcategory._id} to={subcategory.artCollection}>
-              {titleCase(subcategory.artCollection)}
-            </Link>
+            <React.Fragment key={subcategory._id}>
+              <Link to={subcategory.artCollection}>{titleCase(subcategory.artCollection)}</Link>
+              <ThumbnailContainer
+                category={category}
+                subCategory={subCategory}
+                artCollection={subcategory.artCollection}
+              />
+            </React.Fragment>
           ))}
-          <Link to="sample-collection">Sample Collection</Link>
-          <Link to="another-collection">Another Collection</Link>
         </>
       )}
     </>
@@ -34,4 +40,6 @@ function Subcategory() {
 
 const ValidPathSubcategory = withValidPath(Subcategory)
 
-export default ValidPathSubcategory
+const BreadcrumbedSubcategory = withBreadcrumbs(ValidPathSubcategory)
+
+export default BreadcrumbedSubcategory
