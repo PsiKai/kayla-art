@@ -15,7 +15,6 @@ function Upload() {
     if (image.size === 0) {
       fileInput.current!.value = ""
     }
-
     const dt = new DataTransfer()
     Array.from(image.values()).forEach(file => dt.items.add(file))
     fileInput.current!.files = dt.files
@@ -73,7 +72,7 @@ function Upload() {
   return (
     <>
       <div className="form-data">
-        <h2>Explore Artwork</h2>
+        <h2>Make Changes To Your Artwork</h2>
         <ArtworkForm ref={uploadForm} form={form} setForm={setForm} />
         <FileInput
           ref={fileInput}

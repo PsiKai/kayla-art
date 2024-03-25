@@ -15,29 +15,29 @@ type TArtworkFormProps = {
   setForm: Dispatch<SetStateAction<TArtworkForm>>
 }
 
+type TMapType<T> = {
+  [key in keyof TArtworkForm]: T
+}
+
 const invalidCharsRegex = /[!"#$%&'()*+,/:;<=>?@[\\\]^`{|}~]/g
+
 const ArtworkForm = forwardRef<HTMLFormElement, TArtworkFormProps>((props, formRef) => {
   const { form, setForm } = props
+
   const [subCategories, setSubCategories] = useState<string[]>([])
   const [collections, setCollections] = useState<string[]>([])
 
   const debounce = useDebounce(500)
 
-  const updateFormSelections = async (
-    updatedForm: TArtworkForm,
-    updatedField: keyof TArtworkForm,
-  ) => {
+  const updateFormSelections = (updatedForm: TArtworkForm, updatedField: keyof TArtworkForm) => {
     if (!updatedForm.category) return
     if (!updatedForm[updatedField]) return
 
-    type mapType<T> = {
-      [key in keyof TArtworkForm]: T
-    }
-    const urlMap: mapType<string> = {
+    const urlMap: TMapType<string> = {
       category: `/api/artworks/categories/${updatedForm.category}/subcategories`,
       subCategory: `/api/artworks/categories/${updatedForm.category}/subcategories/${updatedForm.subCategory}/collections`,
     }
-    const stateSetterMap: mapType<Dispatch<SetStateAction<string[]>>> = {
+    const stateSetterMap: TMapType<Dispatch<SetStateAction<string[]>>> = {
       category: setSubCategories,
       subCategory: setCollections,
     }
@@ -46,6 +46,7 @@ const ArtworkForm = forwardRef<HTMLFormElement, TArtworkFormProps>((props, formR
     const stateSetter = stateSetterMap[updatedField]
     if (!url || !stateSetter) return
 
+    setCollections([])
     stateSetter([])
     fetch(url)
       .then(res => res.json())
@@ -56,10 +57,12 @@ const ArtworkForm = forwardRef<HTMLFormElement, TArtworkFormProps>((props, formR
   const updateForm = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     let value = e.target.value.replace(invalidCharsRegex, "")
     value = slugify(value)
-    console.log(value)
+
     setForm(prev => {
       const updatedForm = {
         ...prev,
+        ...(e.target.name === "category" ? { subCategory: "", artCollection: "" } : {}),
+        ...(e.target.name === "subCategory" ? { artCollection: "" } : {}),
         [e.target.name]: value,
       }
 
