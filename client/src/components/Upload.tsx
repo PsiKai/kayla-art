@@ -1,12 +1,15 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import AdminArtCollection from "./AdminArtCollection"
 import FileInput from "./form/FileInput"
 import ArtworkForm, { TArtworkForm } from "./form/ArtworkForm"
+import { AppContext } from "../context/AppContext"
 
 function Upload() {
+  const { dispatch } = useContext(AppContext)
+
   const [image, setImage] = useState<Map<string, File>>(new Map())
   const [form, setForm] = useState<TArtworkForm>({})
-  const [uploading, setUploading] = useState<File | null>(null)
+  const [uploading, setUploading] = useState<string | null>(null)
 
   const uploadForm = useRef<HTMLFormElement>(null)
   const fileInput = useRef<HTMLInputElement>(null)
@@ -30,7 +33,7 @@ function Upload() {
   }
 
   const uploadNewArt = async (img: File) => {
-    setUploading(img)
+    setUploading(img.name)
 
     const uploadFormData = new FormData(uploadForm.current!)
     uploadFormData.append("image", img)
@@ -41,7 +44,7 @@ function Upload() {
         body: uploadFormData,
       })
       const { newArt } = await res.json()
-      console.log(newArt)
+      dispatch({ type: "ADD_ARTWORK", payload: newArt })
     } catch (err) {
       console.log(err)
     } finally {

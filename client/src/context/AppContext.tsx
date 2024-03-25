@@ -19,9 +19,14 @@ type Props = {
   children: React.ReactNode | React.ReactNode[]
 }
 
+type TDispatch = {
+  type: string
+  payload?: Partial<TAppState> | string | TArtWork[] | TArtWork
+}
+
 type TProvider = {
   state: TAppState
-  dispatch: React.Dispatch<{ type: string; payload: Partial<TAppState> }>
+  dispatch: React.Dispatch<TDispatch>
 }
 
 const initialAppState: TAppState = {
@@ -39,15 +44,18 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
   return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>
 }
 
-function appReducer(
-  state: TAppState,
-  action: { type: string; payload: Partial<TAppState> },
-): TAppState {
+function appReducer(state: TAppState, action: TDispatch): TAppState {
+  if (!action.payload) return state
+
   switch (action.type) {
     case "SET_USER":
-      return { ...state, user: action.payload.user! }
-    case "SET_ART":
-      return { ...state, art: action.payload.art! }
+      return { ...state, user: action.payload as string }
+    case "SET_ARTWORK":
+      return { ...state, art: action.payload as TArtWork[] }
+    case "DELETE_ARTWORK":
+      return { ...state, art: state.art.filter(art => art._id !== action.payload) }
+    case "ADD_ARTWORK":
+      return { ...state, art: [...state.art, action.payload as TArtWork] }
     default:
       return state
   }

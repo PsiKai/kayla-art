@@ -55,8 +55,9 @@ input:checked + label.artwork-label {
   height: 100px;
 }
 
-.preview.uploading {
-  opacity: 0.5;
+.preview.uploading,
+.pending {
+  opacity: 0.4;
 }
 
 .thumbnail-preview {

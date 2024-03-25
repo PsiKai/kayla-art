@@ -26,7 +26,9 @@ artworkRouter.use("/categories", artworkCategoryRouter)
 
 artworkRouter.get("/:id", async (req, res) => {
   try {
-    const resources = await Artwork.findById(req.params.id)
+    const resources = (await Artwork.findById(req.params.id)).toObject()
+    const [originalSrc] = await storageClient.signedUrl(resources)
+    resources.originalSrc = originalSrc
     res.json({ resources })
   } catch (error) {
     console.error(error)

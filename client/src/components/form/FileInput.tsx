@@ -3,7 +3,7 @@ import { forwardRef } from "react"
 type TFileInputProps = {
   image: Map<string, File>
   updateImage: (event: React.ChangeEvent<HTMLInputElement>) => void
-  uploading: File | null
+  uploading: string | null
   removeStagedUpload: (file: File) => void
 }
 
@@ -35,11 +35,11 @@ const FileInput = forwardRef<HTMLInputElement, TFileInputProps>((props, ref) => 
           return (
             <div className="thumbnail-preview" key={i}>
               <img
-                className={`preview ${uploading === img ? "uploading" : ""}`}
+                className={`preview ${uploading === img.name ? "uploading" : ""}`}
                 src={URL.createObjectURL(img)}
                 alt="Preview of your uploaded image"
               />
-              <button disabled={uploading === img} onClick={() => removeStagedUpload(img)}>
+              <button disabled={uploading === img.name} onClick={() => removeStagedUpload(img)}>
                 ✕
               </button>
             </div>
