@@ -1,5 +1,4 @@
 import { Link, useParams } from "react-router-dom"
-import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import { titleCase } from "../utils/stringUtils"
 import withValidPath from "../components/hoc/withValidPath"
@@ -10,8 +9,8 @@ import ThumbnailContainer from "../components/ThumbnailContainer"
 function Subcategory() {
   const { category, subCategory } = useParams()
 
-  const [subcategories, pending] = useFetchOnRender<TArtWork[]>(
-    `/api/artworks?category=${category}&subCategory=${subCategory}`,
+  const [collections, pending] = useFetchOnRender<string[]>(
+    `/api/artworks/categories/${category}/subcategories/${subCategory}/collections`,
   )
 
   return (
@@ -22,13 +21,13 @@ function Subcategory() {
         <div>Loading...</div>
       ) : (
         <>
-          {subcategories.map(subcategory => (
-            <React.Fragment key={subcategory._id}>
-              <Link to={subcategory.artCollection}>{titleCase(subcategory.artCollection)}</Link>
+          {collections.map(collection => (
+            <React.Fragment key={collection}>
+              <Link to={collection}>{titleCase(collection)}</Link>
               <ThumbnailContainer
                 category={category}
                 subCategory={subCategory}
-                artCollection={subcategory.artCollection}
+                artCollection={collection}
               />
             </React.Fragment>
           ))}

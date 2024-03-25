@@ -1,4 +1,5 @@
-import React, { useState /*, useContext*/ } from "react"
+import React, { useEffect, useState /*, useContext*/ } from "react"
+import { titleCase } from "../utils/stringUtils"
 // import { AppContext } from "../context/AppContext"
 
 type TUploadForm = {
@@ -14,6 +15,25 @@ function Upload() {
   const [image, setImage] = useState<File | null>()
   const [form, setForm] = useState<TUploadForm>({})
   const [uploading, setUploading] = useState(false)
+  const [subCategories, setSubCategories] = useState<string[]>([])
+  const [collections, setCollections] = useState<string[]>([])
+
+  useEffect(() => {
+    if (!form.category) return
+    fetch(`/api/artworks/categories/${form.category}/subcategories`)
+      .then(res => res.json())
+      .then(({ resources }) => setSubCategories(resources))
+      .catch(err => console.log(err))
+  }, [form.category])
+
+  useEffect(() => {
+    if (!form.category || !form.subCategory) return
+
+    fetch(`/api/artworks/categories/${form.category}/subcategories/${form.subCategory}/collections`)
+      .then(res => res.json())
+      .then(({ resources }) => setCollections(resources))
+      .catch(err => console.log(err))
+  }, [form.category, form.subCategory])
 
   const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
@@ -28,6 +48,7 @@ function Upload() {
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const value = e.target.value.replace(invalidCharsRegex, "")
+    console.log(value)
     setForm(prev => {
       return {
         ...prev,
@@ -120,6 +141,20 @@ function Upload() {
               </p>
             </label>
           </legend>
+          <select
+            name="subCategory"
+            id="subCategory"
+            value={form.subCategory || ""}
+            onChange={updateForm}
+          >
+            <option value="">Select a subcategory</option>
+            {subCategories.map(subCategory => (
+              <option key={subCategory} value={subCategory}>
+                {titleCase(subCategory)}
+              </option>
+            ))}
+          </select>
+
           <input
             id="subCategory"
             type="text"
@@ -128,7 +163,7 @@ function Upload() {
             required
             autoComplete="off"
             spellCheck="false"
-            value={form.subCategory || ""}
+            value={titleCase(form.subCategory) || ""}
             onChange={updateForm}
           />
         </div>
@@ -140,6 +175,19 @@ function Upload() {
               </p>
             </label>
           </legend>
+          <select
+            name="artCollection"
+            id="artCollection"
+            value={form.artCollection || ""}
+            onChange={updateForm}
+          >
+            <option value="">Select a collection</option>
+            {collections.map(collection => (
+              <option key={collection} value={titleCase(collection)}>
+                {titleCase(collection)}
+              </option>
+            ))}
+          </select>
           <input
             id="artCollection"
             type="text"
@@ -148,7 +196,7 @@ function Upload() {
             required
             autoComplete="off"
             spellCheck="false"
-            value={form.artCollection || ""}
+            value={titleCase(form.artCollection) || ""}
             onChange={updateForm}
           />
         </div>
