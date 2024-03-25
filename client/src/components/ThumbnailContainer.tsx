@@ -3,7 +3,7 @@ import useFetchOnRender from "../hooks/useFetchOnRender"
 import { TArtWork } from "../context/AppContext"
 import "../styles/ThumbnailContainer.css"
 
-type TThumbnailContainerProps = {
+export type TThumbnailContainerProps = {
   category?: string
   subCategory?: string
   artCollection?: string

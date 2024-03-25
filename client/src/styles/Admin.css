@@ -7,3 +7,51 @@
 .admin-art-thumbnail {
   height: 100px;
 }
+
+.artwork-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+input:checked + label.artwork-label {
+  background-color: #f0f0f0;
+  outline: 1px solid #e0e0e0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  position: absolute;
+  bottom: 100%;
+}
+
+.collection-container {
+  position: relative;
+}
+
+.preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  max-width: 600px;
+}
+
+.preview {
+  height: 100px;
+}
+
+.preview.uploading {
+  opacity: 0.5;
+}
+
+.thumbnail-preview {
+  position: relative;
+}
+
+.thumbnail-preview button,
+.thumbnail-preview input {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
