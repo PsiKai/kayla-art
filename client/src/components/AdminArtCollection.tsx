@@ -5,6 +5,7 @@ import { TArtWork } from "../context/AppContext"
 import { titleCase } from "../utils/stringUtils"
 import UpdateArtworkModal from "./layout/UpdateArtworkModal"
 import { TArtworkForm } from "./form/ArtworkForm"
+import DeleteArtworkModal from "./layout/DeleteArtworkModal"
 
 type TDeleteArtProps = {
   category: string
@@ -19,6 +20,7 @@ function AdminArtCollection({ category, subCategory, artCollection }: TDeleteArt
   } = useContext(AppContext)
 
   const updateModalRef = useRef<HTMLDialogElement>(null)
+  const deleteModalRef = useRef<HTMLDialogElement>(null)
 
   const [artwork, pending] = useFetchWithDebounce<TArtWork[]>(
     `/api/artworks?category=${category}&subCategory=${subCategory}&artCollection=${artCollection}&limit=0`,
@@ -27,6 +29,7 @@ function AdminArtCollection({ category, subCategory, artCollection }: TDeleteArt
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [deleting, setDeleting] = useState<string | null>(null)
   const [editing, setEditing] = useState<string | null>(null)
+  const [selectedArtwork, setSelectedArtwork] = useState<TArtWork[]>([])
 
   useEffect(() => {
     dispatch({ type: "SET_ARTWORK", payload: artwork })
@@ -131,6 +134,12 @@ function AdminArtCollection({ category, subCategory, artCollection }: TDeleteArt
     setSelected(new Set(selected))
   }
 
+  const openModal = (modalRef: React.RefObject<HTMLDialogElement>) => {
+    const selectedArt = art.filter(({ _id }) => selected.has(_id))
+    setSelectedArtwork(selectedArt)
+    modalRef.current?.showModal()
+  }
+
   return (
     <section className="artwork-collection-section">
       <h2>Art Collection: {titleCase(artCollection)}</h2>
@@ -140,13 +149,13 @@ function AdminArtCollection({ category, subCategory, artCollection }: TDeleteArt
         <div className="collection-container">
           <div className="action-buttons">
             <button
-              onClick={deleteSelectedArt}
+              onClick={() => openModal(deleteModalRef)}
               disabled={!!deleting || !selected.size || !!editing}
             >
               {deleting ? "Deleting..." : "Delete Selected"}
             </button>
             <button
-              onClick={() => updateModalRef.current?.showModal()}
+              onClick={() => openModal(updateModalRef)}
               disabled={!!editing || !selected.size || !!deleting}
             >
               {editing ? "Moving..." : "Move Selected"}
@@ -188,7 +197,16 @@ function AdminArtCollection({ category, subCategory, artCollection }: TDeleteArt
           </div>
         </div>
       )}
-      <UpdateArtworkModal ref={updateModalRef} onClose={moveSelectedArt} artwork={selected} />
+      <UpdateArtworkModal
+        ref={updateModalRef}
+        onClose={moveSelectedArt}
+        artwork={selectedArtwork}
+      />
+      <DeleteArtworkModal
+        ref={deleteModalRef}
+        onClose={deleteSelectedArt}
+        artwork={selectedArtwork}
+      />
     </section>
   )
 }

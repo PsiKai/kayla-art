@@ -1,8 +1,9 @@
 import React, { forwardRef, useRef, useState } from "react"
 import ArtworkForm, { TArtworkForm } from "../form/ArtworkForm"
+import { TArtWork } from "../../context/AppContext"
 
 type TModalProps = {
-  artwork: Set<string>
+  artwork: TArtWork[]
   onClose: (TArtworkForm) => void
 }
 
