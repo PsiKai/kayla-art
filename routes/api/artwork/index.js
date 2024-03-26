@@ -36,12 +36,30 @@ artworkRouter.get("/:id", async (req, res) => {
   }
 })
 
+artworkRouter.put("/:id", slugifyValues, async (req, res) => {
+  try {
+    const artwork = await Artwork.findById(req.params.id).lean()
+    const moveFiles = storageClient.moveFile(artwork, req.body)
+    await Promise.all(moveFiles)
+    const thumbnail = storageClient.buildThumbnailUrl({ ...artwork, ...req.body })
+    const updatedArtwork = await Artwork.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body, thumbnail },
+      { new: true },
+    )
+    res.json({ updatedArtwork })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: error.message })
+  }
+})
+
 artworkRouter.delete("/:id", async (req, res) => {
   try {
     const artwork = await Artwork.findById(req.params.id).lean()
     const bucketDeteletion = storageClient.deleteFile(artwork)
-    await Promise.all(bucketDeteletion)
     await Artwork.deleteOne({ _id: req.params.id })
+    await Promise.all(bucketDeteletion)
     res.status(204).end()
   } catch (error) {
     console.error(error)

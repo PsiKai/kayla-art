@@ -40,15 +40,16 @@ class GoogleClient extends Storage {
   }
 
   moveFile(oldImg, newImg) {
-    const { extension } = oldImg
-    const { category, subCategory, title } = newImg
+    const { extension, uid } = oldImg
+    const { category, subCategory, artCollection } = newImg
 
     const [oldFullSizeFile, oldThumbnailFile] = this.buildPaths(oldImg)
     const [newFullSizePath, newThumbnailPath] = this.buildPaths({
       category,
       subCategory,
-      title,
+      artCollection,
       extension,
+      uid,
     })
 
     return [

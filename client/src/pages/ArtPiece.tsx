@@ -11,7 +11,6 @@ function ArtPiece() {
     `/api/artworks/${artwork}`,
   )
 
-  console.log(artPiece)
   return (
     <>
       <h1>ArtPiece</h1>
