@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
+import React, { useContext, /*useEffect,*/ useLayoutEffect, useRef, useState } from "react"
 import AdminArtCollection from "./AdminArtCollection"
 import FileInput from "./form/FileInput"
 import ArtworkForm, { TArtworkForm } from "./form/ArtworkForm"
@@ -14,7 +14,7 @@ function Upload() {
   const uploadForm = useRef<HTMLFormElement>(null)
   const fileInput = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (image.size === 0) {
       fileInput.current!.value = ""
     }

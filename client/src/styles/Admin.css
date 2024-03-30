@@ -72,8 +72,7 @@ input:checked + label.artwork-label {
 }
 
 dialog {
-  width: 100%;
-  max-width: 600px;
+  width: clamp(300px, 800px, 100% - 2rem);
 }
 
 .modal-content {

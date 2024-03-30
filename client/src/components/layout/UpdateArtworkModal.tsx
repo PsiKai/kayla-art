@@ -8,7 +8,7 @@ type TModalProps = {
 }
 
 const UpdateArtworkModal = forwardRef<HTMLDialogElement, TModalProps>((props, modalRef) => {
-  const { onClose } = props
+  const { onClose, artwork } = props
   const [form, setForm] = useState<TArtworkForm>({})
   const formRef = useRef<HTMLFormElement>()
 
@@ -20,7 +20,18 @@ const UpdateArtworkModal = forwardRef<HTMLDialogElement, TModalProps>((props, mo
   return (
     <dialog ref={modalRef}>
       <div className="modal-content">
-        <h2>UpdateArtworkModal</h2>
+        <h2>Choose The Destination</h2>
+        <div className="preview-container">
+          {artwork.map(({ thumbnail, _id, artCollection }) => (
+            <div key={_id}>
+              <img
+                className="preview"
+                src={thumbnail}
+                alt={`An artwork from the ${artCollection} album`}
+              />
+            </div>
+          ))}
+        </div>
         <ArtworkForm ref={formRef} form={form} setForm={setForm} />
 
         <div className="modal-form-buttons">
