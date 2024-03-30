@@ -15,8 +15,8 @@ function Subcategory() {
 
   return (
     <>
-      <h1>Category: {titleCase(category)}</h1>
-      <h2>Subcategory: {titleCase(subCategory)}</h2>
+      <h1>{titleCase(category)}</h1>
+      <h2>{titleCase(subCategory)}</h2>
       {pending ? (
         <div>Loading...</div>
       ) : (

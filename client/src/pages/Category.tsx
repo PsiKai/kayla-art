@@ -14,7 +14,7 @@ function Category() {
 
   return (
     <>
-      <h1>Category: {titleCase(category)}</h1>
+      <h1>{titleCase(category)}</h1>
       {pending ? (
         <div>Loading...</div>
       ) : (
