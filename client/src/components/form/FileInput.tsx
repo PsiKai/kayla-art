@@ -1,4 +1,5 @@
-import { forwardRef } from "react"
+import React, { forwardRef } from "react"
+import Dropzone from "../Dropzone"
 
 type TFileInputProps = {
   image: Map<string, File>
@@ -9,8 +10,34 @@ type TFileInputProps = {
 
 const FileInput = forwardRef<HTMLInputElement, TFileInputProps>((props, ref) => {
   const { image, updateImage, uploading, removeStagedUpload } = props
+
+  function handleValidDrop(e: React.DragEvent) {
+    console.log("Valid drop event")
+    const inputRef = ref as React.MutableRefObject<HTMLInputElement>
+    if (inputRef && inputRef.current) {
+      inputRef.current.files = e.dataTransfer.files
+      const changeEvent = new Event("change", { bubbles: true })
+      inputRef.current.dispatchEvent(changeEvent)
+    }
+  }
+
+  function handleInvalidDrop(e: React.DragEvent) {
+    console.log("Invalid drop event")
+    console.log(e.dataTransfer.items)
+    // const badFile = Array.from(e.dataTransfer.items)?.find(({ type }) => !type.match(typeMatch))
+    // console.log(`File with type "${badFile?.type}" is not allowed!`)
+    // setAlert({
+    //   message: `File with type "${badFile.type}" is not allowed!`,
+    //   type: "warning",
+    // })
+  }
+
   return (
-    <>
+    <Dropzone
+      className="file-input-dropzone"
+      handleValidDrop={handleValidDrop}
+      handleInvalidDrop={handleInvalidDrop}
+    >
       <div>
         <legend>
           <label htmlFor="image">
@@ -46,7 +73,7 @@ const FileInput = forwardRef<HTMLInputElement, TFileInputProps>((props, ref) => 
           )
         })}
       </div>
-    </>
+    </Dropzone>
   )
 })
 
