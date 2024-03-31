@@ -3,12 +3,13 @@ import { useParams } from "react-router-dom"
 
 type TFetchResult<T> = [T, boolean]
 
-export default function useFetchOnRender<T>(url: string): TFetchResult<T> {
+export default function useFetchOnRender<T>(url: string, cancel?: boolean): TFetchResult<T> {
   const params = useParams()
   const [data, setData] = useState<T | undefined>()
   const [pending, setPending] = useState(true)
 
   useEffect(() => {
+    if (cancel) return
     setPending(true)
     fetch(url)
       .then(res => {
@@ -22,7 +23,7 @@ export default function useFetchOnRender<T>(url: string): TFetchResult<T> {
       })
       .catch(err => console.log(err))
       .finally(() => setPending(false))
-  }, [url, params])
+  }, [url, params, cancel])
 
   return [data!, pending]
 }

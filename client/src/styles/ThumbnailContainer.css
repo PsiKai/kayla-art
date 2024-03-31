@@ -1,17 +1,35 @@
+.thumbnail-grid-wrapper {
+  width: 100%;
+}
+
+.thumbnail-skeleton,
 .thumbnail-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  aspect-ratio: 12/8;
+  width: clamp(100%, 800px, 100%);
+  max-width: 800px;
+  margin: auto;
+  overflow: hidden;
 }
 
 .thumbnail-img {
   display: flex;
-  width: auto;
-  height: 200px;
+  overflow: hidden;
+  border-radius: 0.5rem;
 }
 
-.thumbnail-skeleton {
-  display: flex;
-  align-items: center;
-  height: 200px;
+.thumbnail-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.img-skeleton {
+  width: 100%;
+  height: 100%;
+  border: 1px solid grey;
+  border-radius: 0.5rem;
 }

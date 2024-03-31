@@ -1,7 +1,8 @@
-import { useMemo } from "react"
+import { useCallback, useMemo, useRef } from "react"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import { TArtWork } from "../context/AppContext"
 import "../styles/ThumbnailContainer.css"
+import useIntersectionObserver from "../hooks/useIntersectionObserver"
 
 export type TThumbnailContainerProps = {
   category?: string
@@ -11,43 +12,50 @@ export type TThumbnailContainerProps = {
 }
 
 function ThumbnailContainer(props: TThumbnailContainerProps) {
-  const { category, subCategory, artCollection, limit } = props
   const serializedURL = useMemo(() => {
-    const params: TThumbnailContainerProps = {
-      category,
-      subCategory,
-      artCollection,
-      limit,
-    }
-    for (const key in params) {
-      if (!params[key as keyof TThumbnailContainerProps]) {
-        delete params[key as keyof TThumbnailContainerProps]
-      }
-    }
-    const queryParams = new URLSearchParams(params)
-    const url = `/api/artworks?${queryParams.toString()}`
-    return url
-  }, [category, subCategory, artCollection, limit])
+    return `/api/artworks?${new URLSearchParams(props).toString()}`
+  }, [props])
 
-  const [thumbnails, pending] = useFetchOnRender<TArtWork[]>(serializedURL)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const isIntersecting = useIntersectionObserver(containerRef)
+  const [thumbnails, pending] = useFetchOnRender<TArtWork[]>(serializedURL, !isIntersecting)
+
+  const calculatedGridPosition = useCallback((i: number) => {
+    switch (i) {
+      case 0:
+      case 1:
+        return { gridColumn: "span 6", gridRow: "span 5" }
+      case 2:
+      case 3:
+      case 4:
+        return { gridColumn: "span 4", gridRow: "span 3" }
+      default:
+        return {}
+    }
+  }, [])
 
   return (
-    <>
-      {pending ? (
-        <div className="thumbnail-skeleton">Loading...</div>
+    <div className="thumbnail-grid-wrapper" ref={containerRef}>
+      {pending || !isIntersecting ? (
+        <div className="thumbnail-skeleton">
+          {[...Array(props.limit ?? 5)].map((_, i) => (
+            <div className="img-skeleton" key={i} style={calculatedGridPosition(i)} />
+          ))}
+        </div>
       ) : (
         <div className="thumbnail-container">
-          {thumbnails.map(thumbnail => (
-            <img
-              key={thumbnail._id}
-              src={thumbnail.thumbnail}
-              alt={`An artwork from the collection`}
-              className="thumbnail-img"
-            />
+          {thumbnails.map((thumbnail, i) => (
+            <div className="thumbnail-img" style={calculatedGridPosition(i)}>
+              <img
+                key={thumbnail._id}
+                src={thumbnail.thumbnail}
+                alt={`An artwork from the ${thumbnail.artCollection} collection`}
+              />
+            </div>
           ))}
         </div>
       )}
-    </>
+    </div>
   )
 }
 

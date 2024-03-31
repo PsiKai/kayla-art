@@ -14,9 +14,9 @@ function Collection() {
 
   return (
     <>
-      <h1>Category: {titleCase(category)}</h1>
-      <h2>Subcategory: {titleCase(subCategory)}</h2>
-      <h3>Collection: {titleCase(artCollection)}</h3>
+      <h1>{titleCase(category)}</h1>
+      <h2>{titleCase(subCategory)}</h2>
+      <h3>{titleCase(artCollection)}</h3>
       {pending ? (
         <div>Loading...</div>
       ) : (
