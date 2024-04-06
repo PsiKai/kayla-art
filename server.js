@@ -7,6 +7,10 @@ import initDB from "./db/init.js"
 const app = express()
 await initDB()
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("public"))
+}
+
 app.use("/api", apiRouter)
 app.use("/", appRouter)
 
