@@ -20,19 +20,24 @@ function ThumbnailContainer(props: TThumbnailContainerProps) {
   const isIntersecting = useIntersectionObserver(containerRef)
   const [thumbnails, pending] = useFetchOnRender<TArtWork[]>(serializedURL, !isIntersecting)
 
-  const calculatedGridPosition = useCallback((i: number) => {
-    switch (i) {
-      case 0:
-      case 1:
-        return { gridColumn: "span 6", gridRow: "span 5" }
-      case 2:
-      case 3:
-      case 4:
-        return { gridColumn: "span 4", gridRow: "span 3" }
-      default:
-        return {}
-    }
-  }, [])
+  const calculatedGridPosition = useCallback(
+    (i: number) => {
+      if (thumbnails?.length === 1) return { gridColumn: "2 / span 10", gridRow: "span 6" }
+
+      switch (i) {
+        case 0:
+        case 1:
+          return { gridColumn: "span 6", gridRow: "span 5" }
+        case 2:
+        case 3:
+        case 4:
+          return { gridColumn: "span 4", gridRow: "span 3" }
+        default:
+          return {}
+      }
+    },
+    [thumbnails],
+  )
 
   return (
     <div className="thumbnail-grid-wrapper" ref={containerRef}>
