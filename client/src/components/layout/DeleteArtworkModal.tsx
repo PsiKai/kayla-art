@@ -1,13 +1,14 @@
-import { forwardRef } from "react"
+import { FC } from "react"
 import { TArtWork } from "../../context/AppContext"
 
 type TModalProps = {
   artwork: TArtWork[]
   onClose: () => void
+  modalRef: React.RefObject<HTMLDialogElement>
 }
 
-const DeleteArtworkModal = forwardRef<HTMLDialogElement, TModalProps>((props, modalRef) => {
-  const { onClose, artwork } = props
+const DeleteArtworkModal: FC<TModalProps> = props => {
+  const { onClose, artwork, modalRef } = props
 
   const handleClose = () => {
     onClose()
@@ -36,6 +37,6 @@ const DeleteArtworkModal = forwardRef<HTMLDialogElement, TModalProps>((props, mo
       </div>
     </dialog>
   )
-})
+}
 
 export default DeleteArtworkModal

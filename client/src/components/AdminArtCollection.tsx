@@ -198,12 +198,12 @@ function AdminArtCollection({ category, subCategory, artCollection }: TDeleteArt
         </div>
       )}
       <UpdateArtworkModal
-        ref={updateModalRef}
+        modalRef={updateModalRef}
         onClose={moveSelectedArt}
         artwork={selectedArtwork}
       />
       <DeleteArtworkModal
-        ref={deleteModalRef}
+        modalRef={deleteModalRef}
         onClose={deleteSelectedArt}
         artwork={selectedArtwork}
       />

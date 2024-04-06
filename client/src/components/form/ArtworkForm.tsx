@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, forwardRef, useState } from "react"
+import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from "react"
 import CategoriesSelection from "./CategoriesSelection"
 import GenericSelection from "./GenericSelection"
 import { slugify } from "../../utils/stringUtils"
@@ -13,6 +13,7 @@ export type TArtworkForm = {
 type TArtworkFormProps = {
   form: TArtworkForm
   setForm: Dispatch<SetStateAction<TArtworkForm>>
+  formRef: React.RefObject<HTMLFormElement>
 }
 
 type TMapType<T> = {
@@ -21,8 +22,8 @@ type TMapType<T> = {
 
 const invalidCharsRegex = /[!"#$%&'()*+,/:;<=>?@[\\\]^`{|}~]/g
 
-const ArtworkForm = forwardRef<HTMLFormElement, TArtworkFormProps>((props, formRef) => {
-  const { form, setForm } = props
+const ArtworkForm: FC<TArtworkFormProps> = props => {
+  const { form, setForm, formRef } = props
 
   const [subCategories, setSubCategories] = useState<string[]>([])
   const [collections, setCollections] = useState<string[]>([])
@@ -88,6 +89,6 @@ const ArtworkForm = forwardRef<HTMLFormElement, TArtworkFormProps>((props, formR
       />
     </form>
   )
-})
+}
 
 export default ArtworkForm

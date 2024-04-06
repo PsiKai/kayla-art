@@ -1,20 +1,21 @@
-import React, { forwardRef, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import ArtworkForm, { TArtworkForm } from "../form/ArtworkForm"
 import { TArtWork } from "../../context/AppContext"
 
 type TModalProps = {
   artwork: TArtWork[]
-  onClose: (TArtworkForm) => void
+  onClose: (form: TArtworkForm) => void
+  modalRef: React.RefObject<HTMLDialogElement>
 }
 
-const UpdateArtworkModal = forwardRef<HTMLDialogElement, TModalProps>((props, modalRef) => {
-  const { onClose, artwork } = props
+const UpdateArtworkModal: React.FC<TModalProps> = props => {
+  const { onClose, artwork, modalRef } = props
   const [form, setForm] = useState<TArtworkForm>({})
-  const formRef = useRef<HTMLFormElement>()
+  const formRef = useRef<HTMLFormElement>(null)
 
   const handleClose = () => {
     onClose(form)
-    modalRef.current.close()
+    modalRef.current?.close()
   }
 
   return (
@@ -32,10 +33,10 @@ const UpdateArtworkModal = forwardRef<HTMLDialogElement, TModalProps>((props, mo
             </div>
           ))}
         </div>
-        <ArtworkForm ref={formRef} form={form} setForm={setForm} />
+        <ArtworkForm formRef={formRef} form={form} setForm={setForm} />
 
         <div className="modal-form-buttons">
-          <button onClick={() => modalRef.current.close()}>Close</button>
+          <button onClick={() => modalRef.current?.close()}>Close</button>
           <button
             disabled={!form.category || !form.subCategory || !form.artCollection}
             onClick={handleClose}
@@ -46,6 +47,6 @@ const UpdateArtworkModal = forwardRef<HTMLDialogElement, TModalProps>((props, mo
       </div>
     </dialog>
   )
-})
+}
 
 export default UpdateArtworkModal

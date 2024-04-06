@@ -76,7 +76,7 @@ function Upload() {
     <>
       <div className="form-data">
         <h2>Make Changes To Your Artwork</h2>
-        <ArtworkForm ref={uploadForm} form={form} setForm={setForm} />
+        <ArtworkForm formRef={uploadForm} form={form} setForm={setForm} />
         <FileInput
           ref={fileInput}
           image={image}
