@@ -4,6 +4,7 @@ import { uploader } from "../../../middleware/uploader.js"
 import slugifyValues from "../../../middleware/slugifyValues.js"
 import { storageClient } from "../../../google-client.js"
 import artworkCategoryRouter from "./categories/index.js"
+import { isAuthenticated } from "../../../middleware/auth.js"
 
 const artworkRouter = Router()
 artworkRouter.use(json())
@@ -14,7 +15,7 @@ artworkRouter.get("/", async (req, res) => {
   res.json({ resources })
 })
 
-artworkRouter.post("/", uploader, slugifyValues, async (req, res) => {
+artworkRouter.post("/", isAuthenticated, uploader, slugifyValues, async (req, res) => {
   console.log(req.body)
   const thumbnail = storageClient.buildThumbnailUrl(req.body)
   const newArt = new Artwork({ ...req.body, thumbnail })
@@ -36,7 +37,7 @@ artworkRouter.get("/:id", async (req, res) => {
   }
 })
 
-artworkRouter.put("/:id", slugifyValues, async (req, res) => {
+artworkRouter.put("/:id", isAuthenticated, slugifyValues, async (req, res) => {
   try {
     const artwork = await Artwork.findById(req.params.id).lean()
     const moveFiles = storageClient.moveFile(artwork, req.body)
@@ -54,7 +55,7 @@ artworkRouter.put("/:id", slugifyValues, async (req, res) => {
   }
 })
 
-artworkRouter.delete("/:id", async (req, res) => {
+artworkRouter.delete("/:id", isAuthenticated, async (req, res) => {
   try {
     const artwork = await Artwork.findById(req.params.id).lean()
     const bucketDeteletion = storageClient.deleteFile(artwork)
