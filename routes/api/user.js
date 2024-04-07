@@ -1,6 +1,7 @@
 import { Router, json } from "express"
 import User from "../../db/models/user.js"
 import bcrypt from "bcrypt"
+import { isAuthenticated } from "../../middleware/auth.js"
 
 const userRouter = Router()
 userRouter.use(json())
@@ -25,6 +26,10 @@ userRouter.post("/", async (req, res) => {
     console.log("ERROR: ", error)
     res.status(400).send(error)
   }
+})
+
+userRouter.get("/login", isAuthenticated, async (_req, res) => {
+  res.status(200).send("User is authenticated")
 })
 
 userRouter.post("/login", async (req, res) => {
