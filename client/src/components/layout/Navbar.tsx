@@ -10,11 +10,11 @@ function Navbar() {
           <img className="main-nav-logo" src={smallLogo} alt="Kayla Kossajda" />
         </Link>
         <nav className="nav-links">
-          <Link to="illustration">Illustration</Link>
-          <Link to="photography/portraits">Portraits</Link>
-          <Link to="photography/family">Family</Link>
-          <Link to="photography/creative">Creative</Link>
-          <Link to="photography/pets">Pets</Link>
+          <Link to="portraits">Portraits</Link>
+          <Link to="pets">Pets</Link>
+          <Link to="creative">Creative</Link>
+          <Link to="pricing">Pricing</Link>
+          <Link to="about">About</Link>
           <Link to="gallery">Gallery</Link>
           <Link to="admin">Admin</Link>
         </nav>

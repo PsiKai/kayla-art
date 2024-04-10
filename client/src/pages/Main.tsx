@@ -1,48 +1,80 @@
 import "../styles/Main.css"
 import { Link } from "react-router-dom"
 import heroSample2 from "../assets/images/main-page/samplehero1.jpg"
-import heroSample1 from "../assets/images/main-page/sampleherok2.png"
-import { ashleySmoking, flowershoot, veronikaWithCat } from "../assets/images/carousel-photos"
 import {
-  borisIllustration,
+  ashleySmoking,
+  flowershoot,
+  haleySeniorPortrait,
+  monkeyPortrait,
+  veronikaWithCat,
+} from "../assets/images/carousel-photos"
+import {
   haleySeniorStairs,
   michellePainting,
   monkeyAutumnLeaves,
 } from "../assets/images/cover-photos"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 function Main() {
+  const [carouselIndex, setCarouselIndex] = useState<number>(0)
+
+  const carouselImages = useMemo(() => [haleySeniorPortrait, veronikaWithCat, monkeyPortrait], [])
+
+  const carouselTimer = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    carouselTimer.current = setInterval(() => {
+      setCarouselIndex(prevIndex => (prevIndex + 1) % carouselImages.length)
+    }, 5000)
+
+    const timer = carouselTimer.current!
+
+    return () => clearInterval(timer)
+  }, [carouselTimer, carouselImages])
+
   return (
     <>
       <div className="hero-image-container">
-        <img className="hero-image" src={veronikaWithCat.width1200} alt="Kayla Kossajda" />
-        <div className="hero-text">
-          <h1>Kayla Kossajda</h1>
-          <h2>Photographer and Illustrator</h2>
-          <p>Artfully capturing the world around me.</p>
+        <img
+          className="hero-image"
+          src={carouselImages[carouselIndex].width1200}
+          alt="Kayla Kossajda"
+        />
+        <div className="hero-text carousel-hero-text">
+          <p>
+            Hi, I'm Kayla, a photographer and artist based in Denver, CO. I specialize in artfully
+            capturing memoires. Let's connect and create some magic!
+          </p>
+          <Link to="/about">More about me {`>`}</Link>
         </div>
       </div>
       <div className="hero-image-container">
-        <img className="hero-image" src={borisIllustration.width1200} alt="Kayla Kossajda" />
+        <img
+          className="hero-image"
+          src={haleySeniorStairs.width1200}
+          style={{ objectPosition: "top" }}
+          alt="Kayla Kossajda"
+        />
         <div className="hero-text">
-          <Link to="/illustration">Illustration</Link>
-        </div>
-      </div>
-      <div className="hero-image-container">
-        <img className="hero-image" src={michellePainting.width1200} alt="Kayla Kossajda" />
-        <div className="hero-text">
-          <Link to="/photography/family">Family</Link>
+          <Link to="/portraits">Portraits</Link>
         </div>
       </div>
       <div className="hero-image-container">
         <img className="hero-image" src={monkeyAutumnLeaves.width1200} alt="Kayla Kossajda" />
         <div className="hero-text">
-          <Link to="/photography/portraits">Portraits</Link>
+          <Link to="/pets">Pets</Link>
         </div>
       </div>
+      <div className="banner">
+        <h2>
+          I'd love to hear from you. For session info and availability please reach out{" "}
+          <Link to="/contact">here</Link>
+        </h2>
+      </div>
       <div className="hero-image-container">
-        <img className="hero-image" src={haleySeniorStairs.width1200} alt="Kayla Kossajda" />
+        <img className="hero-image" src={ashleySmoking.width1200} alt="Kayla Kossajda" />
         <div className="hero-text">
-          <Link to="/photography/creative">Creative</Link>
+          <Link to="/creative">Creative</Link>
         </div>
       </div>
       <div className="hero-image-container">

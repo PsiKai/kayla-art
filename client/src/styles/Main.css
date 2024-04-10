@@ -20,14 +20,31 @@
   transform: translate(-50%, -50%);
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  font-size: calc(1rem + 1vw);
+  font-size: min(1rem + 1vw, 2rem);
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.carousel-hero-text {
+  bottom: 0%;
+  top: auto;
+  transform: translateX(-50%);
 }
 
 .hero-text > * {
   margin: 0;
   line-height: 1.2;
+}
+
+.banner {
+  min-height: min(50vh, 500px);
+  background-color: teal;
+  width: 100%;
+  display: grid;
+  place-items: center;
 }
