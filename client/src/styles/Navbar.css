@@ -1,15 +1,31 @@
 .page-header {
-  position: sticky;
-  top: 0;
+  position: fixed;
+  inset: 0 0 auto 0;
   z-index: 1000;
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem;
+  background-color: inherit;
+  backdrop-filter: blur(10px);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .main-nav {
   display: flex;
   justify-content: space-between;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 0.5rem;
+}
+
+.main-nav-link {
+  margin-right: auto;
+}
+
+.main-nav-logo {
+  max-width: 75px;
 }

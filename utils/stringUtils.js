@@ -11,3 +11,13 @@ export function capitalize(str) {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ")
 }
+
+export function camelCase(str) {
+  return str
+    .split(/[_-\s]/)
+    .map((word, index) => {
+      if (index === 0) return word.toLowerCase()
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    })
+    .join("")
+}

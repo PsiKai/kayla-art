@@ -7,12 +7,16 @@ export default function useIntersectionObserver(
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
+    setIsVisible(false)
+  }, [ref])
+
+  useEffect(() => {
     if (isVisible) return
 
     const observer = new IntersectionObserver(
       ([entry]) => setIsVisible(entry.isIntersecting),
       options || {
-        threshold: 0.2,
+        threshold: 1,
       },
     )
 

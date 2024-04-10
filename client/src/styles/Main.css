@@ -1,0 +1,33 @@
+.hero-image-container {
+  width: 100%;
+  max-width: 1500px;
+  height: 100dvh;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-image {
+  display: flex;
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.hero-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: calc(1rem + 1vw);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hero-text > * {
+  margin: 0;
+  line-height: 1.2;
+}
