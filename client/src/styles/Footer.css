@@ -1,7 +1,7 @@
 footer {
   display: grid;
   place-items: center;
-  padding: 2rem 1rem;
+  padding: 2rem 0 0;
 }
 
 .footer-links,
@@ -11,14 +11,14 @@ footer {
 }
 
 .footer-images {
-  height: 300px;
-  /* width: max-content; */
+  max-height: 300px;
+  max-width: 1500px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
 }
 
 .footer-image {
-  width: 200px;
-  height: 100%;
-  flex-shrink: 1;
+  width: 100%;
   aspect-ratio: 1 / 1.46;
   object-fit: cover;
 }
