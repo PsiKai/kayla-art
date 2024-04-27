@@ -1,9 +1,11 @@
 .page-header {
-  position: fixed;
+  position: sticky;
   inset: 0 0 auto 0;
   z-index: 1000;
   background-color: inherit;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 

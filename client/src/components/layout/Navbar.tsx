@@ -1,8 +1,15 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import "../../styles/Navbar.css"
 import smallLogo from "../../assets/images/logos/kklogosmall.png"
+import { useEffect } from "react"
 
 function Navbar() {
+  const location = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location])
+
   return (
     <header className="page-header">
       <nav className="main-nav">
