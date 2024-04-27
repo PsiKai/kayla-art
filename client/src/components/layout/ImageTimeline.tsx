@@ -5,8 +5,8 @@ import ImageThumbnail from "./ImageThumbnail"
 import useIntersectionObserver from "../../hooks/useIntersectionObserver"
 
 type TImageTimelineProps = {
-  category: string
-  subCategory: string
+  category?: string
+  subCategory?: string
   artCollection?: string
 }
 

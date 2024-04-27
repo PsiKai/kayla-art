@@ -15,6 +15,7 @@ function Navbar() {
           <Link to="creative">Creative</Link>
           <Link to="pricing">Pricing</Link>
           <Link to="about">About</Link>
+          <Link to="contact">Contact</Link>
           <Link to="gallery">Gallery</Link>
           <Link to="admin">Admin</Link>
         </nav>

@@ -1,5 +1,3 @@
-export * as ashleySmoking from "./ashley-smoking"
-export * as flowershoot from "./flowershoot"
-export * as haleySeniorPortrait from "./haley-senior-portrait"
+export * as haleySenior from "./haley-senior"
 export * as monkeyPortrait from "./monkey-portrait"
-export * as veronikaWithCat from "./veronika-with-cat"
+export * as veronicaAndDemetrius from "./veronica-and-demetrius"

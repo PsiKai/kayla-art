@@ -1,4 +1,3 @@
-import ImageTimeline from "../components/layout/ImageTimeline"
 import heroSample1 from "../assets/images/main-page/samplehero1.jpg"
 
 function Pets() {
@@ -10,7 +9,6 @@ function Pets() {
           <h1>Pets</h1>
         </div>
       </div>
-      <ImageTimeline category="photography" subCategory="pets" />
     </div>
   )
 }

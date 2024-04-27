@@ -25,6 +25,12 @@ body {
   /* place-items: center; */
   /* min-width: 320px; */
   min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto max-content;
+}
+
+#root {
+  display: contents;
 }
 
 @media (prefers-color-scheme: light) {

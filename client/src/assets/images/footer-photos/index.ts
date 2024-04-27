@@ -1,5 +1,6 @@
 export * as birdGirl from "./bird-girl"
-export * as haleyBannister from "./haley-bannister"
 export * as mermaidIllustration from "./mermaid-illustration"
 export * as michelleLeafShoot from "./michelle-leaf-shoot"
-export * as travisBnwClosup from "./travis-bnw-closup"
+export * as rachaelFal from "./rachael-fal"
+export * as tatianaRino from "./tatiana-rino"
+export * as yorkieBoy from "./yorkie-boy"

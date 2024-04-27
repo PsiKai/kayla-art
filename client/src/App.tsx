@@ -9,6 +9,7 @@ import Portraits from "./pages/Portraits.tsx"
 import Pets from "./pages/Pets.tsx"
 import Creative from "./pages/Creative.tsx"
 import About from "./pages/About.tsx"
+import Contact from "./pages/Contact.tsx"
 import Pricing from "./pages/Pricing.tsx"
 import Gallery from "./pages/Gallery.tsx"
 import Admin from "./pages/Admin.tsx"
@@ -27,6 +28,7 @@ function App() {
             <Route path="pets" element={<Pets />} />
             <Route path="creative" element={<Creative />} />
             <Route path="about" element={<About />} />
+            <Route path="contact" element={<Contact />} />
             <Route path="pricing" element={<Pricing />} />
             <Route path="gallery" element={<Gallery />} />
             <Route path="admin" element={<Admin />} />

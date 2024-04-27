@@ -1,24 +1,14 @@
 import "../styles/Main.css"
 import { Link } from "react-router-dom"
 import heroSample2 from "../assets/images/main-page/samplehero1.jpg"
-import {
-  ashleySmoking,
-  flowershoot,
-  haleySeniorPortrait,
-  monkeyPortrait,
-  veronikaWithCat,
-} from "../assets/images/carousel-photos"
-import {
-  haleySeniorStairs,
-  michellePainting,
-  monkeyAutumnLeaves,
-} from "../assets/images/cover-photos"
+import { monkeyPortrait, haleySenior, veronicaAndDemetrius } from "../assets/images/carousel-photos"
+import { ashleySmoking, monkeyAutumnLeaves, haleySeniorStairs } from "../assets/images/cover-photos"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 function Main() {
   const [carouselIndex, setCarouselIndex] = useState<number>(0)
 
-  const carouselImages = useMemo(() => [haleySeniorPortrait, veronikaWithCat, monkeyPortrait], [])
+  const carouselImages = useMemo(() => [haleySenior, veronicaAndDemetrius, monkeyPortrait], [])
 
   const carouselTimer = useRef<NodeJS.Timeout | null>(null)
 
