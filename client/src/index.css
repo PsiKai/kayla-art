@@ -43,7 +43,8 @@ body {
   display: contents;
 }
 
-a {
+a,
+.btn-link {
   color: var(--color-link);
   text-decoration: none;
 }
@@ -54,6 +55,14 @@ a:hover {
 
 a:visited {
   color: var(--color-link-visited);
+}
+
+.btn-link {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
 }
 
 @media (prefers-color-scheme: light) {

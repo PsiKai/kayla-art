@@ -15,29 +15,32 @@ import Gallery from "./pages/Gallery.tsx"
 import Admin from "./pages/Admin.tsx"
 import Login from "./pages/Login.tsx"
 import Footer from "./components/layout/Footer.tsx"
+import { MobileProvider } from "./context/MobileContext.tsx"
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <main>
-        <CookiesProvider>
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="portraits" element={<Portraits />} />
-            <Route path="pets" element={<Pets />} />
-            <Route path="creative" element={<Creative />} />
-            <Route path="about" element={<About />} />
-            <Route path="contact" element={<Contact />} />
-            <Route path="pricing" element={<Pricing />} />
-            <Route path="gallery" element={<Gallery />} />
-            <Route path="admin" element={<Admin />} />
-            <Route path="login" element={<Login />} />
-          </Routes>
-        </CookiesProvider>
-      </main>
-      <Footer />
-    </BrowserRouter>
+    <MobileProvider>
+      <BrowserRouter>
+        <Navbar />
+        <main>
+          <CookiesProvider>
+            <Routes>
+              <Route path="/" element={<Main />} />
+              <Route path="portraits" element={<Portraits />} />
+              <Route path="pets" element={<Pets />} />
+              <Route path="creative" element={<Creative />} />
+              <Route path="about" element={<About />} />
+              <Route path="contact" element={<Contact />} />
+              <Route path="pricing" element={<Pricing />} />
+              <Route path="gallery" element={<Gallery />} />
+              <Route path="admin" element={<Admin />} />
+              <Route path="login" element={<Login />} />
+            </Routes>
+          </CookiesProvider>
+        </main>
+        <Footer />
+      </BrowserRouter>
+    </MobileProvider>
   )
 }
 

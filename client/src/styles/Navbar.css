@@ -31,3 +31,15 @@
 .main-nav-logo {
   max-width: 64px;
 }
+
+@media (max-width: 768px) {
+  /* .main-nav { */
+  /*   flex-direction: column; */
+  /* } */
+
+  .nav-links {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-end;
+  }
+}

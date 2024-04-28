@@ -1,0 +1,35 @@
+.submenu-container {
+  position: relative;
+}
+
+.submenu-items {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  top: calc(100% + 0.5rem);
+  /* top: 100%; */
+  border-radius: 0.25rem;
+  background-color: var(--color-background);
+}
+
+button[aria-expanded] {
+  display: flex;
+  gap: 0.5rem;
+}
+
+button[aria-expanded]::before {
+  content: "↓";
+}
+
+@media (max-width: 768px) {
+  .submenu-items {
+    position: static;
+    background-color: transparent;
+  }
+
+  .submenu-items > * {
+    padding-left: 0.5rem;
+  }
+}
