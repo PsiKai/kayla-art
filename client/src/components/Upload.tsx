@@ -3,6 +3,7 @@ import AdminArtCollection from "./AdminArtCollection"
 import FileInput from "./form/FileInput"
 import ArtworkForm, { TArtworkForm } from "./form/ArtworkForm"
 import { AppContext } from "../context/AppContext"
+import "../styles/form.css"
 
 function Upload() {
   const { dispatch } = useContext(AppContext)

@@ -1,13 +1,16 @@
-import { createContext, useEffect, useState } from "react"
+import { createContext, useEffect, useRef, useState } from "react"
 
 type MobileContextType = {
   isMobile: boolean
+  navbarRef: React.RefObject<HTMLElement>
 }
 
 export const MobileContext = createContext<MobileContextType | undefined>(undefined)
 
 export const MobileProvider = ({ children }: { children: React.ReactNode }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+
+  const navbarRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     function handleResize() {
@@ -20,5 +23,5 @@ export const MobileProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [])
 
-  return <MobileContext.Provider value={{ isMobile }}>{children}</MobileContext.Provider>
+  return <MobileContext.Provider value={{ isMobile, navbarRef }}>{children}</MobileContext.Provider>
 }

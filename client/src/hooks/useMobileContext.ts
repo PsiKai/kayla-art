@@ -5,6 +5,7 @@ export const useMobileContext = () => {
   if (!MobileContext) {
     throw new Error("useMobileContext must be used within a MobileProvider")
   }
-  const mobile = useContext(MobileContext)
-  return mobile?.isMobile
+  const { isMobile, navbarRef } = useContext(MobileContext)!
+
+  return { isMobile, navbarRef }
 }

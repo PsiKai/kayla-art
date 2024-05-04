@@ -5,7 +5,7 @@ type TCategoriesSelectionProps = {
 
 function CategoriesSelection({ category, updateForm }: TCategoriesSelectionProps) {
   return (
-    <div>
+    <div className="form-field">
       <legend>
         <label htmlFor="category">
           <p>

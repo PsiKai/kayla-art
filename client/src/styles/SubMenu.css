@@ -8,10 +8,11 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.5rem;
-  top: calc(100% + 0.5rem);
+  inset: calc(100% + 0.5rem) 0 auto;
   /* top: 100%; */
   border-radius: 0.25rem;
-  background-color: var(--color-background);
+  /* background-color: var(--glass-bg-color); */
+  /* box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4); */
 }
 
 button[aria-expanded] {
@@ -24,12 +25,23 @@ button[aria-expanded]::before {
 }
 
 @media (max-width: 768px) {
+  .submenu-title {
+    margin-left: auto;
+  }
+
   .submenu-items {
     position: static;
     background-color: transparent;
+    align-items: flex-end;
+    box-shadow: none;
   }
 
   .submenu-items > * {
-    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    text-wrap: nowrap;
+  }
+
+  button[aria-expanded]::before {
+    content: "↳";
   }
 }

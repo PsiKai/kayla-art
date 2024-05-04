@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from "react"
 import { useCookies } from "react-cookie"
 import { useNavigate } from "react-router-dom"
+import NavbarPlaceholder from "../components/layout/NavbarPlaceholder"
 
 function Login() {
   const navigate = useNavigate()
@@ -39,20 +40,23 @@ function Login() {
   }
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <fieldset>
-          <label htmlFor="email">Email</label>
-          <input type="text" placeholder="Email" name="email" onChange={updateForm} />
-        </fieldset>
-        <fieldset>
-          <label htmlFor="password">Password</label>
-          <input type="password" placeholder="Password" name="password" onChange={updateForm} />
-        </fieldset>
-        <button type="submit">Login</button>
-      </form>
-    </div>
+    <>
+      <NavbarPlaceholder />
+      <div>
+        <h1>Login</h1>
+        <form onSubmit={handleLogin}>
+          <fieldset>
+            <label htmlFor="email">Email</label>
+            <input type="text" placeholder="Email" name="email" onChange={updateForm} />
+          </fieldset>
+          <fieldset>
+            <label htmlFor="password">Password</label>
+            <input type="password" placeholder="Password" name="password" onChange={updateForm} />
+          </fieldset>
+          <button type="submit">Login</button>
+        </form>
+      </div>
+    </>
   )
 }
 

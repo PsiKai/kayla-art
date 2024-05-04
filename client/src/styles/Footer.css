@@ -1,7 +1,6 @@
 footer {
   display: grid;
   place-items: center;
-  padding: 2rem 0 0;
 }
 
 .footer-links,

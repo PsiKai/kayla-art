@@ -2,8 +2,11 @@ import { useLayoutEffect, useState } from "react"
 import { AppProvider } from "../context/AppContext"
 import { useNavigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
+
 import "../styles/Admin.css"
+
 import Upload from "../components/Upload"
+import NavbarPlaceholder from "../components/layout/NavbarPlaceholder"
 
 function Admin() {
   const navigate = useNavigate()
@@ -27,6 +30,7 @@ function Admin() {
 
   return (
     <AppProvider>
+      <NavbarPlaceholder />
       <h1>Admin</h1>
       {authenticating ? <p>Authenticating...</p> : <Upload />}
     </AppProvider>

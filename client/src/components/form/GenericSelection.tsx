@@ -14,7 +14,7 @@ function GenericSelection({
   valueType,
 }: TGenericSelectionProps) {
   return (
-    <div>
+    <div className="form-field">
       <legend>
         <label htmlFor={valueType}>
           <p>

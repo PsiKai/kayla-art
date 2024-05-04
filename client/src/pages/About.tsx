@@ -1,5 +1,14 @@
+import NavbarPlaceholder from "../components/layout/NavbarPlaceholder"
+
 function About() {
-  return <div>About</div>
+  return (
+    <>
+      <NavbarPlaceholder />
+      <div>
+        <h1>About</h1>
+      </div>
+    </>
+  )
 }
 
 export default About

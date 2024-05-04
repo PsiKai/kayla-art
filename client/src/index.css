@@ -9,6 +9,7 @@
   --color-secondary: #ff0080;
   --color-accent: #79ffe1;
   --color-background: #242424;
+  --color-bg-rgb: 36, 36, 36;
   --color-text: rgba(255, 255, 255, 0.87);
   --color-link: #0070f3;
   --color-link-hover: #0070f3;
@@ -17,6 +18,15 @@
   --font-sans: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --font-serif: "Georgia", Cambria, "Times New Roman", Times, serif;
   --font-mono: "Menlo", Monaco, "Courier New", Courier, monospace;
+
+  --glass-bg-color: rgba(var(--color-bg-rgb), 0.5);
+  --glass-border: 2px solid rgba(255, 255, 255, 0.1);
+  --glass-blur: 10px;
+  --glass-gradient: linear-gradient(
+    to bottom right,
+    rgba(var(--color-bg-rgb), 0.4),
+    rgba(var(--color-bg-rgb), 0.15)
+  );
 
   font-family: var(--font-sans);
   line-height: 1.5;
@@ -37,6 +47,8 @@ body {
   min-height: 100vh;
   display: grid;
   grid-template-rows: auto max-content;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 #root {
@@ -65,9 +77,18 @@ a:visited {
   font-size: 1rem;
 }
 
+.glass {
+  backdrop-filter: blur(var(--glass-blur));
+  background-image: var(--glass-gradient);
+  background-color: var(--glass-bg-color);
+  border: var(--glass-border);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     --color-background: #ffffff;
+    --color-bg-rgb: 255, 255, 255;
     --color-text: #333;
     color: #213547;
     background-color: #ffffff;

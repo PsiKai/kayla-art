@@ -9,7 +9,7 @@ type SubMenuProps = {
 
 function SubMenu({ children, title }: SubMenuProps) {
   const [expanded, setExpanded] = useState(false)
-  const isMobile = useMobileContext()
+  const { isMobile } = useMobileContext()
   const mouseLeaveTimeout = useRef<NodeJS.Timeout | null>(null)
 
   const handleBlur = useCallback((e: React.FocusEvent) => {
@@ -43,19 +43,19 @@ function SubMenu({ children, title }: SubMenuProps) {
       {...(isMobile
         ? {}
         : {
-          onMouseEnter: handleMouseEnter,
-          onMouseLeave: handleDelayedMouseLeave,
-          onBlur: handleBlur,
-        })}
+            onMouseEnter: handleMouseEnter,
+            onMouseLeave: handleDelayedMouseLeave,
+            onBlur: handleBlur,
+          })}
     >
       <button
-        className="btn-link"
+        className="btn-link submenu-title"
         {...(isMobile ? {} : { onClick: handleClick })}
         aria-expanded={expanded || isMobile}
       >
         {title}
       </button>
-      {expanded || isMobile ? <div className="submenu-items">{children}</div> : null}
+      {expanded || isMobile ? <div className="submenu-items glass">{children}</div> : null}
     </div>
   )
 }
