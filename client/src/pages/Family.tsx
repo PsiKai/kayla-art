@@ -4,7 +4,7 @@ function Family() {
   return (
     <div className="hero-image-container">
       <img className="hero-image" src={heroSample2} alt="Kayla Kossajda" />
-      <div className="hero-text">
+      <div className="glass hero-text">
         <h1>Family</h1>
       </div>
     </div>

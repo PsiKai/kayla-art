@@ -6,7 +6,7 @@ function Gallery() {
     <div>
       <div className="hero-image-container">
         <img className="hero-image" src={heroSample2} alt="Kayla Kossajda" />
-        <div className="hero-text">
+        <div className="glass hero-text">
           <h1>Gallery</h1>
         </div>
       </div>

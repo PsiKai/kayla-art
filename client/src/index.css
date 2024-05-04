@@ -5,27 +5,36 @@
 }
 
 :root {
+  --lightness: 85%;
+
   --color-primary: #0070f3;
   --color-secondary: #ff0080;
   --color-accent: #79ffe1;
+
   --color-background: #242424;
   --color-bg-rgb: 36, 36, 36;
+
   --color-text: rgba(255, 255, 255, 0.87);
-  --color-link: #0070f3;
-  --color-link-hover: #0070f3;
-  --color-link-visited: #0070f3;
+  --color-link: hsl(217 61 var(--lightness));
+  --color-link-visited: hsl(246 61 var(--lightness));
+  /* --color-link: #0070f3; */
+  /* --color-link-hover: #0070f3; */
 
   --font-sans: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --font-serif: "Georgia", Cambria, "Times New Roman", Times, serif;
   --font-mono: "Menlo", Monaco, "Courier New", Courier, monospace;
 
-  --glass-bg-color: rgba(var(--color-bg-rgb), 0.5);
-  --glass-border: 2px solid rgba(255, 255, 255, 0.1);
-  --glass-blur: 10px;
+  --glass-bg-color: rgba(var(--color-bg-rgb), 0.3);
+  --glass-border: 2px ridge var(--glass-bg-color);
+  --glass-blur: 15px;
+  --glass-gradient-direction: to bottom right;
   --glass-gradient: linear-gradient(
-    to bottom right,
-    rgba(var(--color-bg-rgb), 0.4),
-    rgba(var(--color-bg-rgb), 0.15)
+    var(--glass-gradient-direction),
+    rgba(var(--color-bg-rgb), 0.25),
+    10%,
+    rgba(var(--color-bg-rgb), 0.5),
+    /* rgba(var(--color-bg-rgb), 0.5), */ 90%,
+    rgba(var(--color-bg-rgb), 0.75)
   );
 
   font-family: var(--font-sans);
@@ -59,30 +68,57 @@ a,
 .btn-link {
   color: var(--color-link);
   text-decoration: none;
+  /* border-bottom: 1px solid var(--color-link); */
+  padding: 0.25rem 0rem 0.125rem;
+  padding: 0.25rem;
+  display: inline-block;
+  text-shadow: inherit;
+  transition: background-color 75ms ease-in-out;
 }
 
 a:hover {
-  color: var(--color-link-hover);
+  background-color: var(--glass-bg-color);
 }
-
+/**/
 a:visited {
   color: var(--color-link-visited);
+  /* border-bottom-color: var(--color-link-visited); */
 }
 
 .btn-link {
   background-color: transparent;
   border: none;
   cursor: pointer;
-  padding: 0;
+  /* padding: 0; */
   font-size: 1rem;
 }
 
 .glass {
-  backdrop-filter: blur(var(--glass-blur));
   background-image: var(--glass-gradient);
-  background-color: var(--glass-bg-color);
   border: var(--glass-border);
+  border-radius: 0.125rem;
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.glass::before {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+input:not([type="checkbox"], [type="radio"], [type="file"], [type="image"], [type="range"]),
+textarea,
+select,
+option {
+  font: inherit;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+  padding: 0 0.2em;
 }
 
 @media (prefers-color-scheme: light) {
@@ -90,7 +126,8 @@ a:visited {
     --color-background: #ffffff;
     --color-bg-rgb: 255, 255, 255;
     --color-text: #333;
-    color: #213547;
-    background-color: #ffffff;
+    --color-text: #213547;
+    --lightness: 50%;
+    --glass-gradient-direction: to top left;
   }
 }

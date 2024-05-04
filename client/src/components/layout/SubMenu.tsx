@@ -55,7 +55,9 @@ function SubMenu({ children, title }: SubMenuProps) {
       >
         {title}
       </button>
-      {expanded || isMobile ? <div className="submenu-items glass">{children}</div> : null}
+      {expanded || isMobile ? (
+        <div className={`submenu-items ${isMobile ? "" : "glass"}`}>{children}</div>
+      ) : null}
     </div>
   )
 }

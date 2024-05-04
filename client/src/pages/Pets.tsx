@@ -5,7 +5,7 @@ function Pets() {
     <div>
       <div className="hero-image-container">
         <img className="hero-image" src={heroSample1} alt="Kayla Kossajda" />
-        <div className="hero-text">
+        <div className="glass hero-text">
           <h1>Pets</h1>
         </div>
       </div>

@@ -30,7 +30,7 @@ function Main() {
           src={carouselImages[carouselIndex].width1200}
           alt="Kayla Kossajda"
         />
-        <div className="hero-text carousel-hero-text">
+        <div className="glass hero-text carousel-hero-text">
           <p>
             Hi, I'm Kayla, a photographer and artist based in Denver, CO. I specialize in artfully
             capturing memoires. Let's connect and create some magic!
@@ -45,13 +45,13 @@ function Main() {
           style={{ objectPosition: "top" }}
           alt="Kayla Kossajda"
         />
-        <div className="hero-text">
+        <div className="glass hero-text">
           <Link to="/portraits">Portraits</Link>
         </div>
       </div>
       <div className="hero-image-container">
         <img className="hero-image" src={monkeyAutumnLeaves.width1200} alt="Kayla Kossajda" />
-        <div className="hero-text">
+        <div className="glass hero-text">
           <Link to="/pets">Pets</Link>
         </div>
       </div>
@@ -63,13 +63,13 @@ function Main() {
       </div>
       <div className="hero-image-container">
         <img className="hero-image" src={ashleySmoking.width1200} alt="Kayla Kossajda" />
-        <div className="hero-text">
+        <div className="glass hero-text">
           <Link to="/creative">Creative</Link>
         </div>
       </div>
       <div className="hero-image-container">
         <img className="hero-image" src={heroSample2} alt="Kayla Kossajda" />
-        <div className="hero-text">
+        <div className="glass hero-text">
           <Link to="/gallery">Gallery</Link>
         </div>
       </div>
