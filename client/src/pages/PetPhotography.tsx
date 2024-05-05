@@ -1,10 +1,10 @@
-import heroSample1 from "../assets/images/main-page/samplehero1.jpg"
+import { jadaSunny } from "../assets/images/pet-photography"
 
 function PetPhotography() {
   return (
     <div>
       <div className="hero-image-container">
-        <img className="hero-image" src={heroSample1} alt="Kayla Kossajda" />
+        <img className="hero-image" src={jadaSunny.width1440} alt="Kayla Kossajda" />
         <div className="glass hero-text">
           <h1>Pet Photography</h1>
         </div>

@@ -73,7 +73,7 @@ function Main() {
           alt="Painting of the late Boris"
         />
         <div className="glass hero-text">
-          <Link to="illustration/portrait">Portrait Illustration</Link>
+          <Link to="illustration/portraits">Portrait Illustration</Link>
         </div>
       </div>
       <div className="hero-image-container">

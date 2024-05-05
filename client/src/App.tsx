@@ -16,8 +16,8 @@ import Footer from "./components/layout/Footer.tsx"
 import CreativePhotography from "./pages/CreativePhotography.tsx"
 import PetPhotography from "./pages/PetPhotography.tsx"
 import PortraitPhotography from "./pages/PortraitPhotography.tsx"
-import PortraitIllustration from "./pages/PortraitIllustration.tsx"
 import CreativeIllustration from "./pages/CreativeIllustration.tsx"
+import PortraitIllustration from "./pages/PortraitIllustration.tsx"
 
 function App() {
   return (
