@@ -1,0 +1,5 @@
+export * as huskyPhoto from "./husky-photo"
+export * as jadaGrass from "./jada-grass"
+export * as jadaSunny from "./jada-sunny"
+export * as monkeyAutumnLeaves from "./monkey-autumn-leaves"
+export * as orangeCatWindow from "./orange-cat-window"

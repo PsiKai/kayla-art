@@ -1,3 +1,3 @@
-export { default as width300 } from "./width300.webp"
-export { default as width600 } from "./width600.webp"
-export { default as width1200 } from "./width1200.webp"
+export { default as width375 } from "./width375.webp"
+export { default as width768 } from "./width768.webp"
+export { default as width1440 } from "./width1440.webp"

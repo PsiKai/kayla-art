@@ -26,13 +26,13 @@ function Navbar() {
         <div className={`nav-links-wrapper ${isMobile ? "glass" : ""}`}>
           <nav className="nav-links">
             <SubMenu title="Photography">
-              <Link to="portraits">Portraits</Link>
-              <Link to="pets">Pets</Link>
-              <Link to="creative">Creative</Link>
+              <Link to="photography/portraits">Portraits</Link>
+              <Link to="photography/pets">Pets</Link>
+              <Link to="photography/creative">Creative</Link>
             </SubMenu>
             <SubMenu title="Illustration">
               <Link to="illustration/portraits">Portraits</Link>
-              <Link to="illustration/pets">Pets</Link>
+              <Link to="illustration/creative">Creative</Link>
             </SubMenu>
             <Link to="pricing">Pricing</Link>
             <Link to="about">About</Link>

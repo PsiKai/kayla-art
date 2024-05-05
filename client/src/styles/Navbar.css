@@ -10,7 +10,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1500px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0.5rem 1rem;
 }
@@ -33,6 +33,7 @@
   margin: 0 auto 0 0;
   padding: 0;
   background-color: transparent;
+  display: flex;
 }
 
 .main-nav-link:hover {
@@ -82,6 +83,6 @@
   }
 
   .page-header.is-open .nav-links-wrapper {
-    transform: translateX(-2px);
+    transform: translateX(calc(-1 * var(--glass-border-width)));
   }
 }

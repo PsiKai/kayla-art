@@ -1,9 +1,14 @@
-import "../styles/Main.css"
-import { Link } from "react-router-dom"
-import heroSample2 from "../assets/images/main-page/samplehero1.jpg"
-import { monkeyPortrait, haleySenior, veronicaAndDemetrius } from "../assets/images/carousel-photos"
-import { ashleySmoking, monkeyAutumnLeaves, haleySeniorStairs } from "../assets/images/cover-photos"
 import { useEffect, useMemo, useRef, useState } from "react"
+import { Link } from "react-router-dom"
+
+import "../styles/Main.css"
+import { haleySenior, monkeyPortrait, veronicaAndDemetrius } from "../assets/images/carousel-photos"
+import { haleySeniorStairs, keriTreeBlossoms } from "../assets/images/portrait-photography"
+import { huskyPhoto, monkeyAutumnLeaves } from "../assets/images/pet-photography"
+import { borisPainting } from "../assets/images/portrait-illustration"
+import { ashleySmoking } from "../assets/images/creative-photography"
+import { mermaidIllustration } from "../assets/images/footer-photos"
+import { meredithPainting } from "../assets/images/about-me"
 
 function Main() {
   const [carouselIndex, setCarouselIndex] = useState<number>(0)
@@ -27,7 +32,7 @@ function Main() {
       <div className="hero-image-container">
         <img
           className="hero-image"
-          src={carouselImages[carouselIndex].width1200}
+          src={carouselImages[carouselIndex].width1440}
           alt="Kayla Kossajda"
         />
         <div className="glass hero-text carousel-hero-text">
@@ -41,18 +46,18 @@ function Main() {
       <div className="hero-image-container">
         <img
           className="hero-image"
-          src={haleySeniorStairs.width1200}
+          src={keriTreeBlossoms.width1440}
           style={{ objectPosition: "top" }}
           alt="Kayla Kossajda"
         />
         <div className="glass hero-text">
-          <Link to="/portraits">Portraits</Link>
+          <Link to="photography/portraits">Portrait Photography</Link>
         </div>
       </div>
       <div className="hero-image-container">
-        <img className="hero-image" src={monkeyAutumnLeaves.width1200} alt="Kayla Kossajda" />
+        <img className="hero-image" src={huskyPhoto.width1440} alt="Kayla Kossajda" />
         <div className="glass hero-text">
-          <Link to="/pets">Pets</Link>
+          <Link to="photography/pets">Pet Photography</Link>
         </div>
       </div>
       <div className="banner">
@@ -62,13 +67,29 @@ function Main() {
         </h2>
       </div>
       <div className="hero-image-container">
-        <img className="hero-image" src={ashleySmoking.width1200} alt="Kayla Kossajda" />
+        <img
+          className="hero-image"
+          src={borisPainting.width1440}
+          alt="Painting of the late Boris"
+        />
         <div className="glass hero-text">
-          <Link to="/creative">Creative</Link>
+          <Link to="illustration/portrait">Portrait Illustration</Link>
         </div>
       </div>
       <div className="hero-image-container">
-        <img className="hero-image" src={heroSample2} alt="Kayla Kossajda" />
+        <img className="hero-image" src={ashleySmoking.width1440} alt="Kayla Kossajda" />
+        <div className="glass hero-text">
+          <Link to="photography/creative">Creative Photography</Link>
+        </div>
+      </div>
+      <div className="hero-image-container">
+        <img className="hero-image" src={mermaidIllustration.width1440} alt="Kayla Kossajda" />
+        <div className="glass hero-text">
+          <Link to="illustration/creative">Creative Illustration</Link>
+        </div>
+      </div>
+      <div className="hero-image-container">
+        <img className="hero-image" src={meredithPainting.width1440} alt="Kayla Kossajda" />
         <div className="glass hero-text">
           <Link to="/gallery">Gallery</Link>
         </div>

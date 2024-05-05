@@ -1,6 +1,6 @@
 .hero-image-container {
   width: 100%;
-  max-width: 1500px;
+  max-width: 1440px;
   height: 100svh;
   overflow: hidden;
   position: relative;
@@ -10,36 +10,48 @@
 .hero-image {
   display: flex;
   object-fit: cover;
+  object-position: 50% 33%;
   height: 100%;
   width: 100%;
 }
 
 .hero-text {
   position: absolute;
-  top: 50%;
+  top: 80%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* color: white; */
-  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); */
-  font-size: min(1rem + 1vw, 2rem);
+  font-size: min(0.875rem + 1vw, 1.5rem);
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  /* background-color: rgba(0, 0, 0, 0.5); */
   padding: 1rem;
   border-radius: 0.5rem;
+  width: fit-content;
+  max-width: 80%;
+}
+
+.hero-text a {
+  scroll-margin-top: 80vh;
+  scroll-margin-bottom: 20vh;
 }
 
 .carousel-hero-text {
   bottom: 0%;
   top: auto;
   transform: translateX(-50%);
+  width: 600px;
+  max-width: 80%;
+}
+
+.carousel-hero-text a {
+  scroll-margin-top: auto;
+  scroll-margin-bottom: 0vh;
 }
 
 .hero-text > * {
   margin: 0;
-  line-height: 1.2;
+  /* line-height: 1.2; */
 }
 
 .banner {

@@ -32,16 +32,16 @@ function Footer() {
         </a>
       </div>
       <div className="footer-images">
-        <img src={rachaelFal.width600} alt="Rachael fall" className="footer-image" />
-        <img src={birdGirl.width600} alt="Bird girl" className="footer-image" />
+        <img src={rachaelFal.width768} alt="Rachael fall" className="footer-image" />
+        <img src={birdGirl.width768} alt="Bird girl" className="footer-image" />
         <img
-          src={mermaidIllustration.width600}
+          src={mermaidIllustration.width768}
           alt="mermaid illustration"
           className="footer-image"
         />
-        <img src={michelleLeafShoot.width600} alt="Michelle leaf shoot" className="footer-image" />
-        <img src={tatianaRino.width600} alt="Tatiana Rino" className="footer-image" />
-        <img src={yorkieBoy.width600} alt="Yorkie boy" className="footer-image" />
+        <img src={michelleLeafShoot.width768} alt="Michelle leaf shoot" className="footer-image" />
+        <img src={tatianaRino.width768} alt="Tatiana Rino" className="footer-image" />
+        <img src={yorkieBoy.width768} alt="Yorkie boy" className="footer-image" />
       </div>
     </footer>
   )

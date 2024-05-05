@@ -2,12 +2,10 @@ import "./App.css"
 
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { CookiesProvider } from "react-cookie"
+import { MobileProvider } from "./context/MobileContext.tsx"
 
 import Navbar from "./components/layout/Navbar.tsx"
 import Main from "./pages/Main.tsx"
-import Portraits from "./pages/Portraits.tsx"
-import Pets from "./pages/Pets.tsx"
-import Creative from "./pages/Creative.tsx"
 import About from "./pages/About.tsx"
 import Contact from "./pages/Contact.tsx"
 import Pricing from "./pages/Pricing.tsx"
@@ -15,7 +13,11 @@ import Gallery from "./pages/Gallery.tsx"
 import Admin from "./pages/Admin.tsx"
 import Login from "./pages/Login.tsx"
 import Footer from "./components/layout/Footer.tsx"
-import { MobileProvider } from "./context/MobileContext.tsx"
+import CreativePhotography from "./pages/CreativePhotography.tsx"
+import PetPhotography from "./pages/PetPhotography.tsx"
+import PortraitPhotography from "./pages/PortraitPhotography.tsx"
+import PortraitIllustration from "./pages/PortraitIllustration.tsx"
+import CreativeIllustration from "./pages/CreativeIllustration.tsx"
 
 function App() {
   return (
@@ -26,9 +28,11 @@ function App() {
           <CookiesProvider>
             <Routes>
               <Route path="/" element={<Main />} />
-              <Route path="portraits" element={<Portraits />} />
-              <Route path="pets" element={<Pets />} />
-              <Route path="creative" element={<Creative />} />
+              <Route path="photography/pets" element={<PetPhotography />} />
+              <Route path="photography/portraits" element={<PortraitPhotography />} />
+              <Route path="photography/creative" element={<CreativePhotography />} />
+              <Route path="illustration/portraits" element={<PortraitIllustration />} />
+              <Route path="illustration/creative" element={<CreativeIllustration />} />
               <Route path="about" element={<About />} />
               <Route path="contact" element={<Contact />} />
               <Route path="pricing" element={<Pricing />} />

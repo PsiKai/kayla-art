@@ -32,9 +32,9 @@
   animation: none;
 }
 
-.menu__burger-icon:focus {
+.menu__burger-icon:focus-visible {
   outline: auto;
-  outline-offset: 2px;
+  outline-offset: 4px;
 }
 
 .menu__burger-icon span {

@@ -1,6 +1,7 @@
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useMobileContext } from "../../hooks/useMobileContext"
 import "../../styles/SubMenu.css"
+import { useLocation } from "react-router-dom"
 
 type SubMenuProps = {
   children: React.ReactNode
@@ -10,7 +11,12 @@ type SubMenuProps = {
 function SubMenu({ children, title }: SubMenuProps) {
   const [expanded, setExpanded] = useState(false)
   const { isMobile } = useMobileContext()
+  const location = useLocation()
   const mouseLeaveTimeout = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    setExpanded(false)
+  }, [location])
 
   const handleBlur = useCallback((e: React.FocusEvent) => {
     if (e.currentTarget.contains(e.relatedTarget)) return
