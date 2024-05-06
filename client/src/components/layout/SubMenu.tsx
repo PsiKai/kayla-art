@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useMobileContext } from "../../hooks/useMobileContext"
 import "../../styles/SubMenu.css"
 import { useLocation } from "react-router-dom"
+import { CSSTransition } from "react-transition-group"
 
 type SubMenuProps = {
   children: React.ReactNode
@@ -13,6 +14,7 @@ function SubMenu({ children, title }: SubMenuProps) {
   const { isMobile } = useMobileContext()
   const location = useLocation()
   const mouseLeaveTimeout = useRef<NodeJS.Timeout | null>(null)
+  const fadeInTimer = useMemo(() => 75, [])
 
   useEffect(() => {
     setExpanded(false)
@@ -61,9 +63,16 @@ function SubMenu({ children, title }: SubMenuProps) {
       >
         {title}
       </button>
-      {expanded || isMobile ? (
-        <div className={`submenu-items ${isMobile ? "" : "glass"}`}>{children}</div>
-      ) : null}
+      <CSSTransition
+        in={expanded || isMobile}
+        timeout={fadeInTimer}
+        classNames="fade-in"
+        unmountOnExit
+      >
+        <div style={{ "--transition-duration": `${fadeInTimer}ms` } as React.CSSProperties}>
+          <div className={`submenu-items ${isMobile ? "" : "glass"}`}>{children}</div>
+        </div>
+      </CSSTransition>
     </div>
   )
 }
