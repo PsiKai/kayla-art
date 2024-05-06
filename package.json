@@ -25,6 +25,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/react-transition-group": "^4.4.10",
     "concurrently": "^8.2.2",
     "nodemon": "^3.0.3"
   },
