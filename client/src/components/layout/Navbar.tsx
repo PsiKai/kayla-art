@@ -29,6 +29,7 @@ function Navbar() {
               <Link to="photography/portraits">Portraits</Link>
               <Link to="photography/pets">Pets</Link>
               <Link to="photography/creative">Creative</Link>
+              <Link to="photography/gallery">Gallery</Link>
             </SubMenu>
             <SubMenu title="Illustration">
               <Link to="illustration/portraits">Portraits</Link>
@@ -37,7 +38,6 @@ function Navbar() {
             <Link to="pricing">Pricing</Link>
             <Link to="about">About</Link>
             <Link to="contact">Contact</Link>
-            <Link to="gallery">Gallery</Link>
             <Link to="admin">Admin</Link>
           </nav>
         </div>
