@@ -86,12 +86,12 @@ a {
 }
 
 a:hover {
+  color: var(--color-link);
   background-color: var(--glass-bg-color);
 }
 
 a:visited {
-  color: var(--color-link-visited);
-  /* border-bottom-color: var(--color-link-visited); */
+  color: var(--color-link);
 }
 
 .btn-link {
@@ -150,7 +150,7 @@ p {
     --color-bg-rgb: 255, 255, 255;
     --color-text: #333;
     --color-text: #213547;
-    --lightness: 50%;
+    --lightness: 40%;
     --glass-gradient-direction: to top left;
   }
 }

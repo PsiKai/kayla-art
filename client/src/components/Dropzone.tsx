@@ -40,7 +40,7 @@ export default function Dropzone(props: DropzoneProps) {
       const { items } = e.dataTransfer
       const files = Array.from(items).filter(({ type }) => type.match(typeMatch))
       const dt = new DataTransfer()
-      files.forEach(file => dt.items.add(file.getAsFile() as File))
+      files.forEach(file => dt.items.add(file.getAsFile()!))
       e.dataTransfer = dt
     },
     [typeMatch],

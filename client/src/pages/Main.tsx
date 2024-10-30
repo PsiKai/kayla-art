@@ -19,11 +19,10 @@ function Main() {
       <div className="hero-image-container">
         <Carousel carouselImages={carouselImages} imageClassName="hero-image" />
         <div className="glass hero-text carousel-hero-text">
-          <p>
-            Hi, I'm Kayla, a photographer and artist based in Denver, CO. I specialize in artfully
-            capturing memoires. Let's connect and create some magic!
-          </p>
-          <Link to="/about">More about me {`>`}</Link>
+          <p>Hi, I'm Kayla</p>
+          <p>Photographer and artist based in Denver, CO.</p>
+          <p>I specialize in artfully capturing memories. Let's connect and create some magic!</p>
+          <Link to="/contact">Contact Me! {`>`}</Link>
         </div>
       </div>
       <div className="hero-image-container">

@@ -14,7 +14,7 @@ const FileInput = forwardRef<HTMLInputElement, TFileInputProps>((props, ref) => 
   const handleValidDrop = useCallback(
     (e: React.DragEvent) => {
       const inputRef = ref as React.MutableRefObject<HTMLInputElement>
-      if (inputRef && inputRef.current) {
+      if (inputRef?.current) {
         inputRef.current.files = e.dataTransfer.files
         const changeEvent = new Event("change", { bubbles: true })
         inputRef.current.dispatchEvent(changeEvent)
