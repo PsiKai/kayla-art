@@ -41,13 +41,12 @@ class GoogleClient extends Storage {
 
   moveFile(oldImg, newImg) {
     const { extension, uid } = oldImg
-    const { category, subCategory, artCollection } = newImg
+    const { category, subCategory } = newImg
 
     const [oldFullSizeFile, oldThumbnailFile] = this.buildPaths(oldImg)
     const [newFullSizePath, newThumbnailPath] = this.buildPaths({
       category,
       subCategory,
-      artCollection,
       extension,
       uid,
     })
@@ -66,20 +65,18 @@ class GoogleClient extends Storage {
   }
 
   buildPaths(art) {
-    let { category, subCategory, artCollection, uid, extension } = art
+    let { category, subCategory, uid, extension } = art
     subCategory = slugify(subCategory)
-    artCollection = slugify(artCollection)
-    const path = `${category}/${subCategory}/${artCollection}/${uid}`
+    const path = `${category}/${subCategory}/${uid}`
 
     return [`${path}.${extension}`, `${path}.webp`]
   }
 
   buildThumbnailUrl(art) {
-    let { category, subCategory, artCollection, uid } = art
+    let { category, subCategory, uid } = art
     subCategory = slugify(subCategory)
-    artCollection = slugify(artCollection)
 
-    return `${this.baseStorageUrl}/${this.thumbBucketName}/${category}/${subCategory}/${artCollection}/${uid}.webp`
+    return `${this.baseStorageUrl}/${this.thumbBucketName}/${category}/${subCategory}/${uid}.webp`
   }
 }
 

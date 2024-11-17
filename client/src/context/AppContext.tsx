@@ -3,11 +3,14 @@ import React, { createContext, useReducer } from "react"
 export type TArtWork = {
   _id: string
   category: "Photography" | "Illustration"
-  artCollection: string
+  artCollection?: string
   subCategory: string
   thumbnail: string
   extension?: string
   createdAt?: string | Date
+  carousel?: boolean
+  hero?: boolean
+  main?: boolean
 }
 
 type TAppState = {

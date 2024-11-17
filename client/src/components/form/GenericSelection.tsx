@@ -4,7 +4,8 @@ type TGenericSelectionProps = {
   allValues: string[]
   selectedValue: string
   valueType: string
-  updateForm: (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void
+  updateForm: React.ChangeEventHandler<HTMLSelectElement | HTMLInputElement>
+  withInput?: boolean
 }
 
 function GenericSelection({
@@ -12,6 +13,7 @@ function GenericSelection({
   selectedValue,
   updateForm,
   valueType,
+  withInput = false,
 }: TGenericSelectionProps) {
   return (
     <div className="form-field">
@@ -31,17 +33,19 @@ function GenericSelection({
         ))}
       </select>
 
-      <input
-        id={valueType}
-        type="text"
-        name={valueType}
-        placeholder={titleCase(valueType)}
-        required
-        autoComplete="off"
-        spellCheck="false"
-        value={titleCase(selectedValue)}
-        onChange={updateForm}
-      />
+      {withInput ? (
+        <input
+          id={valueType}
+          type="text"
+          name={valueType}
+          placeholder={titleCase(valueType)}
+          required
+          autoComplete="off"
+          spellCheck="false"
+          value={titleCase(selectedValue)}
+          onChange={updateForm}
+        />
+      ) : null}
     </div>
   )
 }

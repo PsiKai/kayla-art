@@ -11,11 +11,6 @@ const ArtworkSchema = new Schema({
     required: true,
     index: true,
   },
-  artCollection: {
-    type: String,
-    required: true,
-    index: true,
-  },
   uid: {
     type: String,
     required: true,
@@ -32,6 +27,21 @@ const ArtworkSchema = new Schema({
   extension: {
     type: String,
     required: true,
+  },
+  carousel: {
+    type: Boolean,
+    index: true,
+    default: false,
+  },
+  hero: {
+    type: Boolean,
+    index: true,
+    default: false,
+  },
+  main: {
+    type: Boolean,
+    index: true,
+    default: false,
   },
 })
 

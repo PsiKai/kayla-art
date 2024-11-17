@@ -85,17 +85,18 @@ function Upload() {
           uploading={uploading}
           removeStagedUpload={removeStagedUpload}
         />
-        {form.category && form.subCategory && form.artCollection && image.size ? (
+        {form.category && form.subCategory && image.size ? (
           <button onClick={beginBulkUpload} disabled={uploading !== null}>
             {uploading !== null ? "Uploading..." : "Upload"}
           </button>
         ) : null}
       </div>
-      {form.category && form.subCategory && form.artCollection ? (
+      {form.category && form.subCategory ? (
         <AdminArtCollection
+          form={form}
+          setForm={setForm}
           category={form.category}
           subCategory={form.subCategory}
-          artCollection={form.artCollection}
         />
       ) : null}
     </>

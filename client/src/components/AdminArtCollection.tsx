@@ -10,10 +10,9 @@ import DeleteArtworkModal from "./layout/DeleteArtworkModal"
 type TDeleteArtProps = {
   category: string
   subCategory: string
-  artCollection: string
 }
 
-function AdminArtCollection({ category, subCategory, artCollection }: TDeleteArtProps) {
+function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
   const {
     state: { art },
     dispatch,
@@ -23,7 +22,7 @@ function AdminArtCollection({ category, subCategory, artCollection }: TDeleteArt
   const deleteModalRef = useRef<HTMLDialogElement>(null)
 
   const [artwork, pending] = useFetchWithDebounce<TArtWork[]>(
-    `/api/artworks?category=${category}&subCategory=${subCategory}&artCollection=${artCollection}&limit=0`,
+    `/api/artworks?category=${category}&subCategory=${subCategory}&limit=0`,
   )
 
   const [selected, setSelected] = useState<Set<string>>(new Set())
@@ -105,8 +104,7 @@ function AdminArtCollection({ category, subCategory, artCollection }: TDeleteArt
     }
     if (
       selectedArt.category === values.category &&
-      selectedArt.subCategory === values.subCategory &&
-      selectedArt.artCollection === values.artCollection
+      selectedArt.subCategory === values.subCategory
     ) {
       console.log("No changes made")
       return
@@ -142,7 +140,9 @@ function AdminArtCollection({ category, subCategory, artCollection }: TDeleteArt
 
   return (
     <section className="artwork-collection-section">
-      <h2>Art Collection: {titleCase(artCollection)}</h2>
+      <h2>
+        {titleCase(category)} {titleCase(subCategory)}
+      </h2>
       {pending ? (
         <div>Loading...</div>
       ) : (
@@ -212,3 +212,41 @@ function AdminArtCollection({ category, subCategory, artCollection }: TDeleteArt
 }
 
 export default AdminArtCollection
+// <div className="form-field">
+//   <label htmlFor="none">none</label>
+//   <input
+//     type="radio"
+//     id="none"
+//     name="role"
+//     value=""
+//     onChange={updateRole}
+//     checked={!form.role}
+//   />
+//   <label htmlFor="carousel">Carousel</label>
+//   <input
+//     type="radio"
+//     id="carousel"
+//     name="role"
+//     value="carousel"
+//     onChange={updateRole}
+//     checked={form.role === "carousel"}
+//   />
+//   <label htmlFor="hero">hero</label>
+//   <input
+//     type="radio"
+//     id="hero"
+//     name="role"
+//     value="hero"
+//     onChange={updateRole}
+//     checked={form.role === "hero"}
+//   />
+//   <label htmlFor="main">main</label>
+//   <input
+//     type="radio"
+//     id="main"
+//     name="role"
+//     value="main"
+//     onChange={updateRole}
+//     checked={form.role === "main"}
+//   />
+// </div>
