@@ -20,11 +20,11 @@ const DeleteArtworkModal: FC<TModalProps> = props => {
       <div className="modal-content">
         <h2>Delete This Artwork?</h2>
         <div className="preview-container">
-          {artwork.map(({ thumbnail, _id, artCollection }) => (
+          {artwork.map(({ thumbnails, _id, artCollection }) => (
             <div key={_id}>
               <img
                 className="preview"
-                src={thumbnail}
+                src={thumbnails["375"]}
                 alt={`An artwork from the ${artCollection} album`}
               />
             </div>

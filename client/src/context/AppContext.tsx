@@ -5,12 +5,12 @@ export type TArtWork = {
   category: "Photography" | "Illustration"
   artCollection?: string
   subCategory: string
-  thumbnail: string
   extension?: string
   createdAt?: string | Date
   carousel?: boolean
   hero?: boolean
   main?: boolean
+  thumbnails: Record<string, string>
 }
 
 type TAppState = {

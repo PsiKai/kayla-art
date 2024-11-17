@@ -174,7 +174,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
             </button>
           </div>
           <div className="admin-art">
-            {art.map(({ _id, thumbnail }) => (
+            {art.map(({ _id, thumbnails }) => (
               <div
                 className={`thumbnail-preview ${
                   deleting === _id || editing === _id ? "pending" : ""
@@ -190,7 +190,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
                   disabled={!!deleting || !!editing}
                 />
                 <label className="artwork-label" htmlFor={_id}>
-                  <img className="admin-art-thumbnail" src={thumbnail} alt="An artwork" />
+                  <img className="admin-art-thumbnail" src={thumbnails["375"]} alt="An artwork" />
                 </label>
               </div>
             ))}

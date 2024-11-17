@@ -16,26 +16,28 @@ class GoogleClient extends Storage {
   baseStorageUrl = "https://storage.googleapis.com"
   bucketName = process.env.BUCKETNAME
   thumbBucketName = process.env.THUMBS
-  THUMBNAIL_SIZE = 500
+  thumbnailStorageUrl = `${this.baseStorageUrl}/${this.thumbBucketName}`
+  UPLOAD_SIZES = [375, 768, 1440]
 
   mainBucket = this.bucket(this.bucketName)
   thumbBucket = this.bucket(this.thumbBucketName)
 
   writeStream(art) {
-    const [fullSizeFile, thumbnailFile] = this.buildPaths(art)
+    const [fullSizeFile, thumbnailFiles] = this.buildPaths(art)
+    const thumbnailStreams = this.UPLOAD_SIZES.reduce((acc, size, i) => {
+      acc[size] = this.thumbBucket.file(thumbnailFiles[i]).createWriteStream()
+      return acc
+    }, {})
 
-    return [
-      this.mainBucket.file(fullSizeFile).createWriteStream(),
-      this.thumbBucket.file(thumbnailFile).createWriteStream(),
-    ]
+    return [this.mainBucket.file(fullSizeFile).createWriteStream(), thumbnailStreams]
   }
 
   deleteFile(art) {
-    const [fullSizeFile, thumbnailFile] = this.buildPaths(art)
+    const [fullSizeFile, thumbnailFiles] = this.buildPaths(art)
 
     return [
       this.mainBucket.file(fullSizeFile).delete(),
-      this.thumbBucket.file(thumbnailFile).delete(),
+      ...thumbnailFiles.map(file => this.thumbBucket.file(file).delete()),
     ]
   }
 
@@ -43,8 +45,8 @@ class GoogleClient extends Storage {
     const { extension, uid } = oldImg
     const { category, subCategory } = newImg
 
-    const [oldFullSizeFile, oldThumbnailFile] = this.buildPaths(oldImg)
-    const [newFullSizePath, newThumbnailPath] = this.buildPaths({
+    const [oldFullSizeFile, oldThumbnailFiles] = this.buildPaths(oldImg)
+    const [newFullSizePath, newThumbnailPaths] = this.buildPaths({
       category,
       subCategory,
       extension,
@@ -53,7 +55,9 @@ class GoogleClient extends Storage {
 
     return [
       this.mainBucket.file(oldFullSizeFile).move(newFullSizePath),
-      this.thumbBucket.file(oldThumbnailFile).move(newThumbnailPath),
+      ...oldThumbnailFiles.map((oldFile, i) => {
+        return this.thumbBucket.file(oldFile).move(newThumbnailPaths[i])
+      }),
     ]
   }
 
@@ -68,15 +72,20 @@ class GoogleClient extends Storage {
     let { category, subCategory, uid, extension } = art
     subCategory = slugify(subCategory)
     const path = `${category}/${subCategory}/${uid}`
+    const thumbPaths = this.UPLOAD_SIZES.map(size => `${path}-${size}.webp`)
 
-    return [`${path}.${extension}`, `${path}.webp`]
+    return [`${path}.${extension}`, thumbPaths]
   }
 
-  buildThumbnailUrl(art) {
+  buildThumbnailUrls(art) {
     let { category, subCategory, uid } = art
     subCategory = slugify(subCategory)
+    const urls = this.UPLOAD_SIZES.reduce((acc, size) => {
+      acc[size] = `${this.thumbnailStorageUrl}/${category}/${subCategory}/${uid}-${size}.webp`
+      return acc
+    }, {})
 
-    return `${this.baseStorageUrl}/${this.thumbBucketName}/${category}/${subCategory}/${uid}.webp`
+    return urls
   }
 }
 

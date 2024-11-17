@@ -17,8 +17,7 @@ artworkRouter.get("/", async (req, res) => {
 
 artworkRouter.post("/", isAuthenticated, uploader, slugifyValues, async (req, res) => {
   console.log(req.body)
-  const thumbnail = storageClient.buildThumbnailUrl(req.body)
-  const newArt = new Artwork({ ...req.body, thumbnail })
+  const newArt = new Artwork({ ...req.body })
   await newArt.save()
   res.json({ newArt })
 })
@@ -42,10 +41,9 @@ artworkRouter.put("/:id", isAuthenticated, slugifyValues, async (req, res) => {
     const artwork = await Artwork.findById(req.params.id).lean()
     const moveFiles = storageClient.moveFile(artwork, req.body)
     await Promise.all(moveFiles)
-    const thumbnail = storageClient.buildThumbnailUrl({ ...artwork, ...req.body })
     const updatedArtwork = await Artwork.findByIdAndUpdate(
       req.params.id,
-      { ...req.body, thumbnail },
+      { ...req.body },
       { new: true },
     )
     res.json({ updatedArtwork })

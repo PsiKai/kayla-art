@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose"
+import { storageClient } from "../../google-client.js"
 
 const ArtworkSchema = new Schema({
   category: {
@@ -20,10 +21,6 @@ const ArtworkSchema = new Schema({
     default: Date.now,
     immutable: true,
   },
-  thumbnail: {
-    type: String,
-    required: true,
-  },
   extension: {
     type: String,
     required: true,
@@ -44,5 +41,12 @@ const ArtworkSchema = new Schema({
     default: false,
   },
 })
+
+ArtworkSchema.virtual("thumbnails").get(function() {
+  return storageClient.buildThumbnailUrls(this)
+})
+
+ArtworkSchema.set("toJSON", { virtuals: true })
+ArtworkSchema.set("toObject", { virtuals: true })
 
 export default model("Artwork", ArtworkSchema)
