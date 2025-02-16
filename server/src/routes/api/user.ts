@@ -54,6 +54,8 @@ userRouter.post("/login", async (req, res) => {
       }
     })
   })
+
+  res.status(400).end()
   // const salt = await bcrypt.genSalt(10)
   // const newPass = await bcrypt.hash(password, salt)
   // await User.findOneAndUpdate({ username }, { password: newPass })

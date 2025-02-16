@@ -1,28 +1,36 @@
-import { Storage } from "@google-cloud/storage"
+import { Bucket, GetSignedUrlConfig, Storage } from "@google-cloud/storage"
 import { slugify } from "./utils/stringUtils.js"
+import { Artwork } from "./db/modelTypes.js"
 
-let googleAuth
+let googleAuth: string
 if (process.env.NODE_ENV !== "production") {
-  googleAuth = process.env.GOOGLE_APPLICATION_CREDENTIALS
+  googleAuth = process.env.GOOGLE_APPLICATION_CREDENTIALS || ""
 } else {
   googleAuth = "google-credentials.json"
 }
 
 class GoogleClient extends Storage {
+  public baseStorageUrl: string
+  public bucketName: string
+  public thumbBucketName: string
+  public thumbnailStorageUrl: string
+  public UPLOAD_SIZES: number[]
+  public mainBucket: Bucket
+  public thumbBucket: Bucket
+
   constructor() {
-    super({ keyFileName: googleAuth })
+    super({ keyFilename: googleAuth })
+
+    this.baseStorageUrl = "https://storage.googleapis.com"
+    this.bucketName = process.env.BUCKETNAME!
+    this.thumbBucketName = process.env.THUMBS!
+    this.thumbnailStorageUrl = `${this.baseStorageUrl}/${this.thumbBucketName}`
+    this.UPLOAD_SIZES = [375, 768, 1440]
+    this.mainBucket = this.bucket(this.bucketName)
+    this.thumbBucket = this.bucket(this.thumbBucketName)
   }
 
-  baseStorageUrl = "https://storage.googleapis.com"
-  bucketName = process.env.BUCKETNAME
-  thumbBucketName = process.env.THUMBS
-  thumbnailStorageUrl = `${this.baseStorageUrl}/${this.thumbBucketName}`
-  UPLOAD_SIZES = [375, 768, 1440]
-
-  mainBucket = this.bucket(this.bucketName)
-  thumbBucket = this.bucket(this.thumbBucketName)
-
-  writeStream(art) {
+  writeStream(art: Artwork) {
     const [fullSizeFile, thumbnailFiles] = this.buildPaths(art)
     const thumbnailStreams = this.UPLOAD_SIZES.reduce((acc, size, i) => {
       acc[size] = this.thumbBucket.file(thumbnailFiles[i]).createWriteStream()
@@ -32,7 +40,7 @@ class GoogleClient extends Storage {
     return [this.mainBucket.file(fullSizeFile).createWriteStream(), thumbnailStreams]
   }
 
-  deleteFile(art) {
+  deleteFile(art: Artwork) {
     const [fullSizeFile, thumbnailFiles] = this.buildPaths(art)
 
     return [
@@ -41,7 +49,7 @@ class GoogleClient extends Storage {
     ]
   }
 
-  moveFile(oldImg, newImg) {
+  moveFile(oldImg: Artwork, newImg: Artwork) {
     const { extension, uid } = oldImg
     const { category, subCategory } = newImg
 
@@ -61,14 +69,14 @@ class GoogleClient extends Storage {
     ]
   }
 
-  signedUrl(art, extraOptions = {}) {
-    const options = { action: "read", expires: Date.now() + 60_000, ...extraOptions }
+  signedUrl(art: Artwork, extraOptions: Partial<GetSignedUrlConfig> = {}) {
+    const options = { action: "read" as const, expires: Date.now() + 60_000, ...extraOptions }
     const [filePath] = this.buildPaths(art)
 
     return this.mainBucket.file(filePath).getSignedUrl(options)
   }
 
-  buildPaths(art) {
+  buildPaths(art: Artwork): [string, string[]] {
     let { category, subCategory, uid, extension } = art
     subCategory = slugify(subCategory)
     const path = `${category}/${subCategory}/${uid}`
@@ -77,7 +85,7 @@ class GoogleClient extends Storage {
     return [`${path}.${extension}`, thumbPaths]
   }
 
-  buildThumbnailUrls(art) {
+  buildThumbnailUrls(art: Artwork) {
     let { category, subCategory, uid } = art
     subCategory = slugify(subCategory)
     const urls = this.UPLOAD_SIZES.reduce((acc, size) => {

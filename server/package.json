@@ -2,11 +2,10 @@
   "name": "kayla-art",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "server": "nodemon server.js",
+    "start": "vite build && node server.js",
+    "server": "npx ts-node server",
     "client": "bun run dev --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run dev --prefix client\""
   },
@@ -25,9 +24,13 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^5.0.0",
+    "@types/express-session": "^1.18.1",
     "@types/react-transition-group": "^4.4.10",
     "concurrently": "^8.2.2",
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.3",
+    "vite": "^6.1.0"
   },
   "type": "module"
 }

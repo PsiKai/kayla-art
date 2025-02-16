@@ -1,9 +1,10 @@
 import "dotenv/config"
 import express from "express"
-import apiRouter from "./routes/api/index.js"
-import appRouter from "./routes/app/index.js"
-import initDB from "./db/init.js"
+import apiRouter from "./routes/api/index"
+import appRouter from "./routes/app/index"
+import initDB from "./db/init"
 import session from "express-session"
+import { CipherKey } from "crypto"
 
 const app = express()
 await initDB()
@@ -12,9 +13,17 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("public"))
 }
 
+const accessToken: CipherKey = process.env.ACCESS_TOKEN_SECRET || ""
+
+declare module "express-session" {
+  interface SessionData {
+    user: string
+  }
+}
+
 app.use(
   session({
-    secret: process.env.ACCESS_TOKEN_SECRET,
+    secret: accessToken,
     resave: false,
     saveUninitialized: false,
     cookie: {
