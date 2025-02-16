@@ -26,7 +26,12 @@ artworkRouter.use("/categories", artworkCategoryRouter)
 
 artworkRouter.get("/:id", async (req, res) => {
   try {
-    const resources = (await Artwork.findById(req.params.id)).toObject()
+    const foundArtwork = await Artwork.findById(req.params.id)
+    if (!foundArtwork) {
+      res.status(404).json({ message: "Artwork not found" })
+      return
+    }
+    const resources = { ...foundArtwork.toObject(), originalSrc: "" }
     const [originalSrc] = await storageClient.signedUrl(resources)
     resources.originalSrc = originalSrc
     res.json({ resources })
@@ -39,6 +44,10 @@ artworkRouter.get("/:id", async (req, res) => {
 artworkRouter.put("/:id", isAuthenticated, slugifyValues, async (req, res) => {
   try {
     const artwork = await Artwork.findById(req.params.id).lean()
+    if (!artwork) {
+      res.status(404).json({ message: "Artwork not found" })
+      return
+    }
     const moveFiles = storageClient.moveFile(artwork, req.body)
     await Promise.all(moveFiles)
     const updatedArtwork = await Artwork.findByIdAndUpdate(
@@ -56,6 +65,10 @@ artworkRouter.put("/:id", isAuthenticated, slugifyValues, async (req, res) => {
 artworkRouter.delete("/:id", isAuthenticated, async (req, res) => {
   try {
     const artwork = await Artwork.findById(req.params.id).lean()
+    if (!artwork) {
+      res.status(404).json({ message: "Artwork not found" })
+      return
+    }
     const bucketDeteletion = storageClient.deleteFile(artwork)
     await Artwork.deleteOne({ _id: req.params.id })
     await Promise.all(bucketDeteletion)

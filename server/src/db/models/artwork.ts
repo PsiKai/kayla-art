@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose"
+import { InferSchemaType, Schema, model } from "mongoose"
 import { storageClient } from "../../google-client.js"
 
 const ArtworkSchema = new Schema({
@@ -42,7 +42,7 @@ const ArtworkSchema = new Schema({
   },
 })
 
-ArtworkSchema.virtual("thumbnails").get(function() {
+ArtworkSchema.virtual("thumbnails").get(function () {
   return storageClient.buildThumbnailUrls(this)
 })
 
@@ -50,3 +50,5 @@ ArtworkSchema.set("toJSON", { virtuals: true })
 ArtworkSchema.set("toObject", { virtuals: true })
 
 export default model("Artwork", ArtworkSchema)
+
+export type Artwork = InferSchemaType<typeof ArtworkSchema>

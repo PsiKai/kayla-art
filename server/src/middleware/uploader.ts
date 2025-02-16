@@ -3,12 +3,13 @@ import sharp from "sharp"
 import stream from "stream"
 import { v4 as uuid } from "uuid"
 import { storageClient } from "../google-client.js"
+import { RequestHandler } from "express"
 
 const uploadSizes = [375, 768, 1440]
 
-export const uploader = async (req, res, next) => {
+export const uploader: RequestHandler = async (req, res, next) => {
   const bb = busboy({ headers: req.headers })
-  const uploadPromises = []
+  const uploadPromises: Promise<void>[] = []
 
   bb.on("file", (_name, file, info) => {
     const { mimeType } = info
@@ -21,7 +22,7 @@ export const uploader = async (req, res, next) => {
 
     const [fullSizeStream, thumbnailStreams] = storageClient.writeStream(req.body)
 
-    const uploadPromise = new Promise((resolve, reject) => {
+    const uploadPromise = new Promise<void>((resolve, reject) => {
       const rotateStream = sharp().rotate()
       passThrough
         .pipe(rotateStream)
@@ -39,7 +40,7 @@ export const uploader = async (req, res, next) => {
 
     const resizePromises = Object.entries(thumbnailStreams).map(([size, thumbnailStream], i) => {
       const resizeStream = sharp().rotate().resize(Number(size)).webp()
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         passThrough
           .pipe(resizeStream)
           .pipe(thumbnailStream)

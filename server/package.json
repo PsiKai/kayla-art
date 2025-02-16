@@ -4,10 +4,10 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "vite build && node server.js",
-    "server": "npx ts-node server",
+    "start": "vite build && node src/index.js",
+    "server": "tsx src/index.ts",
     "client": "bun run dev --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run dev --prefix client\""
+    "dev": "concurrently \"npm run server\" \"npm run dev --prefix ../client\""
   },
   "keywords": [],
   "author": "",
@@ -25,11 +25,14 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/busboy": "^1.5.4",
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.1",
     "@types/react-transition-group": "^4.4.10",
+    "@types/uuid": "^10.0.0",
     "concurrently": "^8.2.2",
     "nodemon": "^3.0.3",
+    "tsx": "^4.19.2",
     "vite": "^6.1.0"
   },
   "type": "module"

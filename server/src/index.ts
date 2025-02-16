@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("public"))
 }
 
-const accessToken: CipherKey = process.env.ACCESS_TOKEN_SECRET || ""
+const accessToken: CipherKey = process.env.ACCESS_TOKEN_SECRET!
 
 declare module "express-session" {
   interface SessionData {

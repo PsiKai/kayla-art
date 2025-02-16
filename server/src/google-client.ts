@@ -1,6 +1,6 @@
 import { Bucket, GetSignedUrlConfig, Storage } from "@google-cloud/storage"
 import { slugify } from "./utils/stringUtils.js"
-import { Artwork } from "./db/modelTypes.js"
+import type { Artwork } from "./db/models/artwork.js"
 
 let googleAuth: string
 if (process.env.NODE_ENV !== "production") {
@@ -30,7 +30,7 @@ class GoogleClient extends Storage {
     this.thumbBucket = this.bucket(this.thumbBucketName)
   }
 
-  writeStream(art: Artwork) {
+  writeStream(art: Artwork): [NodeJS.WritableStream, Record<string, NodeJS.WritableStream>] {
     const [fullSizeFile, thumbnailFiles] = this.buildPaths(art)
     const thumbnailStreams = this.UPLOAD_SIZES.reduce((acc, size, i) => {
       acc[size] = this.thumbBucket.file(thumbnailFiles[i]).createWriteStream()
@@ -76,9 +76,9 @@ class GoogleClient extends Storage {
     return this.mainBucket.file(filePath).getSignedUrl(options)
   }
 
-  buildPaths(art: Artwork): [string, string[]] {
+  buildPaths(art: Partial<Artwork>): [string, string[]] {
     let { category, subCategory, uid, extension } = art
-    subCategory = slugify(subCategory)
+    subCategory = slugify(subCategory || "")
     const path = `${category}/${subCategory}/${uid}`
     const thumbPaths = this.UPLOAD_SIZES.map(size => `${path}-${size}.webp`)
 
