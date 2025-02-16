@@ -53,7 +53,7 @@ function ThumbnailContainer(props: TThumbnailContainerProps) {
             <div className="thumbnail-img" style={calculatedGridPosition(i)}>
               <img
                 key={thumbnail._id}
-                src={thumbnail.thumbnail}
+                src={thumbnail.thumbnails.small}
                 alt={`An artwork from the ${thumbnail.artCollection} collection`}
               />
             </div>

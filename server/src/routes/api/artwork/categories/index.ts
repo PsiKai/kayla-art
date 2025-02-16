@@ -1,5 +1,5 @@
 import { Router } from "express"
-import Artwork from "../../../../db/models/artwork.js"
+import Artwork from "../../../../db/models/artwork"
 
 const artworkCategoryRouter = Router()
 
@@ -15,7 +15,7 @@ artworkCategoryRouter.get("/:category/subcategories", async (req, res) => {
     res.json({ resources })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: "Error fetching subcategories" })
   }
 })
 
@@ -26,7 +26,7 @@ artworkCategoryRouter.get("/:category/subcategories/:subCategory/collections", a
     res.json({ resources })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: "Error fetching collections" })
   }
 })
 

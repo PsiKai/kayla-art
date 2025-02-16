@@ -1,6 +1,6 @@
 import { Bucket, GetSignedUrlConfig, Storage } from "@google-cloud/storage"
-import { slugify } from "./utils/stringUtils.js"
-import type { Artwork } from "./db/models/artwork.js"
+import { slugify } from "./utils/stringUtils"
+import type { Artwork } from "./db/models/artwork"
 
 let googleAuth: string
 if (process.env.NODE_ENV !== "production") {
@@ -32,10 +32,13 @@ class GoogleClient extends Storage {
 
   writeStream(art: Artwork): [NodeJS.WritableStream, Record<string, NodeJS.WritableStream>] {
     const [fullSizeFile, thumbnailFiles] = this.buildPaths(art)
-    const thumbnailStreams = this.UPLOAD_SIZES.reduce((acc, size, i) => {
-      acc[size] = this.thumbBucket.file(thumbnailFiles[i]).createWriteStream()
-      return acc
-    }, {})
+    const thumbnailStreams = this.UPLOAD_SIZES.reduce<Record<string, NodeJS.WritableStream>>(
+      (acc, size, i) => {
+        acc[size] = this.thumbBucket.file(thumbnailFiles[i]).createWriteStream()
+        return acc
+      },
+      {},
+    )
 
     return [this.mainBucket.file(fullSizeFile).createWriteStream(), thumbnailStreams]
   }
@@ -88,7 +91,7 @@ class GoogleClient extends Storage {
   buildThumbnailUrls(art: Artwork) {
     let { category, subCategory, uid } = art
     subCategory = slugify(subCategory)
-    const urls = this.UPLOAD_SIZES.reduce((acc, size) => {
+    const urls = this.UPLOAD_SIZES.reduce<Record<string, string>>((acc, size) => {
       acc[size] = `${this.thumbnailStorageUrl}/${category}/${subCategory}/${uid}-${size}.webp`
       return acc
     }, {})

@@ -1,10 +1,10 @@
 import { Router, json } from "express"
-import Artwork from "../../../db/models/artwork.js"
-import { uploader } from "../../../middleware/uploader.js"
-import slugifyValues from "../../../middleware/slugifyValues.js"
-import { storageClient } from "../../../google-client.js"
-import artworkCategoryRouter from "./categories/index.js"
-import { isAuthenticated } from "../../../middleware/auth.js"
+import Artwork from "../../../db/models/artwork"
+import { uploader } from "../../../middleware/uploader"
+import slugifyValues from "../../../middleware/slugifyValues"
+import { storageClient } from "../../../google-client"
+import artworkCategoryRouter from "./categories/index"
+import { isAuthenticated } from "../../../middleware/auth"
 
 const artworkRouter = Router()
 artworkRouter.use(json())
@@ -37,7 +37,7 @@ artworkRouter.get("/:id", async (req, res) => {
     res.json({ resources })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: "Error fetching artwork" })
   }
 })
 
@@ -58,7 +58,7 @@ artworkRouter.put("/:id", isAuthenticated, slugifyValues, async (req, res) => {
     res.json({ updatedArtwork })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: "Error updating artwork" })
   }
 })
 
@@ -75,7 +75,7 @@ artworkRouter.delete("/:id", isAuthenticated, async (req, res) => {
     res.status(204).end()
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: "Error deleting artwork" })
   }
 })
 

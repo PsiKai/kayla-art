@@ -93,8 +93,8 @@ function Upload() {
       </div>
       {form.category && form.subCategory ? (
         <AdminArtCollection
-          form={form}
-          setForm={setForm}
+          // form={form}
+          // setForm={setForm}
           category={form.category}
           subCategory={form.subCategory}
         />

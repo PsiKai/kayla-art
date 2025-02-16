@@ -176,9 +176,8 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
           <div className="admin-art">
             {art.map(({ _id, thumbnails }) => (
               <div
-                className={`thumbnail-preview ${
-                  deleting === _id || editing === _id ? "pending" : ""
-                }`}
+                className={`thumbnail-preview ${deleting === _id || editing === _id ? "pending" : ""
+                  }`}
                 key={_id}
               >
                 <input

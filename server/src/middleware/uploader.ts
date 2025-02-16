@@ -1,8 +1,8 @@
 import busboy from "busboy"
 import sharp from "sharp"
-import stream from "stream"
+import { PassThrough } from "stream"
 import { v4 as uuid } from "uuid"
-import { storageClient } from "../google-client.js"
+import { storageClient } from "../google-client"
 import { RequestHandler } from "express"
 
 const uploadSizes = [375, 768, 1440]
@@ -17,7 +17,7 @@ export const uploader: RequestHandler = async (req, res, next) => {
     req.body.extension = extension
     req.body.uid = uuid()
 
-    const passThrough = new stream.PassThrough()
+    const passThrough = new PassThrough()
     file.pipe(passThrough)
 
     const [fullSizeStream, thumbnailStreams] = storageClient.writeStream(req.body)

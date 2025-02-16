@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "vite build && node src/index.js",
-    "server": "tsx src/index.ts",
-    "client": "bun run dev --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run dev --prefix ../client\""
+    "build": "NPM_CONFIG_PRODUCTION=true npm run client-build && npm run server-build",
+    "client-build": "npm install --prefix ../client && npm run build --prefix ../client",
+    "client-dev": "npm run dev --prefix ../client",
+    "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
+    "server-build": "tsc",
+    "server-dev": "tsx --watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -28,12 +31,10 @@
     "@types/busboy": "^1.5.4",
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.1",
-    "@types/react-transition-group": "^4.4.10",
+    "@types/node": "^22.13.4",
     "@types/uuid": "^10.0.0",
     "concurrently": "^8.2.2",
-    "nodemon": "^3.0.3",
     "tsx": "^4.19.2",
-    "vite": "^6.1.0"
-  },
-  "type": "module"
+    "typescript": "^5.7.3"
+  }
 }

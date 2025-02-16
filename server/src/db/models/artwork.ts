@@ -1,5 +1,5 @@
 import { InferSchemaType, Schema, model } from "mongoose"
-import { storageClient } from "../../google-client.js"
+import { storageClient } from "../../google-client"
 
 const ArtworkSchema = new Schema({
   category: {

@@ -1,5 +1,5 @@
 import { RequestHandler } from "express"
-import { slugify } from "../utils/stringUtils.js"
+import { slugify } from "../utils/stringUtils"
 
 const slugifyValues: RequestHandler = (req, res, next) => {
   const invalidCharsRegex = /[!"#$%&'()*+,/:;<=>?@[\\\]^`{|}~]/g

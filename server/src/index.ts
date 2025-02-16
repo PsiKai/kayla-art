@@ -1,17 +1,16 @@
 import "dotenv/config"
 import express from "express"
+import session from "express-session"
+import { CipherKey } from "crypto"
+import path from "path"
 import apiRouter from "./routes/api/index"
 import appRouter from "./routes/app/index"
 import initDB from "./db/init"
-import session from "express-session"
-import { CipherKey } from "crypto"
 
 const app = express()
-await initDB()
+initDB().catch(console.error)
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("public"))
-}
+app.use(express.static(path.join(process.cwd(), "../public")))
 
 const accessToken: CipherKey = process.env.ACCESS_TOKEN_SECRET!
 

@@ -8,7 +8,7 @@ function ImageThumbnail(props: TImageThumbnailProps) {
   const { image } = props
   return (
     <div>
-      <img style={{ maxWidth: "100%" }} src={image.thumbnail} alt={image.artCollection} />
+      <img style={{ maxWidth: "100%" }} src={image.thumbnails.small} alt={image.artCollection} />
     </div>
   )
 }

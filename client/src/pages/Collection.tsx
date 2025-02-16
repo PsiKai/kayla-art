@@ -23,7 +23,7 @@ function Collection() {
         collection.map(art => (
           <Link to={art._id} key={art._id}>
             <img
-              src={art.thumbnail}
+              src={art.thumbnails.small}
               alt={`An artwork from the ${titleCase(artCollection)} collection`}
             />
           </Link>

@@ -1,7 +1,7 @@
 import { Router, json } from "express"
-import User from "../../db/models/user.js"
+import User from "../../db/models/user"
 import bcrypt from "bcrypt"
-import { isAuthenticated } from "../../middleware/auth.js"
+import { isAuthenticated } from "../../middleware/auth"
 
 const userRouter = Router()
 userRouter.use(json())
@@ -34,16 +34,26 @@ userRouter.get("/login", isAuthenticated, async (_req, res) => {
 
 userRouter.post("/login", async (req, res) => {
   const { email, password } = req.body
-  if (!email || !password) return res.status(400).end()
+  if (!email || !password) {
+    res.status(400).end()
+    return
+  }
 
   const user = await User.findOne({ email })
-  if (!user) return res.status(401).end()
+  if (!user) {
+    res.status(401).end()
+    return
+  }
 
   const isMatch = await bcrypt.compare(password, user.password)
-  if (!isMatch) return res.status(401).end()
+  if (!isMatch) {
+    res.status(401).end()
+    return
+  }
 
   req.session.regenerate(sessionError => {
     if (sessionError) console.log("ERROR GENERATING SESSION: ", sessionError)
+
     req.session.user = user._id.toString()
     req.session.save(sessionSaveError => {
       if (sessionSaveError) {
