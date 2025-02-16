@@ -14,6 +14,6 @@ export default defineConfig({
     devSourcemap: true,
   },
   build: {
-    outDir: path.resolve(process.cwd(), "../public/"),
+    outDir: path.resolve(process.cwd(), "../public"),
   },
 })

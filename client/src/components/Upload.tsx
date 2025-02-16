@@ -57,6 +57,8 @@ function Upload() {
     try {
       while (image.size > 0) {
         const img = image.values().next().value
+        if (!img) continue
+
         await uploadNewArt(img)
         image.delete(img.name)
       }

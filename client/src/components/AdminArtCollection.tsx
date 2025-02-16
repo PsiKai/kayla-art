@@ -61,6 +61,8 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
     try {
       while (selected.size > 0) {
         const id = selected.values().next().value
+        if (!id) continue
+
         await deleteArt(id)
         selected.delete(id)
       }
@@ -114,6 +116,8 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
     try {
       while (selected.size > 0) {
         const _id = selected.values().next().value
+        if (!_id) continue
+
         await moveArt(values, _id)
         selected.delete(_id)
       }
