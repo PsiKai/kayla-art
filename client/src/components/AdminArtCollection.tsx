@@ -6,6 +6,7 @@ import { titleCase } from "../utils/stringUtils"
 import UpdateArtworkModal from "./layout/UpdateArtworkModal"
 import { TArtworkForm } from "./form/ArtworkForm"
 import DeleteArtworkModal from "./layout/DeleteArtworkModal"
+import AdminArtworkLayout from "./layout/AdminArtworkLayout"
 
 type TDeleteArtProps = {
   category: string
@@ -177,27 +178,13 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
               Select All
             </button>
           </div>
-          <div className="admin-art">
-            {art.map(({ _id, thumbnails }) => (
-              <div
-                className={`thumbnail-preview ${deleting === _id || editing === _id ? "pending" : ""
-                  }`}
-                key={_id}
-              >
-                <input
-                  type="checkbox"
-                  id={_id}
-                  value={_id}
-                  onChange={selectArt}
-                  checked={selected.has(_id)}
-                  disabled={!!deleting || !!editing}
-                />
-                <label className="artwork-label" htmlFor={_id}>
-                  <img className="admin-art-thumbnail" src={thumbnails["375"]} alt="An artwork" />
-                </label>
-              </div>
-            ))}
-          </div>
+          <AdminArtworkLayout
+            art={art}
+            deleting={deleting}
+            editing={editing}
+            selected={selected}
+            selectArt={selectArt}
+          />
         </div>
       )}
       <UpdateArtworkModal
