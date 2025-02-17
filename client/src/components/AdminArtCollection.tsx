@@ -7,6 +7,7 @@ import UpdateArtworkModal from "./layout/UpdateArtworkModal"
 import { TArtworkForm } from "./form/ArtworkForm"
 import DeleteArtworkModal from "./layout/DeleteArtworkModal"
 import AdminArtworkLayout from "./layout/AdminArtworkLayout"
+import { ApiContext } from "../context/ApiContext"
 
 type TDeleteArtProps = {
   category: string
@@ -18,88 +19,35 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
     state: { art },
     dispatch,
   } = useContext(AppContext)
+  const { pending, updateArtwork, deleteArtwork } = useContext(ApiContext)
 
   const updateModalRef = useRef<HTMLDialogElement>(null)
   const deleteModalRef = useRef<HTMLDialogElement>(null)
 
-  const [artwork, pending] = useFetchWithDebounce<TArtWork[]>(
+  const [artwork, fetchPending] = useFetchWithDebounce<TArtWork[]>(
     `/api/artworks?category=${category}&subCategory=${subCategory}&limit=0`,
   )
 
   const [selected, setSelected] = useState<Set<string>>(new Set())
-  const [deleting, setDeleting] = useState<string | null>(null)
-  const [editing, setEditing] = useState<string | null>(null)
   const [selectedArtwork, setSelectedArtwork] = useState<TArtWork[]>([])
 
   useEffect(() => {
     dispatch({ type: "SET_ARTWORK", payload: artwork })
   }, [artwork, dispatch])
 
-  const deleteArt = async (_id: string) => {
-    setDeleting(_id)
-    try {
-      const response = await fetch(`/api/artworks/${_id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      if (response.ok) {
-        dispatch({ type: "DELETE_ARTWORK", payload: _id })
-        console.log("Artwork deleted")
-      } else {
-        console.error("Failed to delete artwork")
-        console.error(response)
-      }
-    } catch (error) {
-      console.error("Failed to delete artwork")
-      console.error(error)
-    }
-  }
-
   const deleteSelectedArt = async () => {
     console.log("Deleting selected artwork")
-    try {
-      while (selected.size > 0) {
-        const id = selected.values().next().value
-        if (!id) continue
+    while (selected.size > 0) {
+      const id = selected.values().next().value
+      if (!id) continue
 
-        await deleteArt(id)
-        selected.delete(id)
-      }
-    } catch (error) {
-      console.error("Failed to delete selected artwork")
-      console.error(error)
-    } finally {
-      setSelected(new Set(selected))
-      setDeleting(null)
+      await deleteArtwork(id)
+      selected.delete(id)
     }
+    setSelected(new Set(selected))
   }
 
-  const moveArt = async (values: TArtworkForm, _id: string) => {
-    setEditing(_id)
-    try {
-      const response = await fetch(`/api/artworks/${_id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      })
-      if (response.ok) {
-        console.log("Artwork moved")
-        dispatch({ type: "DELETE_ARTWORK", payload: _id })
-      } else {
-        console.error("Failed to move artwork")
-        console.error(response)
-      }
-    } catch (error) {
-      console.error("Failed to move artwork")
-      console.error(error)
-    }
-  }
-
-  const moveSelectedArt = async (values: TArtworkForm) => {
+  const submitSelectedArtEdits = async (values: TArtworkForm) => {
     const selectedArt = art.find(({ _id }) => selected.has(_id))
     if (!selectedArt) {
       console.log("No selected artwork found")
@@ -114,21 +62,14 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
     }
     console.log("Moving selected artwork")
     console.log(values)
-    try {
-      while (selected.size > 0) {
-        const _id = selected.values().next().value
-        if (!_id) continue
+    while (selected.size > 0) {
+      const _id = selected.values().next().value
+      if (!_id) continue
 
-        await moveArt(values, _id)
-        selected.delete(_id)
-      }
-    } catch (error) {
-      console.error("Failed to move selected artwork")
-      console.error(error)
-    } finally {
-      setSelected(new Set(selected))
-      setEditing(null)
+      await updateArtwork(values, _id)
+      selected.delete(_id)
     }
+    setSelected(new Set(selected))
   }
 
   const selectArt = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,40 +89,37 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
       <h2>
         {titleCase(category)} {titleCase(subCategory)}
       </h2>
-      {pending ? (
+      {fetchPending ? (
         <div>Loading...</div>
       ) : (
         <div className="collection-container">
           <div className="action-buttons">
             <button
               onClick={() => openModal(deleteModalRef)}
-              disabled={!!deleting || !selected.size || !!editing}
+              disabled={!selected.size || !!pending}
             >
-              {deleting ? "Deleting..." : "Delete Selected"}
+              {pending ? "Deleting..." : "Delete Selected"}
             </button>
             <button
               onClick={() => openModal(updateModalRef)}
-              disabled={!!editing || !selected.size || !!deleting}
+              disabled={!!pending || !selected.size}
             >
-              {editing ? "Moving..." : "Move Selected"}
+              {pending ? "Moving..." : "Move Selected"}
             </button>
-            <button
-              onClick={() => setSelected(new Set())}
-              disabled={!selected.size || !!editing || !!deleting}
-            >
+            <button onClick={() => setSelected(new Set())} disabled={!selected.size || !!pending}>
               Clear Selection
             </button>
             <button
               onClick={() => setSelected(new Set(art.map(art => art._id)))}
-              disabled={selected.size === art.length || !!editing || !!deleting}
+              disabled={selected.size === art.length || !!pending}
             >
               Select All
             </button>
           </div>
           <AdminArtworkLayout
             art={art}
-            deleting={deleting}
-            editing={editing}
+            deleting={pending}
+            editing={pending}
             selected={selected}
             selectArt={selectArt}
           />
@@ -189,7 +127,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
       )}
       <UpdateArtworkModal
         modalRef={updateModalRef}
-        onClose={moveSelectedArt}
+        onClose={submitSelectedArtEdits}
         artwork={selectedArtwork}
       />
       <DeleteArtworkModal

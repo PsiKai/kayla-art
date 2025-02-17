@@ -2,15 +2,14 @@ import React, { useContext, /*useEffect,*/ useLayoutEffect, useRef, useState } f
 import AdminArtCollection from "./AdminArtCollection"
 import FileInput from "./form/FileInput"
 import ArtworkForm, { TArtworkForm } from "./form/ArtworkForm"
-import { AppContext } from "../context/AppContext"
+import { ApiContext } from "../context/ApiContext"
 import "../styles/form.css"
 
 function Upload() {
-  const { dispatch } = useContext(AppContext)
+  const { pending, createArtwork } = useContext(ApiContext)
 
   const [image, setImage] = useState<Map<string, File>>(new Map())
   const [form, setForm] = useState<TArtworkForm>({})
-  const [uploading, setUploading] = useState<string | null>(null)
 
   const uploadForm = useRef<HTMLFormElement>(null)
   const fileInput = useRef<HTMLInputElement>(null)
@@ -34,40 +33,20 @@ function Upload() {
   }
 
   const uploadNewArt = async (img: File) => {
-    setUploading(img.name)
-
     const uploadFormData = new FormData(uploadForm.current!)
     uploadFormData.append("image", img)
-
-    try {
-      const res = await fetch("/api/artworks", {
-        method: "POST",
-        body: uploadFormData,
-      })
-      const { newArt } = await res.json()
-      dispatch({ type: "ADD_ARTWORK", payload: newArt })
-    } catch (err) {
-      console.log(err)
-    } finally {
-      setUploading(null)
-    }
+    await createArtwork(uploadFormData, img.name)
   }
 
   const beginBulkUpload = async () => {
-    try {
-      while (image.size > 0) {
-        const img = image.values().next().value
-        if (!img) continue
+    while (image.size > 0) {
+      const img = image.values().next().value
+      if (!img) continue
 
-        await uploadNewArt(img)
-        image.delete(img.name)
-      }
-    } catch (error) {
-      console.error("Failed to upload artwork")
-      console.error(error)
-    } finally {
-      setImage(new Map(image))
+      await uploadNewArt(img)
+      image.delete(img.name)
     }
+    setImage(new Map(image))
   }
 
   const removeStagedUpload = (img: File) => {
@@ -84,12 +63,12 @@ function Upload() {
           ref={fileInput}
           image={image}
           updateImage={updateImage}
-          uploading={uploading}
+          uploading={pending}
           removeStagedUpload={removeStagedUpload}
         />
         {form.category && form.subCategory && image.size ? (
-          <button onClick={beginBulkUpload} disabled={uploading !== null}>
-            {uploading !== null ? "Uploading..." : "Upload"}
+          <button onClick={beginBulkUpload} disabled={!!pending}>
+            {!!pending ? "Uploading..." : "Upload"}
           </button>
         ) : null}
       </div>

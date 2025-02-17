@@ -37,10 +37,7 @@ const UpdateArtworkModal: React.FC<TModalProps> = props => {
 
         <div className="modal-form-buttons">
           <button onClick={() => modalRef.current?.close()}>Close</button>
-          <button
-            disabled={!form.category || !form.subCategory || !form.artCollection}
-            onClick={handleClose}
-          >
+          <button disabled={!form.category || !form.subCategory} onClick={handleClose}>
             Update
           </button>
         </div>
