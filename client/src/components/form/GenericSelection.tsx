@@ -1,11 +1,12 @@
 import { titleCase } from "../../utils/stringUtils"
 
-type TGenericSelectionProps = {
+export type TGenericSelectionProps = {
   allValues: string[]
   selectedValue: string
   valueType: string
   updateForm: React.ChangeEventHandler<HTMLSelectElement | HTMLInputElement>
   withInput?: boolean
+  disabled?: boolean
 }
 
 function GenericSelection({
@@ -13,6 +14,7 @@ function GenericSelection({
   selectedValue,
   updateForm,
   valueType,
+  disabled,
   withInput = false,
 }: TGenericSelectionProps) {
   return (
@@ -24,7 +26,13 @@ function GenericSelection({
           </p>
         </label>
       </legend>
-      <select name={valueType} id="subCategory" value={selectedValue} onChange={updateForm}>
+      <select
+        name={valueType}
+        id="subCategory"
+        value={selectedValue}
+        onChange={updateForm}
+        disabled={disabled}
+      >
         <option value="">Select {titleCase(valueType)}</option>
         {allValues.map(value => (
           <option key={value} value={value}>
@@ -44,6 +52,7 @@ function GenericSelection({
           spellCheck="false"
           value={titleCase(selectedValue)}
           onChange={updateForm}
+          disabled={disabled}
         />
       ) : null}
     </div>

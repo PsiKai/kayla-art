@@ -16,13 +16,10 @@ export default function AdminArtworkLayout({
   selectedIds,
   selectArt,
 }: TAdminArtworkLayout) {
-  const sectionHero = useMemo(() => art.find(({ hero }) => hero), [art])
-  const mainPageCarousel = useMemo(() => art.filter(({ carousel }) => carousel), [art])
-  const mainPage = useMemo(() => art.filter(({ main }) => main), [art])
-  const gallery = useMemo(
-    () => art.filter(({ hero, carousel, main }) => !hero && !carousel && !main),
-    [art],
-  )
+  const sectionHero = useMemo(() => art.find(({ role }) => role === "hero"), [art])
+  const mainPageCarousel = useMemo(() => art.filter(({ role }) => role === "carousel"), [art])
+  const mainPage = useMemo(() => art.filter(({ role }) => role === "main"), [art])
+  const gallery = useMemo(() => art.filter(({ role }) => role === "gallery"), [art])
 
   return (
     <div>

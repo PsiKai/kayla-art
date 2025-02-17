@@ -1,5 +1,5 @@
 import { Router, json } from "express"
-import Artwork from "../../../db/models/artwork"
+import Artwork, { type Artwork as TArtwork, isArtwork } from "../../../db/models/artwork"
 import { uploader } from "../../../middleware/uploader"
 import slugifyValues from "../../../middleware/slugifyValues"
 import { storageClient } from "../../../google-client"
@@ -50,12 +50,19 @@ artworkRouter.put("/:id", isAuthenticated, slugifyValues, async (req, res) => {
     }
     const moveFiles = storageClient.moveFile(artwork, req.body)
     await Promise.all(moveFiles)
-    const updatedArtwork = await Artwork.findByIdAndUpdate(
-      req.params.id,
+    const result = await Artwork.findOneAndUpdate(
+      { _id: req.params.id },
       { ...req.body },
       { new: true },
     )
-    res.json({ updatedArtwork })
+    let data: TArtwork[] = []
+    if ("updatedRecords" in result!) {
+      const records = result.updatedRecords as TArtwork[]
+      data = [result, ...records]
+    } else {
+      data = [result as TArtwork]
+    }
+    res.json({ data })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: "Error updating artwork" })

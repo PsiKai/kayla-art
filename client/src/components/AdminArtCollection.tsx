@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, useCallback } from "react"
 import useFetchWithDebounce from "../hooks/useFetchWithDebounce"
-import { AppContext } from "../context/AppContext"
+import { AppContext, isValidRole } from "../context/AppContext"
 import { TArtWork } from "../context/AppContext"
 import { titleCase } from "../utils/stringUtils"
 import UpdateArtworkModal from "./layout/UpdateArtworkModal"
@@ -8,6 +8,7 @@ import { TArtworkForm } from "./form/ArtworkForm"
 import DeleteArtworkModal from "./layout/DeleteArtworkModal"
 import AdminArtworkLayout from "./layout/AdminArtworkLayout"
 import { ApiContext } from "../context/ApiContext"
+import GenericSelection, { TGenericSelectionProps } from "./form/GenericSelection"
 
 type TDeleteArtProps = {
   category: string
@@ -28,6 +29,10 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
   const [artwork, fetchPending] = useFetchWithDebounce<TArtWork[]>(
     `/api/artworks?category=${category}&subCategory=${subCategory}&limit=0`,
   )
+
+  useEffect(() => {
+    setSelectedIds(new Set())
+  }, [category, subCategory])
 
   useEffect(() => {
     dispatch({ type: "SET_ARTWORK", payload: artwork })
@@ -93,6 +98,30 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
     [art, selectedIds],
   )
 
+  const updateRole = useCallback<TGenericSelectionProps["updateForm"]>(
+    async e => {
+      console.log("Updating role", e.target.value)
+      if (!isValidRole(e.target.value)) return
+
+      const role = e.target.value
+
+      console.log(selectedIds)
+      const selectedArt = art.find(({ _id }) => selectedIds.has(_id))
+      if (!selectedArt) {
+        console.log("No selected artwork found")
+        return
+      }
+      console.log("Updating role for selected artwork", selectedArt, role)
+      const updatedArtwork: TArtworkForm = {
+        category: selectedArt.category,
+        subCategory: selectedArt.subCategory,
+        role,
+      }
+      await updateArtwork(updatedArtwork, selectedArt._id)
+    },
+    [selectedArtwork, selectedIds, updateArtwork, art],
+  )
+
   return (
     <section className="artwork-collection-section">
       <h2>
@@ -128,6 +157,17 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
               Select All
             </button>
           </div>
+          <form>
+            {selectedIds.size === 1 ? (
+              <GenericSelection
+                allValues={["carousel", "hero", "main", "gallery"]}
+                valueType="role"
+                selectedValue={art.find(({ _id }) => selectedIds.has(_id))?.role || ""}
+                updateForm={updateRole}
+                disabled={!!pending}
+              />
+            ) : null}
+          </form>
           <AdminArtworkLayout
             art={art}
             deleting={pending}

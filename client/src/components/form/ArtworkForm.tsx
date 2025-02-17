@@ -1,6 +1,7 @@
 import { ChangeEvent, Dispatch, FC, SetStateAction } from "react"
 import CategoriesSelection from "./CategoriesSelection"
 import GenericSelection from "./GenericSelection"
+import { TArtworkRoles } from "../../context/AppContext"
 // import { slugify } from "../../utils/stringUtils"
 // import useDebounce from "../../hooks/useDebounce"
 
@@ -8,7 +9,7 @@ export type TArtworkForm = {
   category?: string
   subCategory?: string
   artCollection?: string
-  role?: "" | "main" | "hero" | "carousel"
+  role?: TArtworkRoles
 }
 
 type TArtworkFormProps = {

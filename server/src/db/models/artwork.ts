@@ -25,30 +25,67 @@ const ArtworkSchema = new Schema({
     type: String,
     required: true,
   },
-  carousel: {
-    type: Boolean,
+  role: {
+    type: String,
+    enum: {
+      values: ["carousel", "hero", "main", "gallery"],
+      message: "Invalid role",
+    },
     index: true,
-    default: false,
+    default: "gallery",
   },
-  hero: {
-    type: Boolean,
-    index: true,
-    default: false,
-  },
-  main: {
-    type: Boolean,
-    index: true,
-    default: false,
-  },
+  // carousel: {
+  //   type: Boolean,
+  //   index: true,
+  //   default: false,
+  // },
+  // hero: {
+  //   type: Boolean,
+  //   index: true,
+  //   default: false,
+  // },
+  // main: {
+  //   type: Boolean,
+  //   index: true,
+  //   default: false,
+  // },
 })
 
-ArtworkSchema.virtual("thumbnails").get(function () {
+ArtworkSchema.virtual("thumbnails").get(function() {
   return storageClient.buildThumbnailUrls(this)
+})
+
+export type Artwork = InferSchemaType<typeof ArtworkSchema>
+export const isArtwork = (arg: any): arg is Partial<Artwork> => {
+  return Object.keys(arg).every(key => key in ArtworkSchema.obj)
+}
+
+ArtworkSchema.pre("findOneAndUpdate", async function(next) {
+  const update = this.getUpdate()!
+  if (!isArtwork(update)) return
+
+  const { role, category, subCategory } = update
+  if (role && role !== "gallery") {
+    const Model = this.model
+
+    const demotedDocs = await Model.find({ role, category, subCategory })
+    const demotedDocIds = demotedDocs.map(doc => doc._id)
+    this.setOptions({ ...this.getOptions(), _updatedDocs: demotedDocIds })
+
+    await Model.updateMany({ role, category, subCategory }, { role: "gallery" })
+  }
+
+  next()
+})
+
+ArtworkSchema.post("findOneAndUpdate", async function(doc, next) {
+  const options = this.getOptions()
+  const updatedDocIds = options._updatedDocs as string[]
+  doc.updatedRecords = await this.model.find({ _id: { $in: updatedDocIds } })
+  next()
 })
 
 ArtworkSchema.set("toJSON", { virtuals: true })
 ArtworkSchema.set("toObject", { virtuals: true })
 
 export default model("Artwork", ArtworkSchema)
-
-export type Artwork = InferSchemaType<typeof ArtworkSchema>

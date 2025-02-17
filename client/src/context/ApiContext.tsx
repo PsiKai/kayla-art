@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useState } from "react"
-import { AppContext } from "./AppContext"
+import { AppContext, TArtWork } from "./AppContext"
 import { TArtworkForm } from "../components/form/ArtworkForm"
 
 type TApiContext = {
@@ -63,7 +63,8 @@ export function ApiProvider({ children }: { children: React.ReactNode }) {
           throw new Error(`Failed to update artwork: ${response.statusText}`)
         }
 
-        dispatch({ type: "DELETE_ARTWORK", payload: _id })
+        const { data } = await response.json()
+        dispatch({ type: "UPDATE_ARTWORK", payload: data as TArtWork[] })
       } catch (error) {
         console.error(error)
 

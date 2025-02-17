@@ -1,5 +1,10 @@
 import React, { createContext, useReducer } from "react"
 
+export type TArtworkRoles = "gallery" | "main" | "hero" | "carousel"
+export function isValidRole(role: string): role is TArtworkRoles {
+  return ["gallery", "main", "hero", "carousel"].includes(role)
+}
+
 export type TArtWork = {
   _id: string
   category: "Photography" | "Illustration"
@@ -7,9 +12,7 @@ export type TArtWork = {
   subCategory: string
   extension?: string
   createdAt?: string | Date
-  carousel?: boolean
-  hero?: boolean
-  main?: boolean
+  role: TArtworkRoles
   thumbnails: Record<string, string>
 }
 
@@ -37,7 +40,7 @@ const initialAppState: TAppState = {
   art: [],
 }
 
-const initialAppContext: TProvider = { state: initialAppState, dispatch: () => {} }
+const initialAppContext: TProvider = { state: initialAppState, dispatch: () => { } }
 
 export const AppContext = createContext(initialAppContext)
 
@@ -55,6 +58,13 @@ function appReducer(state: TAppState, action: TDispatch): TAppState {
       return { ...state, user: action.payload as string }
     case "SET_ARTWORK":
       return { ...state, art: action.payload as TArtWork[] }
+    case "UPDATE_ARTWORK": {
+      const updatedArtwork = action.payload as TArtWork[]
+      return {
+        ...state,
+        art: state.art.map(art => updatedArtwork.find(({ _id }) => _id === art._id) || art),
+      }
+    }
     case "DELETE_ARTWORK":
       return { ...state, art: state.art.filter(art => art._id !== action.payload) }
     case "ADD_ARTWORK":
