@@ -8,7 +8,7 @@ import { davidFallLeaves, keriTreeBlossoms } from "../assets/images/portrait-pho
 import { TArtWork, TArtworkRoles } from "../context/AppContext"
 
 type HeroMap = {
-  [K in Lowercase<TArtWork["category"]>]: {
+  [K in TArtWork["category"]]: {
     [key: string]: {
       [K in Exclude<TArtworkRoles, "carousel" | "gallery">]: { src: string; alt: string }
     }
@@ -72,4 +72,8 @@ export const heroMap: HeroMap = {
   },
 }
 
-export const carouselMap = [haleySenior, veronicaAndDemetrius, monkeyPortrait]
+export const fallbackCarouselMap = [
+  { thumbnails: haleySenior },
+  { thumbnails: veronicaAndDemetrius },
+  { thumbnails: monkeyPortrait },
+]
