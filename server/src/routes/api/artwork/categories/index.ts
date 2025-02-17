@@ -19,6 +19,17 @@ artworkCategoryRouter.get("/:category/subcategories", async (req, res) => {
   }
 })
 
+artworkCategoryRouter.get("/:category/subcategories/:subCategory", async (req, res) => {
+  const { category, subCategory } = req.params
+  try {
+    const resources = await Artwork.find({ category, subCategory })
+    res.json({ resources })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Error fetching collections" })
+  }
+})
+
 artworkCategoryRouter.get("/:category/subcategories/:subCategory/collections", async (req, res) => {
   const { category, subCategory } = req.params
   try {

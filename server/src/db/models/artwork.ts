@@ -34,26 +34,14 @@ const ArtworkSchema = new Schema({
     index: true,
     default: "gallery",
   },
-  // carousel: {
-  //   type: Boolean,
-  //   index: true,
-  //   default: false,
-  // },
-  // hero: {
-  //   type: Boolean,
-  //   index: true,
-  //   default: false,
-  // },
-  // main: {
-  //   type: Boolean,
-  //   index: true,
-  //   default: false,
-  // },
 })
 
 ArtworkSchema.virtual("thumbnails").get(function() {
   return storageClient.buildThumbnailUrls(this)
 })
+
+ArtworkSchema.set("toJSON", { virtuals: true })
+ArtworkSchema.set("toObject", { virtuals: true })
 
 export type Artwork = InferSchemaType<typeof ArtworkSchema>
 export const isArtwork = (arg: any): arg is Partial<Artwork> => {
@@ -84,8 +72,5 @@ ArtworkSchema.post("findOneAndUpdate", async function(doc, next) {
   doc.updatedRecords = await this.model.find({ _id: { $in: updatedDocIds } })
   next()
 })
-
-ArtworkSchema.set("toJSON", { virtuals: true })
-ArtworkSchema.set("toObject", { virtuals: true })
 
 export default model("Artwork", ArtworkSchema)

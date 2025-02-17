@@ -1,5 +1,8 @@
-import { useMemo } from "react"
-import { TArtWork } from "../../context/AppContext"
+import { useCallback, useContext, useMemo, useState } from "react"
+import { TArtWork, TArtworkRoles } from "../../context/AppContext"
+import { ApiContext } from "../../context/ApiContext"
+import { TArtworkForm } from "../form/ArtworkForm"
+import { UpdateRoleModal } from "../UpdateRoleModal"
 
 type TAdminArtworkLayout = {
   art: TArtWork[]
@@ -16,18 +19,53 @@ export default function AdminArtworkLayout({
   selectedIds,
   selectArt,
 }: TAdminArtworkLayout) {
-  const sectionHero = useMemo(() => art.find(({ role }) => role === "hero"), [art])
-  const mainPageCarousel = useMemo(() => art.filter(({ role }) => role === "carousel"), [art])
-  const mainPage = useMemo(() => art.filter(({ role }) => role === "main"), [art])
-  const gallery = useMemo(() => art.filter(({ role }) => role === "gallery"), [art])
+  const { updateArtwork } = useContext(ApiContext)
+
+  const [modalOpen, setModalOpen] = useState<TArtworkRoles | null>()
+  const { hero, carousel, main, gallery } = useMemo(() => {
+    return art.reduce<{
+      hero: TArtWork[]
+      carousel: TArtWork[]
+      main: TArtWork[]
+      gallery: TArtWork[]
+    }>(
+      (acc, artwork) => {
+        acc[artwork.role].push(artwork)
+        return acc
+      },
+      { hero: [], carousel: [], main: [], gallery: [] },
+    )
+  }, [art])
+
+  const onSubmit = useCallback(
+    async (selectedArt: string) => {
+      console.log(selectedArt)
+      const selected = art.find(({ _id }) => _id === selectedArt)
+      setModalOpen(null)
+      const updatedArtwork: TArtworkForm = {
+        category: selected!.category,
+        subCategory: selected!.subCategory,
+        role: modalOpen!,
+      }
+      await updateArtwork(updatedArtwork, selectedArt)
+    },
+    [art, modalOpen, updateArtwork],
+  )
 
   return (
     <div>
+      <UpdateRoleModal
+        open={!!modalOpen}
+        handleExit={() => setModalOpen(null)}
+        art={art.filter(a => a.role !== modalOpen)}
+        role={modalOpen!}
+        onSubmit={onSubmit}
+      />
       <div>
         <h2>Main Page Carousel</h2>
-        {mainPageCarousel.length ? (
+        {carousel.length ? (
           <div className="admin-art">
-            {mainPageCarousel.map(artwork => (
+            {carousel.map(artwork => (
               <ArtThumbnail
                 key={artwork._id}
                 _id={artwork._id}
@@ -42,41 +80,48 @@ export default function AdminArtworkLayout({
         ) : (
           <p>No artwork from this category in the main page carousel</p>
         )}
+        <button onClick={() => setModalOpen("carousel")}>Choose new Carousel image</button>
       </div>
       <div>
         <h2>Main Page</h2>
-        {mainPage.length ? (
+        {main.length ? (
           <div className="admin-art">
-            <ArtThumbnail
-              _id={mainPage[0]._id}
-              thumbnails={mainPage[0].thumbnails}
-              selectArt={selectArt}
-              selectedIds={selectedIds}
-              deleting={deleting}
-              editing={editing}
-            />
+            {main.map(artwork => (
+              <ArtThumbnail
+                _id={artwork._id}
+                thumbnails={artwork.thumbnails}
+                selectArt={selectArt}
+                selectedIds={selectedIds}
+                deleting={deleting}
+                editing={editing}
+              />
+            ))}
           </div>
         ) : (
           <p>No artwork from this category in the main page</p>
         )}
+        <button onClick={() => setModalOpen("main")}>Choose new Main page image</button>
       </div>
       <div>
         <h2>Section Hero</h2>
-        {sectionHero ? (
+        {hero.length ? (
           <div className="admin-art">
-            <ArtThumbnail
-              key={sectionHero}
-              _id={sectionHero._id}
-              thumbnails={sectionHero.thumbnails}
-              selectArt={selectArt}
-              selectedIds={selectedIds}
-              deleting={deleting}
-              editing={editing}
-            />
+            {hero.map(artwork => (
+              <ArtThumbnail
+                key={artwork._id}
+                _id={artwork._id}
+                thumbnails={artwork.thumbnails}
+                selectArt={selectArt}
+                selectedIds={selectedIds}
+                deleting={deleting}
+                editing={editing}
+              />
+            ))}
           </div>
         ) : (
           <p>No artwork from this category in the section hero</p>
         )}
+        <button onClick={() => setModalOpen("hero")}>Choose new Hero image</button>
       </div>
       <div>
         <h2>Gallery</h2>
