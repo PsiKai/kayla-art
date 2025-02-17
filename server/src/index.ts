@@ -10,7 +10,9 @@ import initDB from "./db/init"
 const app = express()
 initDB().catch(console.error)
 
-app.use(express.static(path.join(process.cwd(), "../public")))
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(process.cwd(), "../public")))
+}
 
 const accessToken: CipherKey = process.env.ACCESS_TOKEN_SECRET!
 

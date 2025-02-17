@@ -5,7 +5,7 @@ type TAdminArtworkLayout = {
   art: TArtWork[]
   deleting: string | null
   editing: string | null
-  selected: Set<string>
+  selectedIds: Set<string>
   selectArt: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -13,7 +13,7 @@ export default function AdminArtworkLayout({
   art,
   deleting,
   editing,
-  selected,
+  selectedIds,
   selectArt,
 }: TAdminArtworkLayout) {
   const sectionHero = useMemo(() => art.find(({ hero }) => hero), [art])
@@ -36,7 +36,7 @@ export default function AdminArtworkLayout({
                 _id={artwork._id}
                 thumbnails={artwork.thumbnails}
                 selectArt={selectArt}
-                selected={selected}
+                selectedIds={selectedIds}
                 deleting={deleting}
                 editing={editing}
               />
@@ -54,7 +54,7 @@ export default function AdminArtworkLayout({
               _id={mainPage[0]._id}
               thumbnails={mainPage[0].thumbnails}
               selectArt={selectArt}
-              selected={selected}
+              selectedIds={selectedIds}
               deleting={deleting}
               editing={editing}
             />
@@ -72,7 +72,7 @@ export default function AdminArtworkLayout({
               _id={sectionHero._id}
               thumbnails={sectionHero.thumbnails}
               selectArt={selectArt}
-              selected={selected}
+              selectedIds={selectedIds}
               deleting={deleting}
               editing={editing}
             />
@@ -90,7 +90,7 @@ export default function AdminArtworkLayout({
               _id={artwork._id}
               thumbnails={artwork.thumbnails}
               selectArt={selectArt}
-              selected={selected}
+              selectedIds={selectedIds}
               deleting={deleting}
               editing={editing}
             />
@@ -101,7 +101,7 @@ export default function AdminArtworkLayout({
   )
 }
 
-function ArtThumbnail({ _id, thumbnails, selectArt, selected, deleting, editing }: any) {
+function ArtThumbnail({ _id, thumbnails, selectArt, selectedIds, deleting, editing }: any) {
   return (
     <div
       className={`thumbnail-preview ${deleting === _id || editing === _id ? "pending" : ""}`}
@@ -112,7 +112,7 @@ function ArtThumbnail({ _id, thumbnails, selectArt, selected, deleting, editing 
         id={_id}
         value={_id}
         onChange={selectArt}
-        checked={selected.has(_id)}
+        checked={selectedIds.has(_id)}
         disabled={!!deleting || !!editing}
       />
       <label className="artwork-label" htmlFor={_id}>

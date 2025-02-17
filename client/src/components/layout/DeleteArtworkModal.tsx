@@ -1,22 +1,21 @@
 import { FC } from "react"
 import { TArtWork } from "../../context/AppContext"
+import { Modal, TModalProps } from "./Modal"
 
-type TModalProps = {
+type TDeleteModalProps = {
   artwork: TArtWork[]
-  onClose: () => void
-  modalRef: React.RefObject<HTMLDialogElement>
-}
+  onSubmit: () => void
+} & TModalProps
 
-const DeleteArtworkModal: FC<TModalProps> = props => {
-  const { onClose, artwork, modalRef } = props
+const DeleteArtworkModal: FC<TDeleteModalProps> = props => {
+  const { artwork, onSubmit, handleExit, ...modalProps } = props
 
-  const handleClose = () => {
-    onClose()
-    modalRef?.current?.close()
+  const handleSubmit = () => {
+    onSubmit()
   }
 
   return (
-    <dialog ref={modalRef}>
+    <Modal {...modalProps} handleExit={handleExit}>
       <div className="modal-content">
         <h2>Delete This Artwork?</h2>
         <div className="preview-container">
@@ -31,11 +30,11 @@ const DeleteArtworkModal: FC<TModalProps> = props => {
           ))}
         </div>
         <div className="modal-form-buttons">
-          <button onClick={() => modalRef?.current?.close()}>Close</button>
-          <button onClick={handleClose}>Delete</button>
+          <button onClick={handleExit}>Close</button>
+          <button onClick={handleSubmit}>Delete</button>
         </div>
       </div>
-    </dialog>
+    </Modal>
   )
 }
 

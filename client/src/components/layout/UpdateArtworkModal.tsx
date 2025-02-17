@@ -1,25 +1,23 @@
-import { useRef, useState } from "react"
+import { useState } from "react"
 import ArtworkForm, { TArtworkForm } from "../form/ArtworkForm"
 import { TArtWork } from "../../context/AppContext"
+import { Modal, TModalProps } from "./Modal"
 
-type TModalProps = {
+type TUpdateModalProps = {
   artwork: TArtWork[]
-  onClose: (form: TArtworkForm) => void
-  modalRef: React.RefObject<HTMLDialogElement>
-}
+  onSubmit: (form: TArtworkForm) => void
+} & TModalProps
 
-const UpdateArtworkModal: React.FC<TModalProps> = props => {
-  const { onClose, artwork, modalRef } = props
+const UpdateArtworkModal: React.FC<TUpdateModalProps> = props => {
+  const { onSubmit, artwork, handleExit, ...modalProps } = props
   const [form, setForm] = useState<TArtworkForm>({})
-  const formRef = useRef<HTMLFormElement>(null)
 
-  const handleClose = () => {
-    onClose(form)
-    modalRef.current?.close()
+  const handleSubmit = () => {
+    onSubmit(form)
   }
 
   return (
-    <dialog ref={modalRef}>
+    <Modal {...modalProps} handleExit={handleExit}>
       <div className="modal-content">
         <h2>Choose The Destination</h2>
         <div className="preview-container">
@@ -33,16 +31,16 @@ const UpdateArtworkModal: React.FC<TModalProps> = props => {
             </div>
           ))}
         </div>
-        <ArtworkForm formRef={formRef} form={form} setForm={setForm} />
+        <ArtworkForm form={form} setForm={setForm} />
 
         <div className="modal-form-buttons">
-          <button onClick={() => modalRef.current?.close()}>Close</button>
-          <button disabled={!form.category || !form.subCategory} onClick={handleClose}>
+          <button onClick={handleExit}>Close</button>
+          <button disabled={!form.category || !form.subCategory} onClick={handleSubmit}>
             Update
           </button>
         </div>
       </div>
-    </dialog>
+    </Modal>
   )
 }
 

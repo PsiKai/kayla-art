@@ -14,7 +14,7 @@ export type TArtworkForm = {
 type TArtworkFormProps = {
   form: TArtworkForm
   setForm: Dispatch<SetStateAction<TArtworkForm>>
-  formRef: React.RefObject<HTMLFormElement>
+  formRef?: React.RefObject<HTMLFormElement>
 }
 
 // type TMapType<T> = {

@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useRef } from "react"
+import { useEffect, useState, useContext, useCallback } from "react"
 import useFetchWithDebounce from "../hooks/useFetchWithDebounce"
 import { AppContext } from "../context/AppContext"
 import { TArtWork } from "../context/AppContext"
@@ -21,68 +21,77 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
   } = useContext(AppContext)
   const { pending, updateArtwork, deleteArtwork } = useContext(ApiContext)
 
-  const updateModalRef = useRef<HTMLDialogElement>(null)
-  const deleteModalRef = useRef<HTMLDialogElement>(null)
+  const [openModal, setOpenModal] = useState<"update" | "delete" | null>(null)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [selectedArtwork, setSelectedArtwork] = useState<TArtWork[]>([])
 
   const [artwork, fetchPending] = useFetchWithDebounce<TArtWork[]>(
     `/api/artworks?category=${category}&subCategory=${subCategory}&limit=0`,
   )
 
-  const [selected, setSelected] = useState<Set<string>>(new Set())
-  const [selectedArtwork, setSelectedArtwork] = useState<TArtWork[]>([])
-
   useEffect(() => {
     dispatch({ type: "SET_ARTWORK", payload: artwork })
   }, [artwork, dispatch])
 
-  const deleteSelectedArt = async () => {
+  const deleteSelectedArt = useCallback(async () => {
     console.log("Deleting selected artwork")
-    while (selected.size > 0) {
-      const id = selected.values().next().value
+    setOpenModal(null)
+    while (selectedIds.size > 0) {
+      const id = selectedIds.values().next().value
       if (!id) continue
 
       await deleteArtwork(id)
-      selected.delete(id)
+      selectedIds.delete(id)
+      setSelectedIds(new Set(selectedIds))
     }
-    setSelected(new Set(selected))
-  }
+  }, [selectedIds, deleteArtwork])
 
-  const submitSelectedArtEdits = async (values: TArtworkForm) => {
-    const selectedArt = art.find(({ _id }) => selected.has(_id))
-    if (!selectedArt) {
-      console.log("No selected artwork found")
-      return
-    }
-    if (
-      selectedArt.category === values.category &&
-      selectedArt.subCategory === values.subCategory
-    ) {
-      console.log("No changes made")
-      return
-    }
-    console.log("Moving selected artwork")
-    console.log(values)
-    while (selected.size > 0) {
-      const _id = selected.values().next().value
-      if (!_id) continue
+  const submitSelectedArtEdits = useCallback(
+    async (values: TArtworkForm) => {
+      setOpenModal(null)
+      const selectedArt = art.find(({ _id }) => selectedIds.has(_id))
+      if (!selectedArt) {
+        console.log("No selected artwork found")
+        return
+      }
+      if (
+        selectedArt.category === values.category &&
+        selectedArt.subCategory === values.subCategory
+      ) {
+        console.log("No changes made")
+        return
+      }
+      console.log("Moving selected artwork")
+      console.log(values)
+      while (selectedIds.size > 0) {
+        const _id = selectedIds.values().next().value
+        if (!_id) continue
 
-      await updateArtwork(values, _id)
-      selected.delete(_id)
-    }
-    setSelected(new Set(selected))
-  }
+        await updateArtwork(values, _id)
+        selectedIds.delete(_id)
+      }
+      setSelectedIds(new Set(selectedIds))
+    },
+    [selectedIds, updateArtwork, art],
+  )
 
-  const selectArt = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const _id = e.target.value
-    selected.has(_id) ? selected.delete(_id) : selected.add(_id)
-    setSelected(new Set(selected))
-  }
+  const selectArt = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const _id = e.target.value
+      selectedIds.has(_id) ? selectedIds.delete(_id) : selectedIds.add(_id)
+      setSelectedIds(new Set(selectedIds))
+    },
+    [selectedIds],
+  )
 
-  const openModal = (modalRef: React.RefObject<HTMLDialogElement>) => {
-    const selectedArt = art.filter(({ _id }) => selected.has(_id))
-    setSelectedArtwork(selectedArt)
-    modalRef.current?.showModal()
-  }
+  const openSelectedModal = useCallback(
+    (modalType: "update" | "delete") => {
+      const selectedArt = art.filter(({ _id }) => selectedIds.has(_id))
+      setSelectedArtwork(selectedArt)
+      setOpenModal(modalType)
+    },
+    [art, selectedIds],
+  )
 
   return (
     <section className="artwork-collection-section">
@@ -95,23 +104,26 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
         <div className="collection-container">
           <div className="action-buttons">
             <button
-              onClick={() => openModal(deleteModalRef)}
-              disabled={!selected.size || !!pending}
+              onClick={() => openSelectedModal("delete")}
+              disabled={!selectedIds.size || !!pending}
             >
               {pending ? "Deleting..." : "Delete Selected"}
             </button>
             <button
-              onClick={() => openModal(updateModalRef)}
-              disabled={!!pending || !selected.size}
+              onClick={() => openSelectedModal("update")}
+              disabled={!!pending || !selectedIds.size}
             >
-              {pending ? "Moving..." : "Move Selected"}
+              {pending ? "Editing..." : "Edit Selected"}
             </button>
-            <button onClick={() => setSelected(new Set())} disabled={!selected.size || !!pending}>
+            <button
+              onClick={() => setSelectedIds(new Set())}
+              disabled={!selectedIds.size || !!pending}
+            >
               Clear Selection
             </button>
             <button
-              onClick={() => setSelected(new Set(art.map(art => art._id)))}
-              disabled={selected.size === art.length || !!pending}
+              onClick={() => setSelectedIds(new Set(art.map(art => art._id)))}
+              disabled={selectedIds.size === art.length || !!pending}
             >
               Select All
             </button>
@@ -120,19 +132,21 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
             art={art}
             deleting={pending}
             editing={pending}
-            selected={selected}
+            selectedIds={selectedIds}
             selectArt={selectArt}
           />
         </div>
       )}
       <UpdateArtworkModal
-        modalRef={updateModalRef}
-        onClose={submitSelectedArtEdits}
+        open={openModal === "update"}
+        handleExit={() => setOpenModal(null)}
+        onSubmit={submitSelectedArtEdits}
         artwork={selectedArtwork}
       />
       <DeleteArtworkModal
-        modalRef={deleteModalRef}
-        onClose={deleteSelectedArt}
+        open={openModal === "delete"}
+        handleExit={() => setOpenModal(null)}
+        onSubmit={deleteSelectedArt}
         artwork={selectedArtwork}
       />
     </section>
