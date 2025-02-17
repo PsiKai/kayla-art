@@ -9,12 +9,15 @@ if (process.env.NODE_ENV !== "production") {
   googleAuth = "google-credentials.json"
 }
 
+type UploadSizes = "small" | "medium" | "large"
+type ThumbnailSizes = 375 | 768 | 1440
+
 class GoogleClient extends Storage {
   public baseStorageUrl: string
   public bucketName: string
   public thumbBucketName: string
   public thumbnailStorageUrl: string
-  public UPLOAD_SIZES: number[]
+  public UPLOAD_SIZES: Record<UploadSizes, ThumbnailSizes>
   public mainBucket: Bucket
   public thumbBucket: Bucket
 
@@ -25,20 +28,23 @@ class GoogleClient extends Storage {
     this.bucketName = process.env.BUCKETNAME!
     this.thumbBucketName = process.env.THUMBS!
     this.thumbnailStorageUrl = `${this.baseStorageUrl}/${this.thumbBucketName}`
-    this.UPLOAD_SIZES = [375, 768, 1440]
+    this.UPLOAD_SIZES = {
+      small: 375,
+      medium: 768,
+      large: 1440,
+    }
     this.mainBucket = this.bucket(this.bucketName)
     this.thumbBucket = this.bucket(this.thumbBucketName)
   }
 
   writeStream(art: Artwork): [NodeJS.WritableStream, Record<string, NodeJS.WritableStream>] {
     const [fullSizeFile, thumbnailFiles] = this.buildPaths(art)
-    const thumbnailStreams = this.UPLOAD_SIZES.reduce<Record<string, NodeJS.WritableStream>>(
-      (acc, size, i) => {
-        acc[size] = this.thumbBucket.file(thumbnailFiles[i]).createWriteStream()
-        return acc
-      },
-      {},
-    )
+    const thumbnailStreams = Object.values(this.UPLOAD_SIZES).reduce<
+      Record<string, NodeJS.WritableStream>
+    >((acc, size, i) => {
+      acc[size] = this.thumbBucket.file(thumbnailFiles[i]).createWriteStream()
+      return acc
+    }, {})
 
     return [this.mainBucket.file(fullSizeFile).createWriteStream(), thumbnailStreams]
   }
@@ -83,18 +89,22 @@ class GoogleClient extends Storage {
     let { category, subCategory, uid, extension } = art
     subCategory = slugify(subCategory || "")
     const path = `${category}/${subCategory}/${uid}`
-    const thumbPaths = this.UPLOAD_SIZES.map(size => `${path}-${size}.webp`)
+    const thumbPaths = Object.keys(this.UPLOAD_SIZES).map(size => `${path}-${size}.webp`)
 
     return [`${path}.${extension}`, thumbPaths]
   }
 
-  buildThumbnailUrls(art: Artwork) {
+  buildThumbnailUrls(art: Artwork): Record<UploadSizes, string> {
     let { category, subCategory, uid } = art
     subCategory = slugify(subCategory)
-    const urls = this.UPLOAD_SIZES.reduce<Record<string, string>>((acc, size) => {
-      acc[size] = `${this.thumbnailStorageUrl}/${category}/${subCategory}/${uid}-${size}.webp`
-      return acc
-    }, {})
+    const urls = Object.keys(this.UPLOAD_SIZES).reduce(
+      (acc, size) => {
+        acc[size as UploadSizes] =
+          `${this.thumbnailStorageUrl}/${category}/${subCategory}/${uid}-${size}.webp`
+        return acc
+      },
+      { small: "", medium: "", large: "" },
+    )
 
     return urls
   }

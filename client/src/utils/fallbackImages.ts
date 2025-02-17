@@ -5,11 +5,12 @@ import { mermaidIllustration } from "../assets/images/footer-photos"
 import { huskyPhoto, jadaSunny } from "../assets/images/pet-photography"
 import { borisPainting, michellePainting } from "../assets/images/portrait-illustration"
 import { davidFallLeaves, keriTreeBlossoms } from "../assets/images/portrait-photography"
+import { TArtWork, TArtworkRoles } from "../context/AppContext"
 
 type HeroMap = {
-  [key: string]: {
+  [K in Lowercase<TArtWork["category"]>]: {
     [key: string]: {
-      [key: string]: { src: string; alt: string }
+      [K in Exclude<TArtworkRoles, "carousel" | "gallery">]: { src: string; alt: string }
     }
   }
 }

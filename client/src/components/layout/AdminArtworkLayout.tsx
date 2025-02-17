@@ -3,6 +3,7 @@ import { TArtWork, TArtworkRoles } from "../../context/AppContext"
 import { ApiContext } from "../../context/ApiContext"
 import { TArtworkForm } from "../form/ArtworkForm"
 import { UpdateRoleModal } from "../UpdateRoleModal"
+import { SelectableImageThumbnail } from "./SelectableImageThumbnail"
 
 type TAdminArtworkLayout = {
   art: TArtWork[]
@@ -66,7 +67,7 @@ export default function AdminArtworkLayout({
         {carousel.length ? (
           <div className="admin-art">
             {carousel.map(artwork => (
-              <ArtThumbnail
+              <SelectableImageThumbnail
                 key={artwork._id}
                 _id={artwork._id}
                 thumbnails={artwork.thumbnails}
@@ -87,7 +88,8 @@ export default function AdminArtworkLayout({
         {main.length ? (
           <div className="admin-art">
             {main.map(artwork => (
-              <ArtThumbnail
+              <SelectableImageThumbnail
+                key={artwork._id}
                 _id={artwork._id}
                 thumbnails={artwork.thumbnails}
                 selectArt={selectArt}
@@ -107,7 +109,7 @@ export default function AdminArtworkLayout({
         {hero.length ? (
           <div className="admin-art">
             {hero.map(artwork => (
-              <ArtThumbnail
+              <SelectableImageThumbnail
                 key={artwork._id}
                 _id={artwork._id}
                 thumbnails={artwork.thumbnails}
@@ -127,7 +129,7 @@ export default function AdminArtworkLayout({
         <h2>Gallery</h2>
         <div className="admin-art">
           {gallery.map(artwork => (
-            <ArtThumbnail
+            <SelectableImageThumbnail
               key={artwork._id}
               _id={artwork._id}
               thumbnails={artwork.thumbnails}
@@ -139,27 +141,6 @@ export default function AdminArtworkLayout({
           ))}
         </div>
       </div>
-    </div>
-  )
-}
-
-function ArtThumbnail({ _id, thumbnails, selectArt, selectedIds, deleting, editing }: any) {
-  return (
-    <div
-      className={`thumbnail-preview ${deleting === _id || editing === _id ? "pending" : ""}`}
-      key={_id}
-    >
-      <input
-        type="checkbox"
-        id={_id}
-        value={_id}
-        onChange={selectArt}
-        checked={selectedIds.has(_id)}
-        disabled={!!deleting || !!editing}
-      />
-      <label className="artwork-label" htmlFor={_id}>
-        <img className="admin-art-thumbnail" src={thumbnails["375"]} alt="An artwork" />
-      </label>
     </div>
   )
 }

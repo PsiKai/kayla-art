@@ -18,10 +18,7 @@ export function SelectableImageThumbnail({
   editing,
 }: TSelectableImageThumbnail) {
   return (
-    <div
-      className={`thumbnail-preview ${deleting === _id || editing === _id ? "pending" : ""}`}
-      key={_id}
-    >
+    <div className={`thumbnail-preview ${deleting === _id || editing === _id ? "pending" : ""}`}>
       <input
         type="checkbox"
         id={_id}
@@ -31,7 +28,7 @@ export function SelectableImageThumbnail({
         disabled={!!deleting || !!editing}
       />
       <label className="artwork-label" htmlFor={_id}>
-        <img className="admin-art-thumbnail" src={thumbnails["375"]} alt="An artwork" />
+        <img className="admin-art-thumbnail" src={thumbnails.small} alt="An artwork" />
       </label>
     </div>
   )

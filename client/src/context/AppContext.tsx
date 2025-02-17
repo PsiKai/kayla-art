@@ -7,13 +7,13 @@ export function isValidRole(role: string): role is TArtworkRoles {
 
 export type TArtWork = {
   _id: string
-  category: "Photography" | "Illustration"
+  category: "photography" | "illustration"
   artCollection?: string
   subCategory: string
   extension?: string
   createdAt?: string | Date
   role: TArtworkRoles
-  thumbnails: Record<string, string>
+  thumbnails: Record<"small" | "medium" | "large", string>
 }
 
 type TAppState = {

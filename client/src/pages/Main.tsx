@@ -1,19 +1,11 @@
-// import { useMemo } from "react"
+import { useMemo } from "react"
 import { Link } from "react-router-dom"
+import useFetchOnRender from "../hooks/useFetchOnRender"
+import Carousel from "../components/layout/Carousel"
+import { TArtWork } from "../context/AppContext"
+import { heroMap } from "../utils/fallbackImages"
 
 import "../styles/Main.css"
-// import { haleySenior, monkeyPortrait, veronicaAndDemetrius } from "../assets/images/carousel-photos"
-// import { keriTreeBlossoms } from "../assets/images/portrait-photography"
-// import { huskyPhoto } from "../assets/images/pet-photography"
-// import { borisPainting } from "../assets/images/portrait-illustration"
-// import { ashleySmoking } from "../assets/images/creative-photography"
-// import { mermaidIllustration } from "../assets/images/footer-photos"
-// import { meredithPainting } from "../assets/images/about-me"
-import Carousel from "../components/layout/Carousel"
-import useFetchOnRender from "../hooks/useFetchOnRender"
-import { TArtWork } from "../context/AppContext"
-import { useMemo } from "react"
-import { heroMap } from "../utils/fallbackImages"
 
 function Main() {
   const [carouselImages, pending] = useFetchOnRender<TArtWork[]>(`/api/artworks/roles/carousel`)
@@ -27,13 +19,12 @@ function Main() {
         acc[key] = {}
       }
       acc[key] = {
-        src: curr.thumbnails["1440"],
+        src: curr.thumbnails.large,
         alt: `An artwork from the ${subCategory} category`,
       }
       return acc
     }, {})
   }, [sectionImages])
-  console.log("mainSectionImageMap", mainSectionImageMap)
 
   if (pending || sectionPending) return <div>Loading...</div>
 
@@ -115,7 +106,7 @@ function HeroImage({
   subCategory,
   mainSectionImageMap = {},
 }: {
-  category: string
+  category: TArtWork["category"]
   subCategory: string
   mainSectionImageMap: Record<string, any>
 }) {

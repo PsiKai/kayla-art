@@ -25,7 +25,7 @@ const UpdateArtworkModal: React.FC<TUpdateModalProps> = props => {
             <div key={_id}>
               <img
                 className="preview"
-                src={thumbnails["375"]}
+                src={thumbnails.small}
                 alt={`An artwork from the ${artCollection} album`}
               />
             </div>

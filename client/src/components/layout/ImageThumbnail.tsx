@@ -10,7 +10,7 @@ function ImageThumbnail(props: TImageThumbnailProps) {
     <div>
       <img
         style={{ maxWidth: "100%" }}
-        src={image.thumbnails["375"]}
+        src={image.thumbnails.small}
         alt={`An image from the ${image.subCategory} album`}
       />
     </div>

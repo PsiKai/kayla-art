@@ -17,8 +17,10 @@ export function Subcategory() {
 
   const hero = useMemo(() => artwork?.find(art => art.role === "hero"), [artwork])
   const gallery = useMemo(() => artwork?.filter(art => art.role === "gallery"), [artwork])
-  console.log({ category, subCategory })
-  const fallbackHero = heroMap[category!]?.[subCategory!].main || { src: "", alt: "" }
+  const fallbackHero = heroMap[category! as TArtWork["category"]]?.[subCategory!].main || {
+    src: "",
+    alt: "",
+  }
 
   if (pending) return <div>Loading...</div>
 
@@ -27,7 +29,7 @@ export function Subcategory() {
       <div className="hero-image-container">
         <img
           className="hero-image"
-          src={hero?.thumbnails["1440"] || fallbackHero.src}
+          src={hero?.thumbnails.large || fallbackHero.src}
           alt={`A hero image for the ${subCategory} album`}
         />
         <div className="hero-text glass">
@@ -37,7 +39,7 @@ export function Subcategory() {
         </div>
       </div>
       {gallery.length ? (
-        gallery.map(artwork => <ImageThumbnail image={artwork} />)
+        gallery.map(artwork => <ImageThumbnail key={artwork._id} image={artwork} />)
       ) : (
         <p>No artwork from this category in the gallery</p>
       )}

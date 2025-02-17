@@ -36,7 +36,7 @@ export function UpdateRoleModal({
             <label key={_id}>
               <img
                 className="preview"
-                src={thumbnails["375"]}
+                src={thumbnails.small}
                 alt={`An artwork from the ${subCategory} album`}
               />
               <input
