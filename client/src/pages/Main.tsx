@@ -1,18 +1,41 @@
-import { useMemo } from "react"
+// import { useMemo } from "react"
 import { Link } from "react-router-dom"
 
 import "../styles/Main.css"
-import { haleySenior, monkeyPortrait, veronicaAndDemetrius } from "../assets/images/carousel-photos"
-import { keriTreeBlossoms } from "../assets/images/portrait-photography"
-import { huskyPhoto } from "../assets/images/pet-photography"
-import { borisPainting } from "../assets/images/portrait-illustration"
-import { ashleySmoking } from "../assets/images/creative-photography"
-import { mermaidIllustration } from "../assets/images/footer-photos"
-import { meredithPainting } from "../assets/images/about-me"
+// import { haleySenior, monkeyPortrait, veronicaAndDemetrius } from "../assets/images/carousel-photos"
+// import { keriTreeBlossoms } from "../assets/images/portrait-photography"
+// import { huskyPhoto } from "../assets/images/pet-photography"
+// import { borisPainting } from "../assets/images/portrait-illustration"
+// import { ashleySmoking } from "../assets/images/creative-photography"
+// import { mermaidIllustration } from "../assets/images/footer-photos"
+// import { meredithPainting } from "../assets/images/about-me"
 import Carousel from "../components/layout/Carousel"
+import useFetchOnRender from "../hooks/useFetchOnRender"
+import { TArtWork } from "../context/AppContext"
+import { useMemo } from "react"
+import { heroMap } from "../utils/fallbackImages"
 
 function Main() {
-  const carouselImages = useMemo(() => [haleySenior, veronicaAndDemetrius, monkeyPortrait], [])
+  const [carouselImages, pending] = useFetchOnRender<TArtWork[]>(`/api/artworks/roles/carousel`)
+  const [sectionImages, sectionPending] = useFetchOnRender<TArtWork[]>(`/api/artworks/roles/main`)
+
+  const mainSectionImageMap = useMemo(() => {
+    return sectionImages?.reduce<Record<string, any>>((acc, curr) => {
+      const { category, subCategory } = curr
+      const key = `${category}/${subCategory}`
+      if (!acc[key]) {
+        acc[key] = {}
+      }
+      acc[key] = {
+        src: curr.thumbnails["1440"],
+        alt: `An artwork from the ${subCategory} category`,
+      }
+      return acc
+    }, {})
+  }, [sectionImages])
+  console.log("mainSectionImageMap", mainSectionImageMap)
+
+  if (pending || sectionPending) return <div>Loading...</div>
 
   return (
     <>
@@ -26,18 +49,21 @@ function Main() {
         </div>
       </div>
       <div className="hero-image-container">
-        <img
-          className="hero-image"
-          src={keriTreeBlossoms.width1440}
-          style={{ objectPosition: "top" }}
-          alt="Kayla Kossajda"
+        <HeroImage
+          category="photography"
+          subCategory="portraits"
+          mainSectionImageMap={mainSectionImageMap}
         />
         <div className="glass hero-text">
           <Link to="photography/portraits">Portrait Photography</Link>
         </div>
       </div>
       <div className="hero-image-container">
-        <img className="hero-image" src={huskyPhoto.width1440} alt="Kayla Kossajda" />
+        <HeroImage
+          category="photography"
+          subCategory="pets"
+          mainSectionImageMap={mainSectionImageMap}
+        />
         <div className="glass hero-text">
           <Link to="photography/pets">Pet Photography</Link>
         </div>
@@ -49,31 +75,33 @@ function Main() {
         </h2>
       </div>
       <div className="hero-image-container">
-        <img
-          className="hero-image"
-          src={borisPainting.width1440}
-          alt="Painting of the late Boris"
+        <HeroImage
+          category="illustration"
+          subCategory="portraits"
+          mainSectionImageMap={mainSectionImageMap}
         />
         <div className="glass hero-text">
           <Link to="illustration/portraits">Portrait Illustration</Link>
         </div>
       </div>
       <div className="hero-image-container">
-        <img className="hero-image" src={ashleySmoking.width1440} alt="Kayla Kossajda" />
+        <HeroImage
+          category="photography"
+          subCategory="creative"
+          mainSectionImageMap={mainSectionImageMap}
+        />
         <div className="glass hero-text">
           <Link to="photography/creative">Creative Photography</Link>
         </div>
       </div>
       <div className="hero-image-container">
-        <img className="hero-image" src={mermaidIllustration.width1440} alt="Kayla Kossajda" />
+        <HeroImage
+          category="illustration"
+          subCategory="creative"
+          mainSectionImageMap={mainSectionImageMap}
+        />
         <div className="glass hero-text">
           <Link to="illustration/creative">Creative Illustration</Link>
-        </div>
-      </div>
-      <div className="hero-image-container">
-        <img className="hero-image" src={meredithPainting.width1440} alt="Kayla Kossajda" />
-        <div className="glass hero-text">
-          <Link to="/gallery">Gallery</Link>
         </div>
       </div>
     </>
@@ -81,3 +109,25 @@ function Main() {
 }
 
 export default Main
+
+function HeroImage({
+  category,
+  subCategory,
+  mainSectionImageMap = {},
+}: {
+  category: string
+  subCategory: string
+  mainSectionImageMap: Record<string, any>
+}) {
+  const key = `${category}/${subCategory}`
+  const src = useMemo(
+    () => mainSectionImageMap?.[key]?.src || heroMap[category][subCategory].main.src,
+    [category, subCategory, mainSectionImageMap],
+  )
+  const alt = useMemo(
+    () => mainSectionImageMap?.[key]?.alt || heroMap[category][subCategory].main.alt,
+    [category, subCategory, mainSectionImageMap],
+  )
+
+  return <img className="hero-image" src={src} alt={alt} />
+}

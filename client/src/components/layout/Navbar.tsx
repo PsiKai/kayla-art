@@ -29,7 +29,6 @@ function Navbar() {
               <Link to="photography/portraits">Portraits</Link>
               <Link to="photography/pets">Pets</Link>
               <Link to="photography/creative">Creative</Link>
-              <Link to="photography/gallery">Gallery</Link>
             </SubMenu>
             <SubMenu title="Illustration">
               <Link to="illustration/portraits">Portraits</Link>

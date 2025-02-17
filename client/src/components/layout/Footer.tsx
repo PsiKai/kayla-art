@@ -15,14 +15,25 @@ function Footer() {
     <footer>
       <h3>Footer</h3>
       <div className="footer-links">
-        <Link to="/portraits">Portraits</Link>
-        <Link to="/pets">Pets</Link>
-        <Link to="/creative">Creative</Link>
-        <Link to="/pricing">Pricing</Link>
-        <Link to="/about">About</Link>
-        <Link to="/gallery">Gallery</Link>
-        <Link to="/admin">Admin</Link>
+        <div className="footer-link-section">
+          <h4>Photography</h4>
+          <Link to="/photography/portraits">Portraits</Link>
+          <Link to="/photography/pets">Pets</Link>
+          <Link to="/photography/creative">Creative</Link>
+        </div>
+        <div className="footer-link-section">
+          <h4>Illustration</h4>
+          <Link to="/illustration/portraits">Portraits</Link>
+          <Link to="/illustration/creative">Creative</Link>
+        </div>
+        <div className="footer-link-section">
+          <h4>Services and Info</h4>
+          <Link to="/pricing">Pricing</Link>
+          <Link to="/about">About</Link>
+          <Link to="/admin">Admin</Link>
+        </div>
       </div>
+      <h4>Follow me on social media</h4>
       <div className="footer-social-links">
         <a href="https://www.instagram.com/kaylakossajda/" target="_blank" rel="noreferrer">
           Instagram

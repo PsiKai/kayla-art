@@ -24,6 +24,17 @@ artworkRouter.post("/", isAuthenticated, uploader, slugifyValues, async (req, re
 
 artworkRouter.use("/categories", artworkCategoryRouter)
 
+artworkRouter.get("/roles/:role", async (req, res) => {
+  const { role } = req.params
+  try {
+    const resources = await Artwork.find({ role })
+    res.json({ resources })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Error fetching carousel images" })
+  }
+})
+
 artworkRouter.get("/:id", async (req, res) => {
   try {
     const foundArtwork = await Artwork.findById(req.params.id)

@@ -12,12 +12,13 @@ import Pricing from "./pages/Pricing.tsx"
 import Admin from "./pages/Admin.tsx"
 import Login from "./pages/Login.tsx"
 import Footer from "./components/layout/Footer.tsx"
-import CreativePhotography from "./pages/CreativePhotography.tsx"
-import PetPhotography from "./pages/PetPhotography.tsx"
-import PortraitPhotography from "./pages/PortraitPhotography.tsx"
-import CreativeIllustration from "./pages/CreativeIllustration.tsx"
-import PortraitIllustration from "./pages/PortraitIllustration.tsx"
-import PhotographyGallery from "./pages/PhotographyGallery.tsx"
+// import CreativePhotography from "./pages/CreativePhotography.tsx"
+// import PetPhotography from "./pages/PetPhotography.tsx"
+// // import PortraitPhotography from "./pages/PortraitPhotography.tsx"
+// import CreativeIllustration from "./pages/CreativeIllustration.tsx"
+// import PortraitIllustration from "./pages/PortraitIllustration.tsx"
+// import PhotographyGallery from "./pages/PhotographyGallery.tsx"
+import { Subcategory } from "./pages/Subcategory.tsx"
 
 function App() {
   return (
@@ -28,17 +29,12 @@ function App() {
           <CookiesProvider>
             <Routes>
               <Route path="/" element={<Main />} />
-              <Route path="photography/pets" element={<PetPhotography />} />
-              <Route path="photography/portraits" element={<PortraitPhotography />} />
-              <Route path="photography/creative" element={<CreativePhotography />} />
-              <Route path="photography/gallery" element={<PhotographyGallery />} />
-              <Route path="illustration/portraits" element={<PortraitIllustration />} />
-              <Route path="illustration/creative" element={<CreativeIllustration />} />
               <Route path="about" element={<About />} />
               <Route path="contact" element={<Contact />} />
               <Route path="pricing" element={<Pricing />} />
               <Route path="admin" element={<Admin />} />
               <Route path="login" element={<Login />} />
+              <Route path=":category/:subCategory" element={<Subcategory />} />
             </Routes>
           </CookiesProvider>
         </main>

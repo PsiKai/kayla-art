@@ -1,22 +1,24 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { CSSTransition, TransitionGroup } from "react-transition-group"
+import { TArtWork } from "../../context/AppContext"
 
 import "../../styles/transitions.css"
+// import { carouselMap } from "../../utils/fallbackImages"
 
 type TCarouselProps = {
-  carouselImages: {
-    width1440: string
-    width768: string
-    width375: string
-  }[]
+  carouselImages: TArtWork[]
   imageClassName?: string
 }
 
-function Carousel({ carouselImages, imageClassName }: TCarouselProps) {
+function Carousel({ carouselImages = [], imageClassName }: TCarouselProps) {
   const [carouselIndex, setCarouselIndex] = useState<number>(0)
   const carouselTimer = useRef<NodeJS.Timeout | null>(null)
   const transitionTimer = useMemo(() => 700, [])
   const carouselDuration = useMemo(() => 5000, [])
+  // const images = useMemo(
+  //   () => (carouselImages.length ? carouselImages : carouselMap),
+  //   [carouselImages],
+  // )
 
   useEffect(() => {
     carouselTimer.current = setInterval(() => {
@@ -34,7 +36,7 @@ function Carousel({ carouselImages, imageClassName }: TCarouselProps) {
         <img
           style={{ "--transition-duration": `${transitionTimer}ms` } as React.CSSProperties}
           className={imageClassName}
-          src={carouselImages[carouselIndex].width1440}
+          src={carouselImages[carouselIndex]?.thumbnails["1440"]}
           alt="Kayla Kossajda"
         />
       </CSSTransition>
