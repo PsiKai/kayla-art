@@ -19,31 +19,31 @@ export const heroMap: HeroMap = {
   photography: {
     portraits: {
       hero: {
-        src: davidFallLeaves.width1440,
+        src: davidFallLeaves.large,
         alt: "David in a field of fall leaves",
       },
       main: {
-        src: keriTreeBlossoms.width1440,
+        src: keriTreeBlossoms.large,
         alt: "David in a field of fall leaves",
       },
     },
     creative: {
       hero: {
-        src: flowershoot.width1440,
+        src: flowershoot.large,
         alt: "A creative photography shoot with flowers",
       },
       main: {
-        src: keriTreeBlossoms.width1440,
+        src: keriTreeBlossoms.large,
         alt: "David in a field of fall leaves",
       },
     },
     pets: {
       hero: {
-        src: jadaSunny.width1440,
+        src: jadaSunny.large,
         alt: "A pet photography shoot with Jada in the sun",
       },
       main: {
-        src: huskyPhoto.width1440,
+        src: huskyPhoto.large,
         alt: "David in a field of fall leaves",
       },
     },
@@ -51,21 +51,21 @@ export const heroMap: HeroMap = {
   illustration: {
     portraits: {
       hero: {
-        src: michellePainting.width1440,
+        src: michellePainting.large,
         alt: "A portrait illustration of Michelle",
       },
       main: {
-        src: borisPainting.width1440,
+        src: borisPainting.large,
         alt: "David in a field of fall leaves",
       },
     },
     creative: {
       hero: {
-        src: umbrellaBoat.width1440,
+        src: umbrellaBoat.large,
         alt: "A creative illustration of an umbrella boat",
       },
       main: {
-        src: mermaidIllustration.width1440,
+        src: mermaidIllustration.large,
         alt: "David in a field of fall leaves",
       },
     },

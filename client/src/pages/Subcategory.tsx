@@ -17,7 +17,7 @@ export function Subcategory() {
 
   const hero = useMemo(() => artwork?.find(art => art.role === "hero"), [artwork])
   const gallery = useMemo(() => artwork?.filter(art => art.role === "gallery"), [artwork])
-  const fallbackHero = heroMap[category! as TArtWork["category"]]?.[subCategory!].main || {
+  const fallbackHero = heroMap[category! as TArtWork["category"]]?.[subCategory!].hero || {
     src: "",
     alt: "",
   }
