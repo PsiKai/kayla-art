@@ -11,9 +11,12 @@ export type TArtWork = {
   artCollection?: string
   subCategory: string
   extension?: string
-  createdAt?: string | Date
+  createdAt?: Date
   role: TArtworkRoles
   thumbnails: Record<"small" | "medium" | "large", string>
+}
+export const isValidCategory = (arg: any): arg is TArtWork["category"] => {
+  return ["photography", "illustration"].includes(arg)
 }
 
 type TAppState = {
@@ -40,7 +43,7 @@ const initialAppState: TAppState = {
   art: [],
 }
 
-const initialAppContext: TProvider = { state: initialAppState, dispatch: () => { } }
+const initialAppContext: TProvider = { state: initialAppState, dispatch: () => {} }
 
 export const AppContext = createContext(initialAppContext)
 

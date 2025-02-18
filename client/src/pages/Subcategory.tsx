@@ -1,26 +1,21 @@
-import { useMemo } from "react"
-import { useParams } from "react-router-dom"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import { titleCase } from "../utils/stringUtils"
-// import withValidPath from "../components/hoc/withValidPath"
+import withValidPath from "../components/hoc/withValidPath"
 // import withBreadcrumbs from "../components/hoc/withBreadcrumb"
-import { heroMap } from "../utils/fallbackImages"
 import { TArtWork } from "../context/AppContext"
 import ImageThumbnail from "../components/layout/ImageThumbnail"
+import { useRoleGroups } from "../hooks/artworkMapping/useRoleGroups"
+import { useFallbackHero } from "../hooks/artworkMapping/useFallbackHero"
 
-export function Subcategory() {
-  const { category, subCategory } = useParams()
-
+function SubcategoryComponent({
+  category,
+  subCategory,
+}: Pick<TArtWork, "category" | "subCategory">) {
   const [artwork, pending] = useFetchOnRender<TArtWork[]>(
     `/api/artworks/categories/${category}/subcategories/${subCategory}`,
   )
-
-  const hero = useMemo(() => artwork?.find(art => art.role === "hero"), [artwork])
-  const gallery = useMemo(() => artwork?.filter(art => art.role === "gallery"), [artwork])
-  const fallbackHero = heroMap[category! as TArtWork["category"]]?.[subCategory!].hero || {
-    src: "",
-    alt: "",
-  }
+  const { hero, galleryFeed } = useRoleGroups(artwork)
+  const fallbackHero = useFallbackHero({ category, subCategory, role: "hero" })
 
   if (pending) return <div>Loading...</div>
 
@@ -29,7 +24,7 @@ export function Subcategory() {
       <div className="hero-image-container">
         <img
           className="hero-image"
-          src={hero?.thumbnails.large || fallbackHero.src}
+          src={hero[0]?.thumbnails.large || fallbackHero.src}
           alt={`A hero image for the ${subCategory} album`}
         />
         <div className="hero-text glass">
@@ -38,14 +33,16 @@ export function Subcategory() {
           </h1>
         </div>
       </div>
-      {gallery.length ? (
-        gallery.map(artwork => <ImageThumbnail key={artwork._id} image={artwork} />)
+      {galleryFeed.length ? (
+        galleryFeed.map(artwork => <ImageThumbnail key={artwork._id} image={artwork} />)
       ) : (
         <p>No artwork from this category in the gallery</p>
       )}
     </>
   )
 }
+
+export const Subcategory = withValidPath(SubcategoryComponent)
 
 // const ValidPathSubcategory = withValidPath(Subcategory)
 //

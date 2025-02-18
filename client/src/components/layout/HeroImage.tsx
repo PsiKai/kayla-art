@@ -1,6 +1,7 @@
 import { useMemo } from "react"
 import { TArtWork } from "../../context/AppContext"
-import { heroMap, ValidHeroMapRoles } from "../../utils/fallbackImages"
+import { ValidHeroMapRoles } from "../../utils/fallbackImages"
+import { useFallbackHero } from "../../hooks/artworkMapping/useFallbackHero"
 
 export function HeroImage({
   category,
@@ -13,13 +14,14 @@ export function HeroImage({
   role: ValidHeroMapRoles
   mainSectionImageMap: Record<string, { src: string; alt: string }>
 }) {
-  const key = `${category}/${subCategory}`
+  const fallBackHero = useFallbackHero({ category, subCategory, role })
+  const key = useMemo(() => `${category}/${subCategory}`, [category, subCategory])
   const src = useMemo(
-    () => mainSectionImageMap[key]?.src || heroMap[category][subCategory][role].src,
+    () => mainSectionImageMap[key]?.src || fallBackHero.src,
     [category, subCategory, mainSectionImageMap],
   )
   const alt = useMemo(
-    () => mainSectionImageMap[key]?.alt || heroMap[category][subCategory][role].alt,
+    () => mainSectionImageMap[key]?.alt || fallBackHero.alt,
     [category, subCategory, mainSectionImageMap],
   )
 

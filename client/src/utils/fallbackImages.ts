@@ -9,7 +9,7 @@ import { TArtWork, TArtworkRoles } from "../context/AppContext"
 
 export type ValidHeroMapRoles = Exclude<TArtworkRoles, "carousel" | "gallery">
 export type HeroMap = {
-  [K in TArtWork["category"]]?: {
+  [K in TArtWork["category"]]: {
     [key: string]: {
       [K in ValidHeroMapRoles]: { src: string; alt: string }
     }

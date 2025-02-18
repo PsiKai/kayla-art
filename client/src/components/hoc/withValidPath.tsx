@@ -1,15 +1,16 @@
 import { useParams } from "react-router-dom"
+import { isValidCategory } from "../../context/AppContext"
 
 export default function withValidPath<TProps extends React.ComponentProps<React.ComponentType>>(
   Component: React.ComponentType<TProps>,
 ) {
   return function WithValidPath(props: TProps) {
-    const { category } = useParams()
+    const { category, subCategory } = useParams()
 
-    if (/^photography|illustration$/.test(category!) === false) {
-      return <div>Category not found</div>
+    if (isValidCategory(category) && subCategory) {
+      return <Component {...props} category={category} subCategory={subCategory} />
     }
 
-    return <Component {...props} />
+    return <div>Category not found</div>
   }
 }

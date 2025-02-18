@@ -24,7 +24,7 @@ export default function AdminArtworkLayout({
   const { updateArtwork } = useContext(ApiContext)
 
   const [modalOpen, setModalOpen] = useState<TArtworkRoles | null>()
-  const { hero, carousel, main, gallery } = useRoleGroups(art)
+  const { hero, carousel, main, galleryFeed } = useRoleGroups(art)
 
   const onSubmit = useCallback(
     async (selectedArt: string) => {
@@ -116,7 +116,7 @@ export default function AdminArtworkLayout({
       <div>
         <h2>Gallery</h2>
         <div className="admin-art">
-          {gallery.map(artwork => (
+          {galleryFeed.map(artwork => (
             <SelectableImageThumbnail
               key={artwork._id}
               _id={artwork._id}
