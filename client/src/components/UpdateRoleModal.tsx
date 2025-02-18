@@ -16,7 +16,6 @@ export function UpdateRoleModal({
   const [selectedArtwork, setSelectedArtwork] = useState<string>()
 
   const selectArt = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value)
     setSelectedArtwork(e.target.value)
   }
 

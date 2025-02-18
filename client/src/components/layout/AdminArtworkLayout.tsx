@@ -1,9 +1,10 @@
-import { useCallback, useContext, useMemo, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 import { TArtWork, TArtworkRoles } from "../../context/AppContext"
 import { ApiContext } from "../../context/ApiContext"
 import { TArtworkForm } from "../form/ArtworkForm"
 import { UpdateRoleModal } from "../UpdateRoleModal"
 import { SelectableImageThumbnail } from "./SelectableImageThumbnail"
+import { useRoleGroups } from "../../hooks/artworkMapping/useRoleGroups"
 
 type TAdminArtworkLayout = {
   art: TArtWork[]
@@ -23,20 +24,7 @@ export default function AdminArtworkLayout({
   const { updateArtwork } = useContext(ApiContext)
 
   const [modalOpen, setModalOpen] = useState<TArtworkRoles | null>()
-  const { hero, carousel, main, gallery } = useMemo(() => {
-    return art.reduce<{
-      hero: TArtWork[]
-      carousel: TArtWork[]
-      main: TArtWork[]
-      gallery: TArtWork[]
-    }>(
-      (acc, artwork) => {
-        acc[artwork.role].push(artwork)
-        return acc
-      },
-      { hero: [], carousel: [], main: [], gallery: [] },
-    )
-  }, [art])
+  const { hero, carousel, main, gallery } = useRoleGroups(art)
 
   const onSubmit = useCallback(
     async (selectedArt: string) => {

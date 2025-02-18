@@ -1,4 +1,4 @@
-import React, { useContext, /*useEffect,*/ useLayoutEffect, useRef, useState } from "react"
+import React, { useContext, useLayoutEffect, useRef, useState } from "react"
 import AdminArtCollection from "./AdminArtCollection"
 import FileInput from "./form/FileInput"
 import ArtworkForm, { TArtworkForm } from "./form/ArtworkForm"

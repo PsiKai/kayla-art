@@ -1,30 +1,16 @@
-import { useMemo } from "react"
 import { Link } from "react-router-dom"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import Carousel from "../components/layout/Carousel"
 import { TArtWork } from "../context/AppContext"
-import { heroMap } from "../utils/fallbackImages"
+import { useSectionImageMap } from "../hooks/artworkMapping/useSectionImageMap"
+import { HeroImage } from "../components/layout/HeroImage"
 
 import "../styles/Main.css"
 
 function Main() {
   const [carouselImages, pending] = useFetchOnRender<TArtWork[]>(`/api/artworks/roles/carousel`)
   const [sectionImages, sectionPending] = useFetchOnRender<TArtWork[]>(`/api/artworks/roles/main`)
-
-  const mainSectionImageMap = useMemo(() => {
-    return sectionImages?.reduce<Record<string, any>>((acc, curr) => {
-      const { category, subCategory } = curr
-      const key = `${category}/${subCategory}`
-      if (!acc[key]) {
-        acc[key] = {}
-      }
-      acc[key] = {
-        src: curr.thumbnails.large,
-        alt: `An artwork from the ${subCategory} category`,
-      }
-      return acc
-    }, {})
-  }, [sectionImages])
+  const mainSectionImageMap = useSectionImageMap(sectionImages)
 
   if (pending || sectionPending) return <div>Loading...</div>
 
@@ -43,6 +29,7 @@ function Main() {
         <HeroImage
           category="photography"
           subCategory="portraits"
+          role="main"
           mainSectionImageMap={mainSectionImageMap}
         />
         <div className="glass hero-text">
@@ -53,6 +40,7 @@ function Main() {
         <HeroImage
           category="photography"
           subCategory="pets"
+          role="main"
           mainSectionImageMap={mainSectionImageMap}
         />
         <div className="glass hero-text">
@@ -69,6 +57,7 @@ function Main() {
         <HeroImage
           category="illustration"
           subCategory="portraits"
+          role="main"
           mainSectionImageMap={mainSectionImageMap}
         />
         <div className="glass hero-text">
@@ -79,6 +68,7 @@ function Main() {
         <HeroImage
           category="photography"
           subCategory="creative"
+          role="main"
           mainSectionImageMap={mainSectionImageMap}
         />
         <div className="glass hero-text">
@@ -89,6 +79,7 @@ function Main() {
         <HeroImage
           category="illustration"
           subCategory="creative"
+          role="main"
           mainSectionImageMap={mainSectionImageMap}
         />
         <div className="glass hero-text">
@@ -100,25 +91,3 @@ function Main() {
 }
 
 export default Main
-
-function HeroImage({
-  category,
-  subCategory,
-  mainSectionImageMap = {},
-}: {
-  category: TArtWork["category"]
-  subCategory: string
-  mainSectionImageMap: Record<string, any>
-}) {
-  const key = `${category}/${subCategory}`
-  const src = useMemo(
-    () => mainSectionImageMap?.[key]?.src || heroMap[category][subCategory].main.src,
-    [category, subCategory, mainSectionImageMap],
-  )
-  const alt = useMemo(
-    () => mainSectionImageMap?.[key]?.alt || heroMap[category][subCategory].main.alt,
-    [category, subCategory, mainSectionImageMap],
-  )
-
-  return <img className="hero-image" src={src} alt={alt} />
-}

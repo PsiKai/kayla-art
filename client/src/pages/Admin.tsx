@@ -2,16 +2,14 @@ import { useLayoutEffect, useState } from "react"
 import { AppProvider } from "../context/AppContext"
 import { useNavigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
-
-import "../styles/Admin.css"
-
 import Upload from "../components/Upload"
 import NavbarPlaceholder from "../components/layout/NavbarPlaceholder"
 import { ApiProvider } from "../context/ApiContext"
 
+import "../styles/Admin.css"
+
 function Admin() {
   const navigate = useNavigate()
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [cookies, _setCookies, removeCookie] = useCookies(["connect.sid"])
   const [authenticating, setAuthenticating] = useState(true)
 

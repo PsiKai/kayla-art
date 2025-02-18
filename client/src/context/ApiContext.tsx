@@ -60,7 +60,7 @@ export function ApiProvider({ children }: { children: React.ReactNode }) {
         })
 
         if (!response.ok) {
-          throw new Error(`Failed to update artwork: ${response.statusText}`)
+          throw new Error(`Failed to update artwork: ${await response.text()}`)
         }
 
         const { data } = await response.json()

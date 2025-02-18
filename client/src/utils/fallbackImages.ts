@@ -7,10 +7,11 @@ import { borisPainting, michellePainting } from "../assets/images/portrait-illus
 import { davidFallLeaves, keriTreeBlossoms } from "../assets/images/portrait-photography"
 import { TArtWork, TArtworkRoles } from "../context/AppContext"
 
-type HeroMap = {
-  [K in TArtWork["category"]]: {
+export type ValidHeroMapRoles = Exclude<TArtworkRoles, "carousel" | "gallery">
+export type HeroMap = {
+  [K in TArtWork["category"]]?: {
     [key: string]: {
-      [K in Exclude<TArtworkRoles, "carousel" | "gallery">]: { src: string; alt: string }
+      [K in ValidHeroMapRoles]: { src: string; alt: string }
     }
   }
 }
