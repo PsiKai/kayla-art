@@ -10,8 +10,11 @@ export default function useFetchOnRender<T>(url: string, cancel?: boolean): TFet
 
   useEffect(() => {
     if (cancel) return
+
+    const controller = new AbortController()
+
     setPending(true)
-    fetch(url)
+    fetch(url, { signal: controller.signal })
       .then(res => {
         if (!res.ok) {
           throw new Error("Network response was not ok")
@@ -20,9 +23,15 @@ export default function useFetchOnRender<T>(url: string, cancel?: boolean): TFet
       })
       .then(({ resources }) => {
         setData(resources as T)
+        setPending(false)
       })
-      .catch(err => console.log(err))
-      .finally(() => setPending(false))
+      .catch(err => {
+        if (err.name === "AbortError") return
+        console.log(err)
+        setPending(false)
+      })
+
+    return () => controller.abort()
   }, [url, params, cancel])
 
   return [data!, pending]

@@ -22,11 +22,14 @@ function SubcategoryComponent({
   return (
     <>
       <div className="hero-image-container">
-        <img
-          className="hero-image"
-          src={hero[0]?.thumbnails.large || fallbackHero.src}
-          alt={`A hero image for the ${subCategory} album`}
-        />
+        {hero.map(artwork => (
+          <img
+            key={artwork._id}
+            className="hero-image"
+            src={artwork.thumbnails.large || fallbackHero.src}
+            alt={`A hero image for the ${subCategory} album`}
+          />
+        ))}
         <div className="hero-text glass">
           <h1>
             {titleCase(category)} {titleCase(subCategory)}

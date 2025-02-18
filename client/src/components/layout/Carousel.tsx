@@ -10,7 +10,7 @@ type TCarouselProps = {
   imageClassName?: string
 }
 
-function Carousel({ carouselImages, imageClassName }: TCarouselProps) {
+function Carousel({ carouselImages = [], imageClassName }: TCarouselProps) {
   const [carouselIndex, setCarouselIndex] = useState<number>(0)
   const carouselTimer = useRef<NodeJS.Timeout | null>(null)
   const transitionTimer = useMemo(() => 700, [])
