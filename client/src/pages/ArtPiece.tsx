@@ -4,6 +4,7 @@ import useFetchOnRender from "../hooks/useFetchOnRender"
 import { titleCase } from "../utils/stringUtils"
 import withValidPath from "../components/hoc/withValidPath"
 import withBreadcrumbs from "../components/hoc/withBreadcrumb"
+import Loading from "../components/layout/Loading"
 
 function ArtPiece() {
   const { artCollection, artwork } = useParams()
@@ -15,7 +16,7 @@ function ArtPiece() {
     <>
       <h1>ArtPiece</h1>
       {pending ? (
-        <div>Loading...</div>
+        <Loading />
       ) : (
         <>
           <img

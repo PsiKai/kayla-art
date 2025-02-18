@@ -7,6 +7,7 @@ import NavbarPlaceholder from "../components/layout/NavbarPlaceholder"
 import { ApiProvider } from "../context/ApiContext"
 
 import "../styles/Admin.css"
+import Loading from "../components/layout/Loading"
 
 function Admin() {
   const navigate = useNavigate()
@@ -30,9 +31,11 @@ function Admin() {
   return (
     <AppProvider>
       <ApiProvider>
-        <NavbarPlaceholder />
-        <h1>Admin</h1>
-        {authenticating ? <p>Authenticating...</p> : <Upload />}
+        <section>
+          <NavbarPlaceholder />
+          <h1>Admin</h1>
+          {authenticating ? <Loading /> : <Upload />}
+        </section>
       </ApiProvider>
     </AppProvider>
   )

@@ -4,6 +4,7 @@ import { titleCase } from "../utils/stringUtils"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import withValidPath from "../components/hoc/withValidPath"
 import ThumbnailContainer from "../components/ThumbnailContainer"
+import Loading from "../components/layout/Loading"
 
 function Category() {
   const { category } = useParams()
@@ -16,7 +17,7 @@ function Category() {
     <>
       <h1>{titleCase(category)}</h1>
       {pending ? (
-        <div>Loading...</div>
+        <Loading />
       ) : (
         <>
           {subCategories.map(subCategory => (

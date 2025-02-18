@@ -6,6 +6,7 @@ import { TArtWork } from "../context/AppContext"
 import ImageThumbnail from "../components/layout/ImageThumbnail"
 import { useRoleGroups } from "../hooks/artworkMapping/useRoleGroups"
 import { useFallbackHero } from "../hooks/artworkMapping/useFallbackHero"
+import Loading from "../components/layout/Loading"
 
 function SubcategoryComponent({
   category,
@@ -16,20 +17,18 @@ function SubcategoryComponent({
   )
   const { hero, galleryFeed } = useRoleGroups(artwork)
   const fallbackHero = useFallbackHero({ category, subCategory, role: "hero" })
+  console.log({ fallbackHero })
 
-  if (pending) return <div>Loading...</div>
+  if (pending) return <Loading />
 
   return (
     <>
       <div className="hero-image-container">
-        {hero.map(artwork => (
-          <img
-            key={artwork._id}
-            className="hero-image"
-            src={artwork.thumbnails.large || fallbackHero.src}
-            alt={`A hero image for the ${subCategory} album`}
-          />
-        ))}
+        <img
+          className="hero-image"
+          src={hero[0]?.thumbnails.large || fallbackHero.src}
+          alt={`A hero image for the ${subCategory} album`}
+        />
         <div className="hero-text glass">
           <h1>
             {titleCase(category)} {titleCase(subCategory)}

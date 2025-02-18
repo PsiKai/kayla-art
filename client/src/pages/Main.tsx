@@ -4,6 +4,7 @@ import Carousel from "../components/layout/Carousel"
 import { TArtWork } from "../context/AppContext"
 import { useSectionImageMap } from "../hooks/artworkMapping/useSectionImageMap"
 import { HeroImage } from "../components/layout/HeroImage"
+import Loading from "../components/layout/Loading"
 
 import "../styles/Main.css"
 
@@ -12,7 +13,7 @@ function Main() {
   const [sectionImages, sectionPending] = useFetchOnRender<TArtWork[]>(`/api/artworks/roles/main`)
   const mainSectionImageMap = useSectionImageMap(sectionImages)
 
-  if (pending || sectionPending) return <div>Loading...</div>
+  if (pending || sectionPending) return <Loading />
 
   return (
     <>

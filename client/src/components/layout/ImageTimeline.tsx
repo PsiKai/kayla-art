@@ -3,6 +3,7 @@ import useFetchOnRender from "../../hooks/useFetchOnRender"
 import { TArtWork } from "../../context/AppContext"
 import ImageThumbnail from "./ImageThumbnail"
 import useIntersectionObserver from "../../hooks/useIntersectionObserver"
+import Loading from "./Loading"
 
 type TImageTimelineProps = {
   category?: string
@@ -36,7 +37,7 @@ function ImageTimeline(props: TImageTimelineProps) {
           <ImageThumbnail image={image} />
         </div>
       ))}
-      {pending ? <div>Loading...</div> : null}
+      {pending ? <Loading /> : null}
     </div>
   )
 }

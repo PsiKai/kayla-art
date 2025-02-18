@@ -4,6 +4,7 @@ import useFetchOnRender from "../hooks/useFetchOnRender"
 import { titleCase } from "../utils/stringUtils"
 import withValidPath from "../components/hoc/withValidPath"
 import withBreadcrumbs from "../components/hoc/withBreadcrumb"
+import Loading from "../components/layout/Loading"
 
 function Collection() {
   const { category, subCategory, artCollection } = useParams()
@@ -18,7 +19,7 @@ function Collection() {
       <h2>{titleCase(subCategory)}</h2>
       <h3>{titleCase(artCollection)}</h3>
       {pending ? (
-        <div>Loading...</div>
+        <Loading />
       ) : (
         collection.map(art => (
           <Link to={art._id} key={art._id}>

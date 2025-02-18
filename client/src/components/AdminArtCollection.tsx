@@ -9,6 +9,7 @@ import DeleteArtworkModal from "./layout/DeleteArtworkModal"
 import AdminArtworkLayout from "./layout/AdminArtworkLayout"
 import { ApiContext } from "../context/ApiContext"
 import GenericSelection, { TGenericSelectionProps } from "./form/GenericSelection"
+import Loading from "./layout/Loading"
 
 type TDeleteArtProps = {
   category: string
@@ -128,7 +129,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
         {titleCase(category)} {titleCase(subCategory)}
       </h2>
       {fetchPending ? (
-        <div>Loading...</div>
+        <Loading />
       ) : (
         <div className="collection-container">
           <div className="action-buttons">
