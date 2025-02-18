@@ -11,7 +11,6 @@ function Upload() {
   const [image, setImage] = useState<Map<string, File>>(new Map())
   const [form, setForm] = useState<TArtworkForm>({})
 
-  const uploadForm = useRef<HTMLFormElement>(null)
   const fileInput = useRef<HTMLInputElement>(null)
 
   useLayoutEffect(() => {
@@ -33,7 +32,10 @@ function Upload() {
   }
 
   const uploadNewArt = async (img: File) => {
-    const uploadFormData = new FormData(uploadForm.current!)
+    const uploadFormData = new FormData()
+    Object.entries(form).forEach(([key, value]) => {
+      uploadFormData.append(key, value)
+    })
     uploadFormData.append("image", img)
     await createArtwork(uploadFormData, img.name)
   }
@@ -58,7 +60,7 @@ function Upload() {
     <>
       <div className="form-data">
         <h2>Make Changes To Your Artwork</h2>
-        <ArtworkForm formRef={uploadForm} form={form} setForm={setForm} />
+        <ArtworkForm form={form} setForm={setForm} />
         <FileInput
           ref={fileInput}
           image={image}

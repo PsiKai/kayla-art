@@ -38,7 +38,7 @@ const FileInput = forwardRef<HTMLInputElement, TFileInputProps>((props, ref) => 
         <legend>
           <label htmlFor="image">
             <p>
-              <strong>Image</strong>
+              <strong>Drag and drop new artwork</strong>
             </p>
           </label>
         </legend>

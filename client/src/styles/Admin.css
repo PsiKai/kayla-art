@@ -92,3 +92,9 @@ dialog {
 .artwork-collection-section {
   position: relative;
 }
+
+.file-input-dropzone {
+  border: 2px dashed var(--color-text);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}

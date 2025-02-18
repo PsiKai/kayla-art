@@ -31,11 +31,9 @@ function Admin() {
   return (
     <AppProvider>
       <ApiProvider>
-        <section>
-          <NavbarPlaceholder />
-          <h1>Admin</h1>
-          {authenticating ? <Loading /> : <Upload />}
-        </section>
+        <NavbarPlaceholder />
+        <h1>Admin</h1>
+        {authenticating ? <Loading /> : <Upload />}
       </ApiProvider>
     </AppProvider>
   )
