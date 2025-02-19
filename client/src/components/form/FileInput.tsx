@@ -1,8 +1,9 @@
 import React, { forwardRef, useCallback } from "react"
 import Dropzone from "../Dropzone"
+import { FileWithSrc } from "../Upload"
 
 type TFileInputProps = {
-  image: Map<string, File>
+  image: Map<string, FileWithSrc>
   updateImage: (event: React.ChangeEvent<HTMLInputElement>) => void
   uploading: string | null
   removeStagedUpload: (file: File) => void
@@ -54,12 +55,12 @@ const FileInput = forwardRef<HTMLInputElement, TFileInputProps>((props, ref) => 
         />
       </div>
       <div className="preview-container">
-        {Array.from(image.values()).map((img, i) => {
+        {Array.from(image.values()).map(img => {
           return (
-            <div className="thumbnail-preview" key={i}>
+            <div className="thumbnail-preview" key={img.name}>
               <img
                 className={`preview ${uploading === img.name ? "uploading" : ""}`}
-                src={URL.createObjectURL(img)}
+                src={img.src || URL.createObjectURL(img)}
                 alt="Preview of your uploaded image"
               />
               <button disabled={uploading === img.name} onClick={() => removeStagedUpload(img)}>

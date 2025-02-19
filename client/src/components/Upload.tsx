@@ -1,6 +1,6 @@
 import React, { useContext, useLayoutEffect, useRef, useState } from "react"
 import AdminArtCollection from "./AdminArtCollection"
-import FileInput from "./form/FileInput"
+import FileInput, { FileWithSrc } from "./form/FileInput"
 import ArtworkForm, { TArtworkForm } from "./form/ArtworkForm"
 import { ApiContext } from "../context/ApiContext"
 import "../styles/form.css"
@@ -8,7 +8,7 @@ import "../styles/form.css"
 function Upload() {
   const { pending, createArtwork } = useContext(ApiContext)
 
-  const [image, setImage] = useState<Map<string, File>>(new Map())
+  const [image, setImage] = useState<Map<string, FileWithSrc>>(new Map())
   const [form, setForm] = useState<TArtworkForm>({})
 
   const fileInput = useRef<HTMLInputElement>(null)
@@ -26,6 +26,8 @@ function Upload() {
     if (!e.target.files) return
 
     for (const file of e.target.files) {
+      const srcFile: FileWithSrc = file
+      srcFile.src ||= URL.createObjectURL(file)
       image.set(file.name, file)
     }
     setImage(new Map(image))
