@@ -1,5 +1,13 @@
 import React, { createContext, useReducer } from "react"
 
+export type TProduct = {
+  category: "photography" | "illustration"
+  price: number
+  size?: string | null | undefined
+  serviceName?: string | null | undefined
+  description?: string | null | undefined
+}
+
 export type TArtworkRoles = "gallery" | "main" | "hero" | "carousel"
 export function isValidRole(role: string): role is TArtworkRoles {
   return ["gallery", "main", "hero", "carousel"].includes(role)
