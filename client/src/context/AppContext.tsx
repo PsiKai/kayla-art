@@ -1,6 +1,7 @@
 import React, { createContext, useReducer } from "react"
 
 export type TProduct = {
+  _id: string
   category: "photography" | "illustration"
   price: number
   size?: string | null | undefined
@@ -36,7 +37,7 @@ type Props = {
   children: React.ReactNode | React.ReactNode[]
 }
 
-type TDispatch = {
+export type TDispatch = {
   type: string
   payload?: Partial<TAppState> | string | TArtWork[] | TArtWork
 }

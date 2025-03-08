@@ -84,7 +84,8 @@ dialog {
   gap: 0.5rem;
 }
 
-.modal-form-buttons {
+.modal-form-buttons,
+.form-field-group {
   display: flex;
   justify-content: space-between;
 }

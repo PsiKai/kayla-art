@@ -6,7 +6,7 @@ import { ApiContext } from "../context/ApiContext"
 import "../styles/form.css"
 
 function Upload() {
-  const { pending, createArtwork } = useContext(ApiContext)
+  const { artworkPending, createArtwork } = useContext(ApiContext)
 
   const [image, setImage] = useState<Map<string, FileWithSrc>>(new Map())
   const [form, setForm] = useState<TArtworkForm>({})
@@ -66,12 +66,12 @@ function Upload() {
           ref={fileInput}
           image={image}
           updateImage={updateImage}
-          uploading={pending}
+          uploading={artworkPending}
           removeStagedUpload={removeStagedUpload}
         />
         {form.category && form.subCategory && image.size ? (
-          <button onClick={beginBulkUpload} disabled={!!pending}>
-            {!!pending ? "Uploading..." : "Upload"}
+          <button onClick={beginBulkUpload} disabled={!!artworkPending}>
+            {!!artworkPending ? "Uploading..." : "Upload"}
           </button>
         ) : null}
       </div>

@@ -21,7 +21,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
     state: { art },
     dispatch,
   } = useContext(AppContext)
-  const { pending, updateArtwork, deleteArtwork } = useContext(ApiContext)
+  const { artworkPending, updateArtwork, deleteArtwork } = useContext(ApiContext)
 
   const [openModal, setOpenModal] = useState<"update" | "delete" | null>(null)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
@@ -135,25 +135,25 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
           <div className="action-buttons">
             <button
               onClick={() => openSelectedModal("delete")}
-              disabled={!selectedIds.size || !!pending}
+              disabled={!selectedIds.size || !!artworkPending}
             >
-              {pending ? "Deleting..." : "Delete Selected"}
+              {artworkPending ? "Deleting..." : "Delete Selected"}
             </button>
             <button
               onClick={() => openSelectedModal("update")}
-              disabled={!!pending || !selectedIds.size}
+              disabled={!!artworkPending || !selectedIds.size}
             >
-              {pending ? "Editing..." : "Edit Selected"}
+              {artworkPending ? "Editing..." : "Edit Selected"}
             </button>
             <button
               onClick={() => setSelectedIds(new Set())}
-              disabled={!selectedIds.size || !!pending}
+              disabled={!selectedIds.size || !!artworkPending}
             >
               Clear Selection
             </button>
             <button
               onClick={() => setSelectedIds(new Set(art.map(art => art._id)))}
-              disabled={selectedIds.size === art.length || !!pending}
+              disabled={selectedIds.size === art.length || !!artworkPending}
             >
               Select All
             </button>
@@ -165,14 +165,14 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
                 valueType="role"
                 selectedValue={art.find(({ _id }) => selectedIds.has(_id))?.role || ""}
                 updateForm={updateRole}
-                disabled={!!pending}
+                disabled={!!artworkPending}
               />
             ) : null}
           </form>
           <AdminArtworkLayout
             art={art}
-            deleting={pending}
-            editing={pending}
+            deleting={artworkPending}
+            editing={artworkPending}
             selectedIds={selectedIds}
             selectArt={selectArt}
           />
