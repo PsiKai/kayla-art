@@ -1,6 +1,7 @@
 import React, { forwardRef, useCallback } from "react"
 import Dropzone from "../Dropzone"
-import { FileWithSrc } from "../Upload"
+
+export type FileWithSrc = File & { src?: string }
 
 type TFileInputProps = {
   image: Map<string, FileWithSrc>

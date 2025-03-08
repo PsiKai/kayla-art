@@ -2,7 +2,15 @@ import { useCallback, useState } from "react"
 import { TDispatch, TProduct } from "../../context/AppContext"
 import { TProductForm } from "../../components/form/NewProduct"
 
-export const useProductApi = (dispatch: React.Dispatch<TDispatch>) => {
+export type TProductApi = {
+  productPending: string
+  productError: string
+  createProduct: (productForm: TProductForm) => Promise<TProduct[] | void>
+  updateProduct: (values: TProduct) => Promise<TProduct[] | void>
+  deleteProduct: (_id: string) => void
+}
+
+export const useProductApi = (dispatch: React.Dispatch) => {
   const [productPending, setPending] = useState<string>("")
   const [productError, setError] = useState<string>("")
 
@@ -13,6 +21,9 @@ export const useProductApi = (dispatch: React.Dispatch<TDispatch>) => {
       try {
         const res = await fetch("/api/products", {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify(productForm),
         })
 
@@ -21,7 +32,7 @@ export const useProductApi = (dispatch: React.Dispatch<TDispatch>) => {
         }
 
         const { data } = await res.json()
-        return data as TProduct[]
+        dispatch({ type: "ADD_PRODUCT", payload: data })
       } catch (err) {
         console.error(err)
         if (err instanceof Error) {
@@ -53,7 +64,7 @@ export const useProductApi = (dispatch: React.Dispatch<TDispatch>) => {
         }
 
         const { data } = await response.json()
-        return data as TProduct[]
+        dispatch({ type: "UPDATE_PRODUCT", payload: data })
       } catch (error) {
         console.error(error)
 
@@ -70,12 +81,18 @@ export const useProductApi = (dispatch: React.Dispatch<TDispatch>) => {
   )
 
   const deleteProduct = useCallback(
-    (_id: string) => {
+    async (_id: string) => {
       setPending(_id)
       try {
-        fetch(`/api/products/${_id}`, {
+        const response = await fetch(`/api/products/${_id}`, {
           method: "DELETE",
         })
+
+        if (!response.ok) {
+          throw new Error(`Failed to delete product: ${await response.text()}`)
+        }
+
+        dispatch({ type: "DELETE_PRODUCT", payload: _id })
       } catch (error) {
         console.error(error)
 

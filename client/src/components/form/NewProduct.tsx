@@ -1,7 +1,7 @@
-import { useCallback, useState } from "react"
+import { useCallback, useContext, useState } from "react"
+import { ApiContext } from "../../context/ApiContext"
 
 export type TProductForm = {
-  _id?: string
   category: "photography" | "illustration" | ""
   serviceName: string
   price: string
@@ -10,6 +10,7 @@ export type TProductForm = {
 }
 
 function NewProduct() {
+  const { createProduct, productPending } = useContext(ApiContext)
   const baseForm: TProductForm = {
     category: "",
     serviceName: "",
@@ -17,8 +18,6 @@ function NewProduct() {
     size: "",
     description: "",
   }
-
-  const [submitting, setSubmitting] = useState(false)
   const [form, setForm] = useState(baseForm)
 
   const handleChange = useCallback(
@@ -32,10 +31,8 @@ function NewProduct() {
   const submitNewProduct = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault()
-      setSubmitting(true)
-      window.alert(JSON.stringify(form, null, 2))
+      await createProduct(form)
       setForm(baseForm)
-      setSubmitting(false)
     },
     [form],
   )
@@ -113,7 +110,7 @@ function NewProduct() {
             />
           </div>
         </fieldset>
-        <button disabled={submitting}>Add Product</button>
+        <button disabled={!!productPending}>Add Product</button>
       </form>
     </>
   )

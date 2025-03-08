@@ -1,16 +1,9 @@
 import { createContext, useContext } from "react"
 import { AppContext } from "./AppContext"
-import { TArtworkForm } from "../components/form/ArtworkForm"
-import { useArtworkApi } from "../hooks/api/useArtworkApi"
-import { useProductApi } from "../hooks/api/useProductApi"
+import { TArtworkApi, useArtworkApi } from "../hooks/api/useArtworkApi"
+import { TProductApi, useProductApi } from "../hooks/api/useProductApi"
 
-type TApiContext = {
-  artworkPending: string
-  artworkError: string
-  createArtwork: (form: FormData, artworkName: string) => Promise<void>
-  updateArtwork: (values: TArtworkForm, _id: string) => Promise<void>
-  deleteArtwork: (_id: string) => Promise<void>
-}
+type TApiContext = TArtworkApi & TProductApi
 
 export const ApiContext = createContext<TApiContext>({} as TApiContext)
 
