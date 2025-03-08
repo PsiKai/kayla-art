@@ -34,7 +34,7 @@ type TAppState = {
   products: TProduct[]
 }
 
-export type TDispatch =
+export type TAppDispatch =
   | { type: "SET_USER"; payload: string }
   | { type: "SET_ARTWORK"; payload: TArtWork[] }
   | { type: "UPDATE_ARTWORK"; payload: TArtWork[] }
@@ -47,7 +47,7 @@ export type TDispatch =
 
 type TProvider = {
   state: TAppState
-  dispatch: React.Dispatch<TDispatch>
+  dispatch: React.Dispatch<TAppDispatch>
 }
 
 const initialAppState: TAppState = {
@@ -61,12 +61,12 @@ const initialAppContext: TProvider = { state: initialAppState, dispatch: () => {
 export const AppContext = createContext(initialAppContext)
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer<>(appReducer, initialAppState)
+  const [state, dispatch] = useReducer(appReducer, initialAppState)
 
   return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>
 }
 
-const appReducer = (state: TAppState, action: TDispatch): TAppState => {
+const appReducer = (state: TAppState, action: TAppDispatch): TAppState => {
   if (!action.payload) return state
 
   switch (action.type) {

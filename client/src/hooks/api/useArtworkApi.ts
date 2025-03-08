@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { TArtWork, TDispatch } from "../../context/AppContext"
+import { TArtWork, TAppDispatch } from "../../context/AppContext"
 import { TArtworkForm } from "../../components/form/ArtworkForm"
 
 export type TArtworkApi = {
@@ -10,7 +10,7 @@ export type TArtworkApi = {
   deleteArtwork: (_id: string) => Promise<void>
 }
 
-export const useArtworkApi = (dispatch: React.Dispatch<TDispatch<TArtWork>>) => {
+export const useArtworkApi = (dispatch: React.Dispatch<TAppDispatch>) => {
   const [artworkPending, setPending] = useState<string>("")
   const [artworkError, setError] = useState<string>("")
 

@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { TDispatch, TProduct } from "../../context/AppContext"
+import { TAppDispatch, TProduct } from "../../context/AppContext"
 import { TProductForm } from "../../components/form/NewProduct"
 
 export type TProductApi = {
@@ -10,7 +10,7 @@ export type TProductApi = {
   deleteProduct: (_id: string) => void
 }
 
-export const useProductApi = (dispatch: React.Dispatch) => {
+export const useProductApi = (dispatch: React.Dispatch<TAppDispatch>) => {
   const [productPending, setPending] = useState<string>("")
   const [productError, setError] = useState<string>("")
 
