@@ -7,11 +7,12 @@
     "client-build": "npm install --prefix ../client && npm run build --prefix ../client",
     "client-dev": "npm run dev --prefix ../client",
     "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
-    "server-build": "tsc",
+    "server-build": "npm install && tsc",
     "server-dev": "tsx --watch src/",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "dump-db": "mongodump --db kayla-business --out ./mongo-backup"
   },
   "keywords": [],
   "author": "",

@@ -11,7 +11,7 @@ const app = express()
 initDB().catch(console.error)
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(process.cwd(), "../public")))
+  app.use(express.static(path.join(process.cwd(), "client-dist")))
 }
 
 const accessToken: CipherKey = process.env.ACCESS_TOKEN_SECRET!
@@ -28,7 +28,8 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
+      // secure: process.env.NODE_ENV === "production",
+      secure: false,
       sameSite: "strict",
       maxAge: 60 * 60 * 1000,
       httpOnly: false,
@@ -38,7 +39,7 @@ app.use(
 
 app.use("/api", apiRouter)
 app.use("/", appRouter)
-
-app.listen(process.env.PORT || 3000, () => {
-  console.log("Server is running on port 3000")
+const port = process.env.PORT || 3000
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}...`)
 })
