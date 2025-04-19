@@ -4,10 +4,11 @@ import { PassThrough } from "stream"
 import { v4 as uuid } from "uuid"
 import { storageClient } from "../google-client"
 import { RequestHandler } from "express"
+import { TArtworkRequest } from "../routes/api/artwork"
 
 const uploadSizes = [375, 768, 1440]
 
-export const uploader: RequestHandler = async (req, res, next) => {
+export const uploader: RequestHandler = (req: TArtworkRequest, res, next) => {
   const bb = busboy({ headers: req.headers })
   const uploadPromises: Promise<void>[] = []
 
@@ -33,8 +34,12 @@ export const uploader: RequestHandler = async (req, res, next) => {
         })
         .on("error", err => {
           console.log("Error uploading fullsize image")
-          console.log(err)
-          reject(err)
+          if (err instanceof Error) {
+            console.log(err)
+            reject(err)
+          } else {
+            reject(new Error("Unknown error uploading fullsize image"))
+          }
         })
     })
 
@@ -50,8 +55,12 @@ export const uploader: RequestHandler = async (req, res, next) => {
           })
           .on("error", err => {
             console.log("Error uploading thumbnail", uploadSizes[i])
-            console.log(err)
-            reject(err)
+            if (err instanceof Error) {
+              console.log(err)
+              reject(err)
+            } else {
+              reject(new Error(`Unknown error uploading thumbnail for size ${uploadSizes[i]}`))
+            }
           })
       })
     })
@@ -59,13 +68,21 @@ export const uploader: RequestHandler = async (req, res, next) => {
     uploadPromises.push(uploadPromise, ...resizePromises)
   })
 
+  /* @ts-expect-error strong typing can't be applied */
   bb.on("field", (name, val) => (req.body[name] = val))
 
   bb.on("close", () => {
     console.log("Done parsing form!")
     Promise.all(uploadPromises)
       .then(() => next())
-      .catch(err => res.status(500).send(err.message))
+      .catch(err => {
+        if (err instanceof Error) {
+          console.error("Error uploading files:", err)
+          res.status(500).send(err.message)
+        }
+        console.error("Unknown error uploading files")
+        res.status(500).send("Server error uploading files")
+      })
   })
 
   req.pipe(bb)

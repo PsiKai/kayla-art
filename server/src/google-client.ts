@@ -1,6 +1,7 @@
+/* global NodeJS */
 import { Bucket, GetSignedUrlConfig, Storage } from "@google-cloud/storage"
 import { slugify } from "./utils/stringUtils"
-import type { Artwork } from "./db/models/artwork"
+import type { TArtworkSchema } from "./db/models/artwork"
 
 let googleAuth: string
 if (process.env.NODE_ENV !== "production") {
@@ -37,7 +38,7 @@ class GoogleClient extends Storage {
     this.thumbBucket = this.bucket(this.thumbBucketName)
   }
 
-  writeStream(art: Artwork): [NodeJS.WritableStream, Record<string, NodeJS.WritableStream>] {
+  writeStream(art: TArtworkSchema): [NodeJS.WritableStream, Record<string, NodeJS.WritableStream>] {
     const [fullSizeFile, thumbnailFiles] = this.buildPaths(art)
     const thumbnailStreams = Object.values(this.UPLOAD_SIZES).reduce<
       Record<string, NodeJS.WritableStream>
@@ -49,7 +50,7 @@ class GoogleClient extends Storage {
     return [this.mainBucket.file(fullSizeFile).createWriteStream(), thumbnailStreams]
   }
 
-  deleteFile(art: Artwork) {
+  deleteFile(art: TArtworkSchema) {
     const [fullSizeFile, thumbnailFiles] = this.buildPaths(art)
 
     return [
@@ -58,7 +59,7 @@ class GoogleClient extends Storage {
     ]
   }
 
-  moveFile(oldImg: Artwork, newImg: Artwork) {
+  moveFile(oldImg: TArtworkSchema, newImg: TArtworkSchema) {
     const { extension, uid } = oldImg
     const { category, subCategory } = newImg
 
@@ -78,15 +79,16 @@ class GoogleClient extends Storage {
     ]
   }
 
-  signedUrl(art: Artwork, extraOptions: Partial<GetSignedUrlConfig> = {}) {
+  signedUrl(art: TArtworkSchema, extraOptions: Partial<GetSignedUrlConfig> = {}) {
     const options = { action: "read" as const, expires: Date.now() + 60_000, ...extraOptions }
     const [filePath] = this.buildPaths(art)
 
     return this.mainBucket.file(filePath).getSignedUrl(options)
   }
 
-  buildPaths(art: Partial<Artwork>): [string, string[]] {
-    let { category, subCategory, uid, extension } = art
+  buildPaths(art: Partial<TArtworkSchema>): [string, string[]] {
+    let { subCategory } = art
+    const { category, uid, extension } = art
     subCategory = slugify(subCategory || "")
     const path = `${category}/${subCategory}/${uid}`
     const thumbPaths = Object.keys(this.UPLOAD_SIZES).map(size => `${path}-${size}.webp`)
@@ -94,8 +96,9 @@ class GoogleClient extends Storage {
     return [`${path}.${extension}`, thumbPaths]
   }
 
-  buildThumbnailUrls(art: Artwork): Record<UploadSizes, string> {
-    let { category, subCategory, uid } = art
+  buildThumbnailUrls(art: TArtworkSchema): Record<UploadSizes, string> {
+    let { subCategory } = art
+    const { category, uid } = art
     subCategory = slugify(subCategory)
     const urls = Object.keys(this.UPLOAD_SIZES).reduce(
       (acc, size) => {

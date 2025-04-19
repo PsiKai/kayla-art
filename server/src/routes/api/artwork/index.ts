@@ -1,10 +1,17 @@
-import { Router, json } from "express"
-import Artwork, { type Artwork as TArtwork, isArtwork } from "../../../db/models/artwork"
+import { Request, Response, Router, json } from "express"
+import Artwork, { TArtworkSchema, type TArtwork } from "../../../db/models/artwork"
 import { uploader } from "../../../middleware/uploader"
 import slugifyValues from "../../../middleware/slugifyValues"
 import { storageClient } from "../../../google-client"
 import artworkCategoryRouter from "./categories/index"
 import { isAuthenticated } from "../../../middleware/auth"
+
+export type TArtworkRequest<TParams extends Record<string, string> = Record<string, string>> =
+  Request<TParams, object, TArtworkSchema>
+
+type TArtworkResponse = Response<
+  { newArt: TArtwork } | { resources: TArtwork[] } | { data: TArtwork[] } | { message: string }
+>
 
 const artworkRouter = Router()
 artworkRouter.use(json())
@@ -15,12 +22,18 @@ artworkRouter.get("/", async (req, res) => {
   res.json({ resources })
 })
 
-artworkRouter.post("/", isAuthenticated, uploader, slugifyValues, async (req, res) => {
-  console.log(req.body)
-  const newArt = new Artwork({ ...req.body })
-  await newArt.save()
-  res.json({ newArt })
-})
+artworkRouter.post(
+  "/",
+  isAuthenticated,
+  uploader,
+  slugifyValues,
+  async (req: TArtworkRequest, res: TArtworkResponse) => {
+    console.log(req.body)
+    const newArt = new Artwork({ ...req.body })
+    await newArt.save()
+    res.json({ newArt })
+  },
+)
 
 artworkRouter.use("/categories", artworkCategoryRouter)
 
@@ -52,33 +65,38 @@ artworkRouter.get("/:id", async (req, res) => {
   }
 })
 
-artworkRouter.put("/:id", isAuthenticated, slugifyValues, async (req, res) => {
-  try {
-    const artwork = await Artwork.findById(req.params.id).lean()
-    if (!artwork) {
-      res.status(404).json({ message: "Artwork not found" })
-      return
+artworkRouter.put(
+  "/:id",
+  isAuthenticated,
+  slugifyValues,
+  async (req: TArtworkRequest<{ id: string }>, res: TArtworkResponse) => {
+    try {
+      const artwork = await Artwork.findById(req.params.id)
+      if (!artwork) {
+        res.status(404).json({ message: "Artwork not found" })
+        return
+      }
+      const moveFiles = storageClient.moveFile(artwork, req.body)
+      await Promise.all(moveFiles)
+      const result = await Artwork.findOneAndUpdate(
+        { _id: req.params.id },
+        { ...req.body },
+        { new: true },
+      )
+      let data: TArtwork[] = []
+      if ("updatedRecords" in result!) {
+        const records = result.updatedRecords as TArtwork[]
+        data = [result, ...records]
+      } else {
+        data = [result as TArtwork]
+      }
+      res.json({ data })
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: "Error updating artwork" })
     }
-    const moveFiles = storageClient.moveFile(artwork, req.body)
-    await Promise.all(moveFiles)
-    const result = await Artwork.findOneAndUpdate(
-      { _id: req.params.id },
-      { ...req.body },
-      { new: true },
-    )
-    let data: TArtwork[] = []
-    if ("updatedRecords" in result!) {
-      const records = result.updatedRecords as TArtwork[]
-      data = [result, ...records]
-    } else {
-      data = [result as TArtwork]
-    }
-    res.json({ data })
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: "Error updating artwork" })
-  }
-})
+  },
+)
 
 artworkRouter.delete("/:id", isAuthenticated, async (req, res) => {
   try {

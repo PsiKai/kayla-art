@@ -3,13 +3,20 @@ import { slugify } from "../utils/stringUtils"
 
 const slugifyValues: RequestHandler = (req, res, next) => {
   const invalidCharsRegex = /[!"#$%&'()*+,/:;<=>?@[\\\]^`{|}~]/g
-  const { body } = req
-  for (const key in body) {
-    if (typeof body[key] === "string") {
-      if (invalidCharsRegex.test(body[key])) {
+  const body = req.body as unknown
+  if (!body) {
+    res.status(400).json({ message: "Request body is required" })
+    return
+  }
+  const objectBody: Record<string, unknown> = body as Record<string, unknown>
+
+  for (const key in objectBody) {
+    if (typeof objectBody[key] === "string") {
+      if (invalidCharsRegex.test(objectBody[key])) {
         res.status(400).json({ message: "Invalid characters in request body" })
+        return
       }
-      body[key] = slugify(body[key].trim())
+      objectBody[key] = slugify(objectBody[key].trim())
     }
   }
   next()

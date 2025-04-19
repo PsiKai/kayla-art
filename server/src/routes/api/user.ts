@@ -1,7 +1,13 @@
-import { Router, json } from "express"
-import User from "../../db/models/user"
+import { Request, Router, json } from "express"
+import User, { TUser } from "../../db/models/user"
 import bcrypt from "bcrypt"
 import { isAuthenticated } from "../../middleware/auth"
+
+type TUserRequest<TParams extends Record<string, string> = Record<string, string>> = Request<
+  TParams,
+  object,
+  TUser
+>
 
 const userRouter = Router()
 userRouter.use(json())
@@ -13,7 +19,7 @@ userRouter.get("/", async (_req, res) => {
   res.end("\n")
 })
 
-userRouter.post("/", async (req, res) => {
+userRouter.post("/", async (req: TUserRequest, res) => {
   try {
     const { password } = req.body
     const salt = await bcrypt.genSalt(10)
@@ -24,15 +30,15 @@ userRouter.post("/", async (req, res) => {
     res.status(201).send(user)
   } catch (error) {
     console.log("ERROR: ", error)
-    res.status(400).send(error)
+    res.status(400).json({ message: error })
   }
 })
 
-userRouter.get("/login", isAuthenticated, async (_req, res) => {
+userRouter.get("/login", isAuthenticated, (_req, res) => {
   res.status(200).send("User is authenticated")
 })
 
-userRouter.post("/login", async (req, res) => {
+userRouter.post("/login", async (req: TUserRequest, res) => {
   const { email, password } = req.body
   if (!email || !password) {
     res.status(400).end()
@@ -58,7 +64,7 @@ userRouter.post("/login", async (req, res) => {
     req.session.save(sessionSaveError => {
       if (sessionSaveError) {
         console.log("ERROR GENERATING SESSION: ", sessionSaveError)
-        res.status(500).send("Error saving session")
+        res.status(500).json({ message: "Error saving session" })
       } else {
         res.status(200).end()
       }
