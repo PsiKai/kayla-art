@@ -1,4 +1,49 @@
-// module.exports = {
+import { defineConfig, globalIgnores } from "eslint/config"
+import { fixupConfigRules } from "@eslint/compat"
+import globals from "globals"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+import js from "@eslint/js"
+import { FlatCompat } from "@eslint/eslintrc"
+import tseslint from "typescript-eslint"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
+})
+
+export default defineConfig([
+  globalIgnores(["**/dist", "**/.eslintrc.cjs", "**/vite.config.ts", "**/eslint.config.mjs"]),
+
+  ...tseslint.configs.recommendedTypeChecked,
+
+  { files: ["**/*.ts", "**/*.tsx"] },
+
+  {
+    extends: fixupConfigRules(compat.extends("eslint:recommended")),
+
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+      parserOptions: {
+        project: ["./tsconfig.json"],
+      },
+    },
+
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+    },
+  },
+])
 //   root: true,
 //   env: { es2020: true },
 //   extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
