@@ -1,3 +1,4 @@
+import React from "react"
 import { titleCase } from "../../utils/stringUtils"
 
 export type TGenericSelectionProps = {

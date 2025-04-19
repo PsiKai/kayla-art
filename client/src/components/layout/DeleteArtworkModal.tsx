@@ -1,6 +1,6 @@
-import { FC } from "react"
-import { TArtWork } from "../../context/AppContext"
+import { FC, useCallback } from "react"
 import { Modal, TModalProps } from "./Modal"
+import { TArtWork } from "../../core-types"
 
 type TDeleteModalProps = {
   artwork: TArtWork[]
@@ -10,9 +10,9 @@ type TDeleteModalProps = {
 const DeleteArtworkModal: FC<TDeleteModalProps> = props => {
   const { artwork, onSubmit, handleExit, ...modalProps } = props
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     onSubmit()
-  }
+  }, [onSubmit])
 
   return (
     <Modal {...modalProps} handleExit={handleExit}>

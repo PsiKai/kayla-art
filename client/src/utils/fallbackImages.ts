@@ -5,13 +5,13 @@ import { mermaidIllustration } from "../assets/images/footer-photos"
 import { huskyPhoto, jadaSunny } from "../assets/images/pet-photography"
 import { borisPainting, michellePainting } from "../assets/images/portrait-illustration"
 import { davidFallLeaves, keriTreeBlossoms } from "../assets/images/portrait-photography"
-import { TArtWork, TArtworkRoles } from "../context/AppContext"
+import { TArtWork, TArtworkRoles } from "../core-types"
 
 export type ValidHeroMapRoles = Exclude<TArtworkRoles, "carousel" | "gallery">
 export type HeroMap = {
-  [K in TArtWork["category"]]: {
+  [_K in TArtWork["category"]]: {
     [key: string]: {
-      [K in ValidHeroMapRoles]: { src: string; alt: string }
+      [_K in ValidHeroMapRoles]: { src: string; alt: string }
     }
   }
 }

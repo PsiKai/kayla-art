@@ -5,9 +5,9 @@ export type FileWithSrc = File & { src?: string }
 
 type TFileInputProps = {
   image: Map<string, FileWithSrc>
-  updateImage: (event: React.ChangeEvent<HTMLInputElement>) => void
+  updateImage: (_event: React.ChangeEvent<HTMLInputElement>) => void
   uploading: string | null
-  removeStagedUpload: (file: File) => void
+  removeStagedUpload: (_file: File) => void
 }
 
 const FileInput = forwardRef<HTMLInputElement, TFileInputProps>((props, ref) => {

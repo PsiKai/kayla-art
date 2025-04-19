@@ -26,6 +26,10 @@ export default function useFetchOnRender<T>(url: string, cancel?: boolean): TFet
         setPending(false)
       })
       .catch(err => {
+        if (!(err instanceof Error)) {
+          console.error("Fetch error:", err)
+          return
+        }
         if (err.name === "AbortError") return
         console.log(err)
         setPending(false)

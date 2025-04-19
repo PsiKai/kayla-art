@@ -1,4 +1,4 @@
-import { TArtWork } from "../context/AppContext"
+import { TArtWork } from "../core-types"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import ImageThumbnail from "./layout/ImageThumbnail"
 import Loading from "./layout/Loading"

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import useFetchOnRender from "../../hooks/useFetchOnRender"
-import { TArtWork } from "../../context/AppContext"
 import ImageThumbnail from "./ImageThumbnail"
 import useIntersectionObserver from "../../hooks/useIntersectionObserver"
 import Loading from "./Loading"
+import { TArtWork } from "../../core-types"
 
 type TImageTimelineProps = {
   category?: string
@@ -13,7 +13,7 @@ type TImageTimelineProps = {
 
 function ImageTimeline(props: TImageTimelineProps) {
   const [page, setPage] = useState(0)
-  const lastElementRef = useRef<HTMLDivElement>(null)
+  const lastElementRef = useRef<HTMLDivElement>({} as HTMLDivElement)
 
   const serializedURL = useMemo(() => {
     return `/api/artworks?${new URLSearchParams({ ...props, offset: page.toString() }).toString()}`

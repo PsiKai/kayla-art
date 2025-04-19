@@ -1,6 +1,6 @@
-import { useState } from "react"
-import { TArtWork, TArtworkRoles } from "../context/AppContext"
+import React, { useState } from "react"
 import { Modal, TModalProps } from "./layout/Modal"
+import { TArtWork, TArtworkRoles } from "../core-types"
 
 export function UpdateRoleModal({
   art,
@@ -11,7 +11,7 @@ export function UpdateRoleModal({
 }: {
   art: TArtWork[]
   role: TArtworkRoles
-  onSubmit: (selectedArt: string) => void
+  onSubmit: (_selectedArt: string) => void
 } & TModalProps) {
   const [selectedArtwork, setSelectedArtwork] = useState<string>()
 

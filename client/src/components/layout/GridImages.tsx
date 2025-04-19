@@ -1,6 +1,6 @@
-import { TArtWork } from "../../context/AppContext"
 import { Link } from "react-router-dom"
 import { titleCase } from "../../utils/stringUtils"
+import { TArtWork } from "../../core-types"
 
 type TGridImagesProps = {
   artworks: TArtWork[]

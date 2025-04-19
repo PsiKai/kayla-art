@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { TArtWork } from "../../context/AppContext"
+import { TArtWork } from "../../core-types"
 
 export function useSectionImageMap(sectionImages: TArtWork[] | undefined) {
   const mainSectionImageMap = useMemo(() => {

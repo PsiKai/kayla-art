@@ -2,11 +2,11 @@ import useFetchOnRender from "../hooks/useFetchOnRender"
 import { titleCase } from "../utils/stringUtils"
 import withValidPath from "../components/hoc/withValidPath"
 // import withBreadcrumbs from "../components/hoc/withBreadcrumb"
-import { TArtWork } from "../context/AppContext"
 import ImageThumbnail from "../components/layout/ImageThumbnail"
 import { useRoleGroups } from "../hooks/artworkMapping/useRoleGroups"
 import { useFallbackHero } from "../hooks/artworkMapping/useFallbackHero"
 import Loading from "../components/layout/Loading"
+import { TArtWork } from "../core-types"
 
 function SubcategoryComponent({
   category,

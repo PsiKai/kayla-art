@@ -1,17 +1,17 @@
-import { useCallback, useContext, useState } from "react"
-import { TArtWork, TArtworkRoles } from "../../context/AppContext"
-import { ApiContext } from "../../context/ApiContext"
+import React, { useCallback, useContext, useState } from "react"
 import { TArtworkForm } from "../form/ArtworkForm"
 import { UpdateRoleModal } from "../UpdateRoleModal"
 import { SelectableImageThumbnail } from "./SelectableImageThumbnail"
 import { useRoleGroups } from "../../hooks/artworkMapping/useRoleGroups"
+import { TArtWork, TArtworkRoles } from "../../core-types"
+import { ApiContext } from "../../context/apiContext"
 
 type TAdminArtworkLayout = {
   art: TArtWork[]
   deleting: string | null
   editing: string | null
   selectedIds: Set<string>
-  selectArt: (e: React.ChangeEvent<HTMLInputElement>) => void
+  selectArt: (_e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export default function AdminArtworkLayout({
@@ -48,7 +48,7 @@ export default function AdminArtworkLayout({
         handleExit={() => setModalOpen(null)}
         art={art.filter(a => a.role !== modalOpen)}
         role={modalOpen!}
-        onSubmit={onSubmit}
+        onSubmit={e => void onSubmit(e)}
       />
       <div>
         <h2>Main Page Carousel</h2>

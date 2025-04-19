@@ -17,14 +17,17 @@ function Admin() {
   const [authenticating, setAuthenticating] = useState(true)
 
   useLayoutEffect(() => {
-    if (!cookies["connect.sid"]) return navigate("/login")
+    if (!cookies["connect.sid"]) {
+      void navigate("/login")
+      return
+    }
     if (!authenticating) return
 
-    fetch("/api/users/login")
+    void fetch("/api/users/login")
       .then(res => {
         if (!res.ok) {
           removeCookie("connect.sid")
-          navigate("/login")
+          void navigate("/login")
         }
       })
       .finally(() => setAuthenticating(false))

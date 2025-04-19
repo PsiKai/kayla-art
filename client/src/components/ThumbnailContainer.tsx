@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useRef } from "react"
 import useFetchOnRender from "../hooks/useFetchOnRender"
-import { TArtWork } from "../context/AppContext"
 import "../styles/ThumbnailContainer.css"
 import useIntersectionObserver from "../hooks/useIntersectionObserver"
+import { TArtWork } from "../core-types"
 
 export type TThumbnailContainerProps = {
   category?: string
@@ -16,7 +16,7 @@ function ThumbnailContainer(props: TThumbnailContainerProps) {
     return `/api/artworks?${new URLSearchParams(props).toString()}`
   }, [props])
 
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>({} as HTMLDivElement)
   const isIntersecting = useIntersectionObserver(containerRef)
   const [thumbnails, pending] = useFetchOnRender<TArtWork[]>(serializedURL, !isIntersecting)
 

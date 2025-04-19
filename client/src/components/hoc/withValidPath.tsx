@@ -1,5 +1,6 @@
+import React from "react"
 import { useParams } from "react-router-dom"
-import { isValidCategory } from "../../context/AppContext"
+import { isValidCategory } from "../../core-types"
 
 export default function withValidPath<TProps extends React.ComponentProps<React.ComponentType>>(
   Component: React.ComponentType<TProps>,

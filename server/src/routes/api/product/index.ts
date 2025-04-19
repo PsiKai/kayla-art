@@ -29,7 +29,7 @@ productRouter.post("/", isAuthenticated, async (req, res) => {
 
 productRouter.put("/:_id", isAuthenticated, async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params._id, req.body)
+    const product = await Product.findByIdAndUpdate(req.params._id, req.body, { new: true })
     res.json({ data: product })
   } catch (error) {
     console.error(error)

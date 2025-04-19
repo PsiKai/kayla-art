@@ -1,6 +1,6 @@
 import { useMemo } from "react"
-import { TArtWork } from "../../context/AppContext"
 import { heroMap, ValidHeroMapRoles } from "../../utils/fallbackImages"
+import { TArtWork } from "../../core-types"
 
 export function useFallbackHero({
   category,

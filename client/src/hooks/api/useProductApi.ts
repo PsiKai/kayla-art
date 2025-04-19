@@ -1,13 +1,13 @@
-import { useCallback, useState } from "react"
-import { TAppDispatch, TProduct } from "../../context/AppContext"
-import { TProductForm } from "../../components/form/NewProduct"
+import React, { useCallback, useState } from "react"
+import { TProductForm } from "../../components/form/ProductForm"
+import { TAppDispatch, TProduct } from "../../core-types"
 
 export type TProductApi = {
   productPending: string
   productError: string
-  createProduct: (productForm: TProductForm) => Promise<TProduct[] | void>
-  updateProduct: (values: TProduct) => Promise<TProduct[] | void>
-  deleteProduct: (_id: string) => void
+  createProduct: (_productForm: TProductForm) => Promise<TProduct[] | void>
+  updateProduct: (_values: TProductForm) => Promise<TProduct[] | void>
+  deleteProduct: (_id: string) => Promise<void>
 }
 
 export const useProductApi = (dispatch: React.Dispatch<TAppDispatch>) => {
@@ -31,7 +31,7 @@ export const useProductApi = (dispatch: React.Dispatch<TAppDispatch>) => {
           throw new Error(`Failed to upload product: ${await res.text()}`)
         }
 
-        const { data } = await res.json()
+        const { data } = (await res.json()) as { data: TProduct }
         dispatch({ type: "ADD_PRODUCT", payload: data })
       } catch (err) {
         console.error(err)
@@ -48,8 +48,8 @@ export const useProductApi = (dispatch: React.Dispatch<TAppDispatch>) => {
   )
 
   const updateProduct = useCallback(
-    async (values: TProduct) => {
-      setPending(values._id)
+    async (values: TProductForm) => {
+      setPending(values?._id ? values._id : values.serviceName)
       try {
         const response = await fetch(`/api/products/${values._id}`, {
           method: "PUT",
@@ -63,7 +63,7 @@ export const useProductApi = (dispatch: React.Dispatch<TAppDispatch>) => {
           throw new Error(`Failed to update product: ${await response.text()}`)
         }
 
-        const { data } = await response.json()
+        const { data } = (await response.json()) as { data: TProduct }
         dispatch({ type: "UPDATE_PRODUCT", payload: data })
       } catch (error) {
         console.error(error)

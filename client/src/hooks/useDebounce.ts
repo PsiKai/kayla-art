@@ -1,3 +1,4 @@
+/* global NodeJS */
 import { useCallback, useRef } from "react"
 
 export default function useDebounce<T>(wait: number = 500) {

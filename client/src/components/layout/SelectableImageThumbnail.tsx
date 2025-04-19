@@ -1,9 +1,10 @@
-import { TArtWork } from "../../context/AppContext"
+import React from "react"
+import { TArtWork } from "../../core-types"
 
 type TSelectableImageThumbnail = {
   _id: string
   thumbnails: TArtWork["thumbnails"]
-  selectArt: (e: React.ChangeEvent<HTMLInputElement>) => void
+  selectArt: (_e: React.ChangeEvent<HTMLInputElement>) => void
   selectedIds: Set<string>
   deleting: string | null
   editing: string | null

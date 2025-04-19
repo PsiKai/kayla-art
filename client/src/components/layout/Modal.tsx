@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import React, { useEffect, useRef } from "react"
 
 export type TModalProps = {
   open: boolean
@@ -7,15 +7,19 @@ export type TModalProps = {
 }
 
 export function Modal({ open, handleExit, children }: TModalProps) {
-  const modalRef = useRef() as React.MutableRefObject<HTMLDialogElement>
+  const modalRef = useRef({}) as React.MutableRefObject<HTMLDialogElement>
 
   useEffect(() => {
-    if (open && modalRef.current?.open === false) {
-      modalRef.current?.showModal()
-    } else {
-      modalRef.current?.close()
+    if (!modalRef.current) return
+
+    if (open && modalRef.current.open === false) {
+      modalRef.current.showModal()
+    } else if (open === false && modalRef.current.open === true) {
+      modalRef.current.close()
     }
   }, [open])
+
+  if (!open) return null
 
   return (
     <dialog

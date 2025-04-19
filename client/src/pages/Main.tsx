@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import Carousel from "../components/layout/Carousel"
-import { TArtWork } from "../context/AppContext"
 import { useSectionImageMap } from "../hooks/artworkMapping/useSectionImageMap"
 import { HeroImage } from "../components/layout/HeroImage"
 import Loading from "../components/layout/Loading"
+import { TArtWork } from "../core-types"
 
 import "../styles/Main.css"
 

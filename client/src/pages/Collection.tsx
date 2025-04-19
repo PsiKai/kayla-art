@@ -1,10 +1,10 @@
 import { useParams, Link } from "react-router-dom"
-import { TArtWork } from "../context/AppContext"
 import useFetchOnRender from "../hooks/useFetchOnRender"
 import { titleCase } from "../utils/stringUtils"
 import withValidPath from "../components/hoc/withValidPath"
 import withBreadcrumbs from "../components/hoc/withBreadcrumb"
 import Loading from "../components/layout/Loading"
+import { TArtWork } from "../core-types"
 
 function Collection() {
   const { category, subCategory, artCollection } = useParams()

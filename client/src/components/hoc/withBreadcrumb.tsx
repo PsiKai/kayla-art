@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import React, { JSX, useMemo } from "react"
 import { Link, useParams } from "react-router-dom"
 import "../../styles/breadcrumb.css"
 

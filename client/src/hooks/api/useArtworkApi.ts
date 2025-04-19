@@ -1,12 +1,12 @@
-import { useCallback, useState } from "react"
-import { TArtWork, TAppDispatch } from "../../context/AppContext"
+import React, { useCallback, useState } from "react"
 import { TArtworkForm } from "../../components/form/ArtworkForm"
+import { TAppDispatch, TArtWork } from "../../core-types"
 
 export type TArtworkApi = {
   artworkPending: string
   artworkError: string
-  createArtwork: (form: FormData, artworkName: string) => Promise<void>
-  updateArtwork: (values: TArtworkForm, _id: string) => Promise<void>
+  createArtwork: (_form: FormData, _artworkName: string) => Promise<void>
+  updateArtwork: (_values: TArtworkForm, _id: string) => Promise<void>
   deleteArtwork: (_id: string) => Promise<void>
 }
 
@@ -28,7 +28,7 @@ export const useArtworkApi = (dispatch: React.Dispatch<TAppDispatch>) => {
           throw new Error(`Failed to upload artwork: ${await res.text()}`)
         }
 
-        const { newArt } = await res.json()
+        const { newArt } = (await res.json()) as { newArt: TArtWork }
         dispatch({ type: "ADD_ARTWORK", payload: newArt })
       } catch (err) {
         console.error(err)
@@ -60,8 +60,8 @@ export const useArtworkApi = (dispatch: React.Dispatch<TAppDispatch>) => {
           throw new Error(`Failed to update artwork: ${await response.text()}`)
         }
 
-        const { data } = await response.json()
-        dispatch({ type: "UPDATE_ARTWORK", payload: data as TArtWork[] })
+        const { data } = (await response.json()) as { data: TArtWork[] }
+        dispatch({ type: "UPDATE_ARTWORK", payload: data })
       } catch (error) {
         console.error(error)
 

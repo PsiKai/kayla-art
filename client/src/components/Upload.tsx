@@ -2,7 +2,7 @@ import React, { useContext, useLayoutEffect, useRef, useState } from "react"
 import AdminArtCollection from "./AdminArtCollection"
 import FileInput, { FileWithSrc } from "./form/FileInput"
 import ArtworkForm, { TArtworkForm } from "./form/ArtworkForm"
-import { ApiContext } from "../context/ApiContext"
+import { ApiContext } from "../context/apiContext"
 import "../styles/form.css"
 
 function Upload() {
@@ -70,8 +70,8 @@ function Upload() {
           removeStagedUpload={removeStagedUpload}
         />
         {form.category && form.subCategory && image.size ? (
-          <button onClick={beginBulkUpload} disabled={!!artworkPending}>
-            {!!artworkPending ? "Uploading..." : "Upload"}
+          <button onClick={void beginBulkUpload} disabled={!!artworkPending}>
+            {artworkPending ? "Uploading..." : "Upload"}
           </button>
         ) : null}
       </div>

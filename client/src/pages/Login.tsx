@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react"
+import React, { useCallback, useLayoutEffect } from "react"
 import { useCookies } from "react-cookie"
 import { useNavigate } from "react-router-dom"
 import NavbarPlaceholder from "../components/layout/NavbarPlaceholder"
@@ -10,41 +10,44 @@ function Login() {
 
   useLayoutEffect(() => {
     if (cookies["connect.sid"]) {
-      navigate("/admin")
+      void navigate("/admin")
     }
   }, [cookies, navigate])
 
-  function updateForm(event: React.ChangeEvent<HTMLInputElement>) {
-    setForm({
-      ...form,
+  const updateForm = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setForm(prevForm => ({
+      ...prevForm,
       [event.target.name]: event.target.value,
-    })
-  }
+    }))
+  }, [])
 
-  async function handleLogin(event: React.FormEvent) {
-    event.preventDefault()
-    console.log("Logging in...")
-    const res = await fetch("/api/users/login", {
-      method: "POST",
-      body: JSON.stringify(form),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+  const handleLogin = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault()
+      console.log("Logging in...")
+      const res = await fetch("/api/users/login", {
+        method: "POST",
+        body: JSON.stringify(form),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
 
-    if (res.ok) {
-      console.log("Login successful!")
-    } else {
-      console.error("Login failed!")
-    }
-  }
+      if (res.ok) {
+        console.log("Login successful!")
+      } else {
+        console.error("Login failed!")
+      }
+    },
+    [form],
+  )
 
   return (
     <>
       <NavbarPlaceholder />
       <div>
         <h1>Login</h1>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={e => void handleLogin(e)}>
           <fieldset>
             <label htmlFor="email">Email</label>
             <input type="text" placeholder="Email" name="email" onChange={updateForm} />

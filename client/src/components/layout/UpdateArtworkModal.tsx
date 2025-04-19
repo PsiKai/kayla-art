@@ -1,11 +1,11 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import ArtworkForm, { TArtworkForm } from "../form/ArtworkForm"
-import { TArtWork } from "../../context/AppContext"
 import { Modal, TModalProps } from "./Modal"
+import { TArtWork } from "../../core-types"
 
 type TUpdateModalProps = {
   artwork: TArtWork[]
-  onSubmit: (form: TArtworkForm) => void
+  onSubmit: (_form: TArtworkForm) => void
 } & TModalProps
 
 const UpdateArtworkModal: React.FC<TUpdateModalProps> = props => {

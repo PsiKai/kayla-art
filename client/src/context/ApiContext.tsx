@@ -1,11 +1,8 @@
-import { createContext, useContext } from "react"
-import { AppContext } from "./AppContext"
-import { TArtworkApi, useArtworkApi } from "../hooks/api/useArtworkApi"
-import { TProductApi, useProductApi } from "../hooks/api/useProductApi"
-
-type TApiContext = TArtworkApi & TProductApi
-
-export const ApiContext = createContext<TApiContext>({} as TApiContext)
+import React, { useContext } from "react"
+import { useArtworkApi } from "../hooks/api/useArtworkApi"
+import { useProductApi } from "../hooks/api/useProductApi"
+import { ApiContext } from "./apiContext"
+import { AppContext } from "./appContext"
 
 export function ApiProvider({ children }: { children: React.ReactNode }) {
   const { dispatch } = useContext(AppContext)

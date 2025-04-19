@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+/* global NodeJS */
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { CSSTransition, TransitionGroup } from "react-transition-group"
-import { TArtWork } from "../../context/AppContext"
 import { fallbackCarouselMap } from "../../utils/fallbackImages"
 
 import "../../styles/transitions.css"
+import { TArtWork } from "../../core-types"
 
 type TCarouselProps = {
   carouselImages: Pick<TArtWork, "thumbnails">[]
@@ -25,10 +26,10 @@ function Carousel({ carouselImages = [], imageClassName }: TCarouselProps) {
       setCarouselIndex(prevIndex => (prevIndex + 1) % images.length)
     }, carouselDuration)
 
-    const timer = carouselTimer.current!
+    const timer = carouselTimer.current
 
     return () => clearInterval(timer)
-  }, [carouselTimer, carouselImages, carouselDuration])
+  }, [carouselTimer, carouselImages, carouselDuration, images.length])
 
   return (
     <TransitionGroup component={null}>

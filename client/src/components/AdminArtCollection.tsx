@@ -1,15 +1,15 @@
-import { useEffect, useState, useContext, useCallback } from "react"
+import React, { useEffect, useState, useContext, useCallback } from "react"
 import useFetchWithDebounce from "../hooks/useFetchWithDebounce"
-import { AppContext, isValidRole } from "../context/AppContext"
-import { TArtWork } from "../context/AppContext"
 import { titleCase } from "../utils/stringUtils"
 import UpdateArtworkModal from "./layout/UpdateArtworkModal"
 import { TArtworkForm } from "./form/ArtworkForm"
 import DeleteArtworkModal from "./layout/DeleteArtworkModal"
 import AdminArtworkLayout from "./layout/AdminArtworkLayout"
-import { ApiContext } from "../context/ApiContext"
 import GenericSelection, { TGenericSelectionProps } from "./form/GenericSelection"
 import Loading from "./layout/Loading"
+import { AppContext } from "../context/appContext"
+import { ApiContext } from "../context/apiContext"
+import { isValidRole, TArtWork } from "../core-types"
 
 type TDeleteArtProps = {
   category: string
@@ -22,7 +22,6 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
     dispatch,
   } = useContext(AppContext)
   const { artworkPending, updateArtwork, deleteArtwork } = useContext(ApiContext)
-
   const [openModal, setOpenModal] = useState<"update" | "delete" | null>(null)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [selectedArtwork, setSelectedArtwork] = useState<TArtWork[]>([])
@@ -84,7 +83,8 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
   const selectArt = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const _id = e.target.value
-      selectedIds.has(_id) ? selectedIds.delete(_id) : selectedIds.add(_id)
+      if (selectedIds.has(_id)) selectedIds.delete(_id)
+      else selectedIds.add(_id)
       setSelectedIds(new Set(selectedIds))
     },
     [selectedIds],
@@ -100,7 +100,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
   )
 
   const updateRole = useCallback<TGenericSelectionProps["updateForm"]>(
-    async e => {
+    e => {
       console.log("Updating role", e.target.value)
       if (!isValidRole(e.target.value)) return
 
@@ -118,9 +118,9 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
         subCategory: selectedArt.subCategory,
         role,
       }
-      await updateArtwork(updatedArtwork, selectedArt._id)
+      void updateArtwork(updatedArtwork, selectedArt._id)
     },
-    [selectedArtwork, selectedIds, updateArtwork, art],
+    [selectedIds, updateArtwork, art],
   )
 
   return (
@@ -181,13 +181,13 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
       <UpdateArtworkModal
         open={openModal === "update"}
         handleExit={() => setOpenModal(null)}
-        onSubmit={submitSelectedArtEdits}
+        onSubmit={e => void submitSelectedArtEdits(e)}
         artwork={selectedArtwork}
       />
       <DeleteArtworkModal
         open={openModal === "delete"}
         handleExit={() => setOpenModal(null)}
-        onSubmit={deleteSelectedArt}
+        onSubmit={() => void deleteSelectedArt()}
         artwork={selectedArtwork}
       />
     </section>

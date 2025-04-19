@@ -1,4 +1,4 @@
-import { TArtWork } from "../../context/AppContext"
+import { TArtWork } from "../../core-types"
 
 type TImageThumbnailProps = {
   image: TArtWork

@@ -1,6 +1,8 @@
+import React from "react"
+
 type TCategoriesSelectionProps = {
   category: string
-  updateForm: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  updateForm: (_event: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
 function CategoriesSelection({ category, updateForm }: TCategoriesSelectionProps) {

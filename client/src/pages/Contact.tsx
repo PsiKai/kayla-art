@@ -1,12 +1,12 @@
-import { FormEvent } from "react"
+import { FormEvent, useCallback } from "react"
 import "../styles/form.css"
 import NavbarPlaceholder from "../components/layout/NavbarPlaceholder"
 
 function Contact() {
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()
     console.log(e.target)
-  }
+  }, [])
 
   return (
     <>

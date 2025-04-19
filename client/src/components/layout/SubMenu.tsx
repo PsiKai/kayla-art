@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+/* global NodeJS */
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useMobileContext } from "../../hooks/useMobileContext"
 import "../../styles/SubMenu.css"
 import { useLocation } from "react-router-dom"

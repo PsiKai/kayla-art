@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { TArtWork } from "../../context/AppContext"
+import { TArtWork } from "../../core-types"
 
 export function useRoleGroups(art: TArtWork[] = []) {
   const groups = useMemo(() => {
@@ -21,7 +21,7 @@ export function useRoleGroups(art: TArtWork[] = []) {
     return (groups || []).gallery.sort(
       (a, b) => new Date(b.createdAt!).valueOf() - new Date(a.createdAt!).valueOf(),
     )
-  }, [groups.gallery])
+  }, [groups])
 
   return { ...groups, galleryFeed }
 }

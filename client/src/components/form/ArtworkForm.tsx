@@ -1,6 +1,6 @@
 import { ChangeEvent, Dispatch, FC, SetStateAction } from "react"
-import { TArtworkRoles } from "../../context/AppContext"
 import { titleCase } from "../../utils/stringUtils"
+import { TArtworkRoles } from "../../core-types"
 
 export type TArtworkForm = {
   category?: string
