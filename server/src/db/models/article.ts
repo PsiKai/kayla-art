@@ -12,9 +12,10 @@ const ArticleSchema = new Schema({
   images: {
     type: [Schema.Types.ObjectId],
     ref: "Artwork",
+    default: [],
   },
 })
 
 export default model("Article", ArticleSchema)
 
-export type Article = InferSchemaType<typeof ArticleSchema>
+export type TArticle = InferSchemaType<typeof ArticleSchema>

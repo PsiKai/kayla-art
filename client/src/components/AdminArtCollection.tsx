@@ -35,7 +35,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
   }, [category, subCategory])
 
   useEffect(() => {
-    dispatch({ type: "SET_ARTWORK", payload: artwork })
+    dispatch({ type: "SET_ARTWORKS", payload: artwork })
   }, [artwork, dispatch])
 
   const deleteSelectedArt = useCallback(async () => {

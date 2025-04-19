@@ -2,6 +2,7 @@ import { Router } from "express"
 import userRouter from "./user"
 import artworkRouter from "./artwork"
 import productRouter from "./product"
+import articleRouter from "./article"
 
 const apiRouter = Router()
 
@@ -17,5 +18,6 @@ apiRouter.get("/", (_req, res) => {
 apiRouter.use("/users", userRouter)
 apiRouter.use("/artworks", artworkRouter)
 apiRouter.use("/products", productRouter)
+apiRouter.use("/articles", articleRouter)
 
 export default apiRouter

@@ -11,7 +11,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 const appReducer = (state: TAppState, action: TAppDispatch): TAppState => {
   switch (action.type) {
     // ARTWORK ACTIONS
-    case "SET_ARTWORK":
+    case "SET_ARTWORKS":
       return { ...state, art: action.payload }
     case "UPDATE_ARTWORK": {
       const updatedArtwork = action.payload
@@ -43,6 +43,26 @@ const appReducer = (state: TAppState, action: TAppDispatch): TAppState => {
       return {
         ...state,
         products: state.products.filter(product => product._id !== action.payload),
+      }
+
+    // ARTICLE ACTIONS
+    case "SET_ARTICLES":
+      return { ...state, articles: action.payload }
+    case "ADD_ARTICLE":
+      return { ...state, articles: [...state.articles, action.payload] }
+    case "UPDATE_ARTICLE": {
+      const updatedArticle = action.payload
+      return {
+        ...state,
+        articles: state.articles.map(article =>
+          article._id === updatedArticle._id ? updatedArticle : article,
+        ),
+      }
+    }
+    case "DELETE_ARTICLE":
+      return {
+        ...state,
+        articles: state.articles.filter(article => article._id !== action.payload),
       }
 
     // DEFAULT
