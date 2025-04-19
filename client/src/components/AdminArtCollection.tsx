@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext, useCallback } from "react"
-import useFetchWithDebounce from "../hooks/useFetchWithDebounce"
 import { titleCase } from "../utils/stringUtils"
 import UpdateArtworkModal from "./layout/UpdateArtworkModal"
 import { TArtworkForm } from "./form/ArtworkForm"
@@ -10,6 +9,7 @@ import Loading from "./layout/Loading"
 import { AppContext } from "../context/appContext"
 import { ApiContext } from "../context/apiContext"
 import { isValidRole, TArtWork } from "../core-types"
+import useFetchOnRender from "../hooks/useFetchOnRender"
 
 type TDeleteArtProps = {
   category: string
@@ -26,7 +26,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [selectedArtwork, setSelectedArtwork] = useState<TArtWork[]>([])
 
-  const [artwork, fetchPending] = useFetchWithDebounce<TArtWork[]>(
+  const [artwork, fetchPending] = useFetchOnRender<TArtWork[]>(
     `/api/artworks?category=${category}&subCategory=${subCategory}&limit=0`,
   )
 
@@ -54,7 +54,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
   const submitSelectedArtEdits = useCallback(
     async (values: TArtworkForm) => {
       setOpenModal(null)
-      const selectedArt = art.find(({ _id }) => selectedIds.has(_id))
+      const selectedArt = art?.find(({ _id }) => selectedIds.has(_id))
       if (!selectedArt) {
         console.log("No selected artwork found")
         return
@@ -92,7 +92,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
 
   const openSelectedModal = useCallback(
     (modalType: "update" | "delete") => {
-      const selectedArt = art.filter(({ _id }) => selectedIds.has(_id))
+      const selectedArt = art?.filter(({ _id }) => selectedIds.has(_id))
       setSelectedArtwork(selectedArt)
       setOpenModal(modalType)
     },
@@ -107,7 +107,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
       const role = e.target.value
 
       console.log(selectedIds)
-      const selectedArt = art.find(({ _id }) => selectedIds.has(_id))
+      const selectedArt = art?.find(({ _id }) => selectedIds.has(_id))
       if (!selectedArt) {
         console.log("No selected artwork found")
         return
@@ -153,7 +153,7 @@ function AdminArtCollection({ category, subCategory }: TDeleteArtProps) {
             </button>
             <button
               onClick={() => setSelectedIds(new Set(art.map(art => art._id)))}
-              disabled={selectedIds.size === art.length || !!artworkPending}
+              disabled={selectedIds.size === art?.length || !!artworkPending}
             >
               Select All
             </button>

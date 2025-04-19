@@ -45,9 +45,9 @@ function Admin() {
             <>
               <h2>Make Changes To Your Site</h2>
               <nav className="admin-nav">
-                <Link to="">Galleries</Link>
-                <Link to="about">About</Link>
-                <Link to="pricing">Pricing</Link>
+                <Link to="/admin">Galleries</Link>
+                <Link to="/admin/about">About</Link>
+                <Link to="/admin/pricing">Pricing</Link>
               </nav>
               <Routes>
                 <Route path="/" element={<Upload />} />

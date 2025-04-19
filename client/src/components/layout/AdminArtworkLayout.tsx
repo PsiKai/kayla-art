@@ -5,6 +5,7 @@ import { SelectableImageThumbnail } from "./SelectableImageThumbnail"
 import { useRoleGroups } from "../../hooks/artworkMapping/useRoleGroups"
 import { TArtWork, TArtworkRoles } from "../../core-types"
 import { ApiContext } from "../../context/apiContext"
+import Loading from "./Loading"
 
 type TAdminArtworkLayout = {
   art: TArtWork[]
@@ -40,6 +41,8 @@ export default function AdminArtworkLayout({
     },
     [art, modalOpen, updateArtwork],
   )
+
+  if (!art) return <Loading />
 
   return (
     <div>
